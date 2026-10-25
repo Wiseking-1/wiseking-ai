@@ -947,7 +947,7 @@ window.showGenericModal = function(id, title, html) {
 
 <script>
 /* ============ APP LOGIC — UNCHANGED CORE + FAST BOOT ============ */
-const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
+const ENV_GEMINI_KEY = '';
 const ENV_DEEPSEEK_KEY = '';
 
 const SYSTEM_PROMPT = `
@@ -2255,130 +2255,253 @@ function saveEditedMessage(){if(editingMessageIdx<0)return;const chat=window.cha
 function confirmDeleteMessage(){if(deletingMessageIdx<0)return;const chat=window.chats.find(c=>c.id===window.activeChatId);if(!chat)return;const msg=chat.messages[deletingMessageIdx];if(!msg){closeModal('deleteMessageModal');deletingMessageIdx=-1;return;}if(msg.role==='user'&&chat.messages[deletingMessageIdx+1]&&chat.messages[deletingMessageIdx+1].role==='ai')chat.messages.splice(deletingMessageIdx,2);else chat.messages.splice(deletingMessageIdx,1);closeModal('deleteMessageModal');deletingMessageIdx=-1;saveChats();renderMessages();showToast('🗑️ Deleted');}
 window.handleLikeMessage=handleLikeMessage;window.handleDislikeMessage=handleDislikeMessage;window.submitDislikeFeedback=submitDislikeFeedback;window.handleRegenerateMessage=handleRegenerateMessage;window.handleCopyMessage=handleCopyMessage;window.handleShareMessage=handleShareMessage;window.handleEditMessage=handleEditMessage;window.handleDeleteMessage=handleDeleteMessage;window.saveEditedMessage=saveEditedMessage;window.confirmDeleteMessage=confirmDeleteMessage;
 
-async function fetchWebSearch(query){try{const res=await fetch('https://text.pollinations.ai/search?q='+encodeURIComponent(query));if(!res.ok)return null;const text=await res.text();return text.slice(0,2000);}catch(e){return null;}}
-async function tryDeepSeekFallback(userText,chatHistory,signal){try{const dsKey=(localStorage.getItem('wk_deepseek_key')||'').trim()||ENV_DEEPSEEK_KEY;if(!dsKey)return {success:false};const messages=[{role:'system',content:SYSTEM_PROMPT}];(chatHistory||[]).slice(-6).forEach(m=>messages.push({role:m.role==='user'?'user':'assistant',content:(m.content||'').slice(0,6000)}));messages.push({role:'user',content:userText});const opts={method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+dsKey},body:JSON.stringify({model:'deepseek-chat',messages:messages,max_tokens:2000,temperature:0.7})};if(signal)opts.signal=signal;const res=await fetch('https://api.deepseek.com/v1/chat/completions',opts);if(!res.ok)return {success:false};const data=await res.json();const reply=(data&&data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content)||'';if(!reply)return {success:false};return {success:true,reply:reply,provider:'DeepSeek'};}catch(e){return {success:false};}}
-window.tryDeepSeekFallback=tryDeepSeekFallback;
-function parseDataUrl(dataUrl){try{const match=dataUrl.match(/^data:([^;]+);base64,(.+)$/);if(!match)return null;return {mime:match[1],base64:match[2]};}catch(e){return null;}}
-window.parseDataUrl=parseDataUrl;
+// ============================================================
+// BACKEND URL — EDIT AFTER DEPLOYING TO VERCEL
+// ============================================================
+const BACKEND_URL = 'https://YOUR-PROJECT.vercel.app'; // <-- EDIT THIS ONLY
 
-function buildChatHistoryForModel(chat){if(!chat||!Array.isArray(chat.messages))return [];const msgs=chat.messages.filter(m=>m.role==='user'||m.role==='ai');if(msgs.length<=MEMORY_HISTORY_LIMIT)return msgs;const recent=msgs.slice(-MEMORY_HISTORY_LIMIT);const older=msgs.slice(0,-MEMORY_HISTORY_LIMIT);const summaryParts=[];older.slice(-40).forEach(function(m){const txt=(m.content||'').slice(0,180);if(txt)summaryParts.push((m.role==='user'?'User: ':'AI: ')+txt);});const summaryMsg={role:'ai',content:'[EARLIER CONVERSATION SUMMARY]\n'+summaryParts.join('\n'),_isSummary:true};return [summaryMsg].concat(recent);}
-window.buildChatHistoryForModel=buildChatHistoryForModel;
+async function fetchWebSearch(query) {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/search`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.results || !data.results.length) return null;
+    return data.results
+      .map((r, i) => `[${i + 1}] ${r.title}\n${r.snippet}\nSource: ${r.url}`)
+      .join('\n\n');
+  } catch (e) {
+    console.warn('Search failed:', e);
+    return null;
+  }
+}
+window.fetchWebSearch = fetchWebSearch;
 
-async function sendMessageWithFallback(userText,chatHistory,signal){
-  chatHistory=chatHistory||[];
-  const apiKey=(localStorage.getItem('wk_api_key')||'').trim()||ENV_GEMINI_KEY;
-  const model=localStorage.getItem('wk_model')||'gemini-2.5-flash';
-  const url='https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent?key='+apiKey;
-  const now=new Date();
-  const dateTimeString=now.toLocaleString('en-NG',{weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
-  const memoryBlock=getMemoryEnabled()?buildMemoryContext(null,userText):'';
-  let searchContext='';
-  const liveKeywords=/\b(news|latest|today|now|current|weather|price|rate)\b/i;
-  if(liveKeywords.test(userText)&&getWebSearchEnabled()){const results=await fetchWebSearch(userText);if(results)searchContext='\n\n[LIVE WEB]:\n'+results+'\n[END]\n';}
-  const systemText=SYSTEM_PROMPT+(memoryBlock?'\n\n'+memoryBlock:'')+(searchContext?searchContext:'');
-  const contents=[];
-  chatHistory.slice(-MEMORY_HISTORY_LIMIT).forEach(function(m){
-    const role=m.role==='user'?'user':'model';
-    const parts=[{text:(m.content||'').slice(0,6000)}];
-    if(m.role==='user'&&Array.isArray(m.attachments)&&m.attachments.length){
-      m.attachments.forEach(function(att){
-        if(att.type==='image'&&att.dataUrl){const parsed=parseDataUrl(att.dataUrl);if(parsed)parts.push({inlineData:{mimeType:parsed.mime,data:parsed.base64}});}
-        else if((att.type==='pdf'||att.type==='text'||att.type==='docx')&&att.text){parts.push({text:'\n[Attached: '+att.name+']\n'+att.text.slice(0,30000)});}
+// Single source of truth for chat
+async function sendMessageWithFallback(userText, chatHistory, signal) {
+  chatHistory = chatHistory || [];
+
+  const model = localStorage.getItem('wk_model') || 'gemini-2.5-flash';
+  const now = new Date();
+  const dateTimeString = now.toLocaleString('en-NG', {
+    weekday: 'long', year: 'numeric', month: 'long',
+    day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true,
+  });
+
+  const memoryBlock = getMemoryEnabled() ? buildMemoryContext(null, userText) : '';
+  let searchContext = '';
+
+  const liveKeywords = /\b(news|latest|today|now|current|weather|price|rate|who is|what is)\b/i;
+  if (liveKeywords.test(userText) && getWebSearchEnabled()) {
+    const results = await fetchWebSearch(userText);
+    if (results) {
+      searchContext = `\n\n[LIVE WEB SEARCH RESULTS — use these for current info]:\n${results}\n[END RESULTS]\n`;
+    }
+  }
+
+  const systemText = SYSTEM_PROMPT
+    + (memoryBlock ? '\n\n' + memoryBlock : '')
+    + (searchContext ? searchContext : '');
+
+  // Build Gemini contents array
+  const contents = [];
+  chatHistory.slice(-MEMORY_HISTORY_LIMIT).forEach(function (m) {
+    const role = m.role === 'user' ? 'user' : 'model';
+    const parts = [{ text: (m.content || '').slice(0, 6000) }];
+    if (m.role === 'user' && Array.isArray(m.attachments)) {
+      m.attachments.forEach(function (att) {
+        if (att.type === 'image' && att.dataUrl) {
+          const parsed = parseDataUrl(att.dataUrl);
+          if (parsed) parts.push({ inlineData: { mimeType: parsed.mime, data: parsed.base64 } });
+        } else if (att.text) {
+          parts.push({ text: `\n[Attached: ${att.name}]\n${att.text.slice(0, 30000)}` });
+        }
       });
     }
-    contents.push({role:role,parts:parts});
+    contents.push({ role, parts });
   });
-  const currentParts=[{text:'[Today is '+dateTimeString+'.]\n\nUser: '+userText}];
-  const currentUserMsg=chatHistory[chatHistory.length-1];
-  if(currentUserMsg&&currentUserMsg.role==='user'&&Array.isArray(currentUserMsg.attachments)){
-    currentUserMsg.attachments.forEach(function(att){
-      if(att.type==='image'&&att.dataUrl){const parsed=parseDataUrl(att.dataUrl);if(parsed)currentParts.push({inlineData:{mimeType:parsed.mime,data:parsed.base64}});}
-      else if((att.type==='pdf'||att.type==='text'||att.type==='docx')&&att.text){currentParts.push({text:'\n[Attached: '+att.name+']\n'+att.text.slice(0,30000)});}
+
+  const currentParts = [{ text: `[Today is ${dateTimeString}.]\n\nUser: ${userText}` }];
+  const currentUserMsg = chatHistory[chatHistory.length - 1];
+  if (currentUserMsg && currentUserMsg.role === 'user' && Array.isArray(currentUserMsg.attachments)) {
+    currentUserMsg.attachments.forEach(function (att) {
+      if (att.type === 'image' && att.dataUrl) {
+        const parsed = parseDataUrl(att.dataUrl);
+        if (parsed) currentParts.push({ inlineData: { mimeType: parsed.mime, data: parsed.base64 } });
+      } else if (att.text) {
+        currentParts.push({ text: `\n[Attached: ${att.name}]\n${att.text.slice(0, 30000)}` });
+      }
     });
   }
-  contents.push({role:'user',parts:currentParts});
-  const requestBody={systemInstruction:{parts:[{text:systemText}]},contents:contents};
-  let attempts=0;
-  while(attempts<2){
-    attempts++;
-    try{
-      const fetchOpts={method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(requestBody)};
-      if(signal)fetchOpts.signal=signal;
-      const response=await fetch(url,fetchOpts);
-      if(!response.ok){if(response.status===429||response.status>=500){await new Promise(r=>setTimeout(r,120));continue;}throw new Error('HTTP '+response.status);}
-      const data=await response.json();
-      const reply=(data&&data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts&&data.candidates[0].content.parts[0]&&data.candidates[0].content.parts[0].text)||'';
-      if(!reply)throw new Error('Empty');
-      return {success:true,reply:reply,provider:'Gemini'};
-    }catch(err){
-      if(err.name==='AbortError')throw err;
-      if(attempts>=2){
-        const fallback=await tryDeepSeekFallback(userText,chatHistory,signal);
-        if(fallback.success)return fallback;
-        return {success:true,reply:'Ranka ya dade! I received your message. Please try again. 👑',provider:'local'};
-      }
-      await new Promise(r=>setTimeout(r,120));
+  contents.push({ role: 'user', parts: currentParts });
+
+  try {
+    const fetchOpts = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents,
+        systemInstruction: { parts: [{ text: systemText }] },
+        model,
+      }),
+    };
+    if (signal) fetchOpts.signal = signal;
+
+    const response = await fetch(`${BACKEND_URL}/api/chat`, fetchOpts);
+
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      const detail = errData.detail || errData.error || `HTTP ${response.status}`;
+      throw new Error(detail);
     }
+
+    const data = await response.json();
+    if (!data.reply) throw new Error('Empty reply from backend');
+
+    return { success: true, reply: data.reply, provider: data.provider || 'gemini' };
+  } catch (err) {
+    if (err.name === 'AbortError') throw err;
+    console.error('Backend error:', err);
+    return {
+      success: false,
+      reply: `⚠️ **Connection error:** ${err.message}\n\nPlease check:\n1. Backend URL in code (\`BACKEND_URL\`)\n2. Your Gemini API key is set on Vercel\n3. Your backend is deployed and online`,
+    };
   }
 }
-window.sendMessageWithFallback=sendMessageWithFallback;
+window.sendMessageWithFallback = sendMessageWithFallback;
 
-async function triggerResponse(chat,userMsg){
-  isSending=true;
-  const btn=document.getElementById('sendBtn');
-  if(btn){btn.classList.remove('hidden');btn.classList.add('stop');btn.innerHTML='<i class="fas fa-stop"></i>';}
-  currentAbortController=new AbortController();
-  const aiMsg={role:'ai',content:'',createdAt:Date.now(),streaming:true};
-  chat.messages.push(aiMsg);renderMessages();
-  try{
-    const history=buildChatHistoryForModel(chat).filter(m=>m!==aiMsg);
-    const result=await sendMessageWithFallback(userMsg.content,history,currentAbortController.signal);
-    if(result&&result.success&&result.reply&&result.reply.trim().length>0){aiMsg.content=result.reply;}
-    else if(result&&result.reply){aiMsg.content=result.reply;}
-    else{aiMsg.error=true;aiMsg.content='⚠️ No response. Try again.';}
-    try{extractProjectFacts(userMsg.content,aiMsg.content,chat);}catch(e){}
-  }catch(err){
-    if(err.name!=='AbortError'){aiMsg.error=true;aiMsg.content=aiMsg.content||'⚠️ Connection error.';}
-  }finally{
-    aiMsg.streaming=false;isSending=false;currentAbortController=null;
-    if(btn){btn.classList.remove('stop');btn.classList.add('hidden');btn.innerHTML='<i class="fas fa-arrow-up"></i>';}
-    try{handleInputChange();}catch(e){}
-    try{saveChats();}catch(e){}
-    try{renderMessages();}catch(e){}
+function buildChatHistoryForModel(chat) {
+  if (!chat || !Array.isArray(chat.messages)) return [];
+  const msgs = chat.messages.filter(m => m.role === 'user' || m.role === 'ai');
+  if (msgs.length <= MEMORY_HISTORY_LIMIT) return msgs;
+  const recent = msgs.slice(-MEMORY_HISTORY_LIMIT);
+  const older = msgs.slice(0, -MEMORY_HISTORY_LIMIT);
+  const summaryParts = [];
+  older.slice(-40).forEach(function (m) {
+    const txt = (m.content || '').slice(0, 180);
+    if (txt) summaryParts.push((m.role === 'user' ? 'User: ' : 'AI: ') + txt);
+  });
+  const summaryMsg = { role: 'ai', content: '[EARLIER CONVERSATION SUMMARY]\n' + summaryParts.join('\n'), _isSummary: true };
+  return [summaryMsg].concat(recent);
+}
+window.buildChatHistoryForModel = buildChatHistoryForModel;
+
+async function triggerResponse(chat, userMsg) {
+  isSending = true;
+  const btn = document.getElementById('sendBtn');
+  if (btn) { btn.classList.remove('hidden'); btn.classList.add('stop'); btn.innerHTML = '<i class="fas fa-stop"></i>'; }
+  currentAbortController = new AbortController();
+  const aiMsg = { role: 'ai', content: '', createdAt: Date.now(), streaming: true };
+  chat.messages.push(aiMsg);
+  renderMessages();
+  try {
+    const history = buildChatHistoryForModel(chat).filter(m => m !== aiMsg);
+    const result = await sendMessageWithFallback(userMsg.content, history, currentAbortController.signal);
+    if (result && result.success && result.reply && result.reply.trim().length > 0) {
+      aiMsg.content = result.reply;
+    } else if (result && result.reply) {
+      aiMsg.content = result.reply;
+    } else {
+      aiMsg.error = true;
+      aiMsg.content = '⚠️ No response. Try again.';
+    }
+    try { extractProjectFacts(userMsg.content, aiMsg.content, chat); } catch (e) {}
+  } catch (err) {
+    if (err.name !== 'AbortError') {
+      aiMsg.error = true;
+      aiMsg.content = aiMsg.content || '⚠️ Connection error.';
+    }
+  } finally {
+    aiMsg.streaming = false;
+    isSending = false;
+    currentAbortController = null;
+    if (btn) { btn.classList.remove('stop'); btn.classList.add('hidden'); btn.innerHTML = '<i class="fas fa-arrow-up"></i>'; }
+    try { handleInputChange(); } catch (e) {}
+    try { saveChats(); } catch (e) {}
+    try { renderMessages(); } catch (e) {}
   }
 }
-window.triggerResponse=triggerResponse;
+window.triggerResponse = triggerResponse;
 
-window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredInstallPrompt=e;const btn=document.getElementById('installAppBtn');if(btn)btn.style.display='inline-flex';});
-window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;const btn=document.getElementById('installAppBtn');if(btn)btn.style.display='none';showToast('✅ Installed!');});
-async function promptInstallApp(){if(!deferredInstallPrompt){showToast('Menu → "Add to Home Screen"');return;}deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;}
-window.promptInstallApp=promptInstallApp;
-
-function init(){
-  try{
-    loadVault();loadCrossChatMemory();loadMusic();loadActiveProject();
-    loadChatsFromLocalStorage();loadTheme();
-    const savedName=localStorage.getItem('wk_user_name');if(savedName)document.getElementById('sidebarName').textContent=savedName;
-    const av=localStorage.getItem('wk_user_avatar');if(av)applyAvatar(av);
-    const k1=localStorage.getItem('wk_api_key');if(k1)document.getElementById('apiKeyInput').value=k1;
-    const dk=localStorage.getItem('wk_deepseek_key');if(dk)document.getElementById('deepseekKeyInput').value=dk;
-    const m=localStorage.getItem('wk_model');if(m)document.getElementById('modelSelect').value=m;
-    setWebSearchEnabled(getWebSearchEnabled());setMemoryEnabled(getMemoryEnabled());
-    updateModelBadge();updatePlanBadge();handleInputChange();
-    initHoldToSpeak();setupProfileButton();
-    if(typeof pdfjsLib!=='undefined')pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    currentVoiceLang=localStorage.getItem('wk_voice_lang')||'en-NG';
-  }catch(e){console.warn(e);}
+// PWA install
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  const btn = document.getElementById('installAppBtn');
+  if (btn) btn.style.display = 'inline-flex';
+});
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  const btn = document.getElementById('installAppBtn');
+  if (btn) btn.style.display = 'none';
+  showToast('✅ Installed!');
+});
+async function promptInstallApp() {
+  if (!deferredInstallPrompt) { showToast('Menu → "Add to Home Screen"'); return; }
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
 }
-document.querySelectorAll('.modal-bg').forEach(m=>{m.addEventListener('click',(e)=>{if(e.target===m)m.classList.remove('show');});});
-document.getElementById('sharePopup')?.addEventListener('click',(e)=>{if(e.target.id==='sharePopup')closeSharePopup();});
-document.getElementById('welcomePopup')?.addEventListener('click',(e)=>{if(e.target.id==='welcomePopup')closeWelcomePopup();});
-document.addEventListener('DOMContentLoaded',function(){setTimeout(function(){var area=document.getElementById('messagesArea');if(area){var obs=new MutationObserver(function(){setTimeout(highlightCodeBlocks,80);});obs.observe(area,{childList:true,subtree:true});}highlightCodeBlocks();},800);});
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+window.promptInstallApp = promptInstallApp;
+
+function init() {
+  try {
+    loadVault();
+    loadCrossChatMemory();
+    loadMusic();
+    loadActiveProject();
+    loadChatsFromLocalStorage();
+    loadTheme();
+    const savedName = localStorage.getItem('wk_user_name');
+    if (savedName) document.getElementById('sidebarName').textContent = savedName;
+    const av = localStorage.getItem('wk_user_avatar');
+    if (av) applyAvatar(av);
+    const k1 = localStorage.getItem('wk_api_key');
+    if (k1) document.getElementById('apiKeyInput').value = k1;
+    const dk = localStorage.getItem('wk_deepseek_key');
+    if (dk) document.getElementById('deepseekKeyInput').value = dk;
+    const m = localStorage.getItem('wk_model');
+    if (m) document.getElementById('modelSelect').value = m;
+    setWebSearchEnabled(getWebSearchEnabled());
+    setMemoryEnabled(getMemoryEnabled());
+    updateModelBadge();
+    updatePlanBadge();
+    handleInputChange();
+    initHoldToSpeak();
+    setupProfileButton();
+    if (typeof pdfjsLib !== 'undefined') {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+    currentVoiceLang = localStorage.getItem('wk_voice_lang') || 'en-NG';
+  } catch (e) { console.warn(e); }
+}
+
+document.querySelectorAll('.modal-bg').forEach(m => {
+  m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('show'); });
+});
+document.getElementById('sharePopup')?.addEventListener('click', (e) => {
+  if (e.target.id === 'sharePopup') closeSharePopup();
+});
+document.getElementById('welcomePopup')?.addEventListener('click', (e) => {
+  if (e.target.id === 'welcomePopup') closeWelcomePopup();
+});
+document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    var area = document.getElementById('messagesArea');
+    if (area) {
+      var obs = new MutationObserver(function () { setTimeout(highlightCodeBlocks, 80); });
+      obs.observe(area, { childList: true, subtree: true });
+    }
+    highlightCodeBlocks();
+  }, 800);
+});
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
 else init();
-setTimeout(setupProfileButton,500);
-setTimeout(setupProfileButton,1500);
+setTimeout(setupProfileButton, 500);
+setTimeout(setupProfileButton, 1500);
 </script>
 </body>
 </html>
-  
