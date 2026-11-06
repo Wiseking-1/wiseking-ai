@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f">
 <title>Wise King AI — IBRAHIM ABDULLAHI 🇳🇬</title>
-<link rel="manifest" href='data:application/manifest+json,{"name":"Wise King AI","short_name":"WiseKing","start_url":".","display":"standalone","background_color":"#0a0a0f","theme_color":"#6366f1","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 192 192%22><rect width=%22192%22 height=%22192%22 rx=%2244%22 fill=%22%236366f1%22/><text x=%2296%22 y=%22130%22 font-size=%22110%22 text-anchor=%22middle%22>👑</text></svg>","sizes":"192x192","type":"image/svg+xml"}]}'>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👑</text></svg>">
+<link rel="manifest" href='data:application/manifest+json,{"name":"Wise King AI","short_name":"WiseKing","start_url":".","display":"standalone","background_color":"#0a0a0f","theme_color":"#6366f1","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 192 192%22><defs><linearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22><stop offset=%220%22 stop-color=%22%23fbbf24%22/><stop offset=%220.5%22 stop-color=%22%23a855f7%22/><stop offset=%221%22 stop-color=%22%236366f1%22/></linearGradient></defs><rect width=%22192%22 height=%22192%22 rx=%2244%22 fill=%22%230f0f18%22/><path d=%22M42 66 L60 120 L96 84 L132 120 L150 66 L138 72 L132 60 L114 78 L96 54 L78 78 L60 60 L54 72 Z M54 132 L138 132 L132 150 L60 150 Z%22 fill=%22url(%23g)%22 stroke=%22url(%23g)%22 stroke-width=%223%22 stroke-linejoin=%22round%22/></svg>","sizes":"192x192","type":"image/svg+xml"}]}'>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23fbbf24'/><stop offset='0.5' stop-color='%23a855f7'/><stop offset='1' stop-color='%236366f1'/></linearGradient></defs><rect width='64' height='64' rx='16' fill='%230f0f18'/><path d='M14 22 L20 40 L32 28 L44 40 L50 22 L46 24 L44 20 L38 26 L32 18 L26 26 L20 20 L18 24 Z M18 44 L46 44 L44 50 L20 50 Z' fill='url(%23g)' stroke='url(%23g)' stroke-width='1' stroke-linejoin='round'/></svg>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
@@ -33,7 +33,144 @@
     --border-subtle:rgba(0,0,0,0.06);--border-default:rgba(0,0,0,0.12);--border-strong:rgba(0,0,0,0.2);
     --text-primary:#111827;--text-secondary:#4b5563;--text-tertiary:#9ca3af;
   }
-  body.light-mode .msg-content.user { color: #ffffff; }
+body.light-mode .msg-content.user { color: #ffffff; }
+
+/* ============ WISE KING PREMIUM LOGO ============ */
+.wk-logo{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:linear-gradient(135deg,#1a1a24 0%,#0f0f18 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 4px 20px rgba(99,102,241,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  overflow:hidden;
+  flex-shrink:0;
+}
+.wk-logo::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(251,191,36,0.18) 0%,rgba(168,85,247,0.18) 50%,rgba(99,102,241,0.22) 100%);
+  opacity:0.9;
+}
+.wk-logo::after{
+  content:'';
+  position:absolute;
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,0.15) 50%,transparent 60%);
+  animation:wkShimmer 6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes wkShimmer{
+  0%,100%{transform:translateX(-60%) rotate(0deg)}
+  50%{transform:translateX(60%) rotate(0deg)}
+}
+.wk-logo svg{
+  position:relative;
+  z-index:1;
+  width:62%;
+  height:62%;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+}
+/* Size variants */
+.wk-logo.xs{width:22px;height:22px;border-radius:6px}
+.wk-logo.sm{width:32px;height:32px;border-radius:10px}
+.wk-logo.md{width:38px;height:38px;border-radius:11px}
+.wk-logo.lg{width:56px;height:56px;border-radius:16px}
+.wk-logo.xl{width:72px;height:72px;border-radius:20px}
+/* Light-mode tweaks */
+body.light-mode .wk-logo{
+  background:linear-gradient(135deg,#ffffff 0%,#f3f4f6 100%);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.06),
+    0 4px 20px rgba(99,102,241,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+body.light-mode .wk-logo::before{
+  background:linear-gradient(135deg,rgba(251,191,36,0.22) 0%,rgba(168,85,247,0.20) 50%,rgba(99,102,241,0.24) 100%);
+}
+/* AI message avatar variant — flatter, subtler */
+.msg-avatar.ai.wk-msg-logo{
+  background:transparent;
+  box-shadow:none;
+  padding:0;
+}
+body.light-mode .msg-content.user { color: #ffffff; }
+
+/* ============ WISE KING PREMIUM LOGO ============ */
+.wk-logo{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:linear-gradient(135deg,#1a1a24 0%,#0f0f18 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 4px 20px rgba(99,102,241,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  overflow:hidden;
+  flex-shrink:0;
+}
+.wk-logo::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(251,191,36,0.18) 0%,rgba(168,85,247,0.18) 50%,rgba(99,102,241,0.22) 100%);
+  opacity:0.9;
+}
+.wk-logo::after{
+  content:'';
+  position:absolute;
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,0.15) 50%,transparent 60%);
+  animation:wkShimmer 6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes wkShimmer{
+  0%,100%{transform:translateX(-60%) rotate(0deg)}
+  50%{transform:translateX(60%) rotate(0deg)}
+}
+.wk-logo svg{
+  position:relative;
+  z-index:1;
+  width:62%;
+  height:62%;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,0.4));
+}
+/* Size variants */
+.wk-logo.xs{width:22px;height:22px;border-radius:6px}
+.wk-logo.sm{width:32px;height:32px;border-radius:10px}
+.wk-logo.md{width:38px;height:38px;border-radius:11px}
+.wk-logo.lg{width:56px;height:56px;border-radius:16px}
+.wk-logo.xl{width:72px;height:72px;border-radius:20px}
+/* Light-mode tweaks */
+body.light-mode .wk-logo{
+  background:linear-gradient(135deg,#ffffff 0%,#f3f4f6 100%);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.06),
+    0 4px 20px rgba(99,102,241,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+}
+body.light-mode .wk-logo::before{
+  background:linear-gradient(135deg,rgba(251,191,36,0.22) 0%,rgba(168,85,247,0.20) 50%,rgba(99,102,241,0.24) 100%);
+}
+/* AI message avatar variant — flatter, subtler */
+.msg-avatar.ai.wk-msg-logo{
+  background:transparent;
+  box-shadow:none;
+  padding:0;
+}
+.msg-avatar.ai.wk-msg-logo .wk-logo{
+  width:100%;height:100%;border-radius:var(--radius-full);
+}
+/* ============ END WISE KING PREMIUM LOGO ============ */
   
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;overflow:hidden;background:var(--bg-primary);color:var(--text-primary);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background 0.3s, color 0.3s}
@@ -367,7 +504,7 @@
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-logo">👑</div>
+    <div class="login-logo wk-logo lg" style="background:transparent;box-shadow:none;font-size:0"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="wkG1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="0.5" stop-color="#a855f7"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs><path d="M14 22 L20 40 L32 28 L44 40 L50 22 L46 24 L44 20 L38 26 L32 18 L26 26 L20 20 L18 24 Z M18 44 L46 44 L44 50 L20 50 Z" fill="url(#wkG1)" stroke="url(#wkG1)" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
     <h1 class="login-title">Welcome to Wise King AI</h1>
     <p class="login-subtitle">Your conversations, memories, and creations — synced forever.</p>
     <div class="auth-error" id="authError"></div>
@@ -403,7 +540,7 @@
 <div class="app" id="mainApp" style="opacity:0;transition:opacity .4s">
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div class="brand"><div class="brand-logo">👑</div><div class="brand-name">Wise King Ai 👑</div></div>
+      <div class="brand"><div class="brand-logo wk-logo sm" style="background:transparent;box-shadow:none;font-size:0"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="wkG2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="0.5" stop-color="#a855f7"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs><path d="M14 22 L20 40 L32 28 L44 40 L50 22 L46 24 L44 20 L38 26 L32 18 L26 26 L20 20 L18 24 Z M18 44 L46 44 L44 50 L20 50 Z" fill="url(#wkG2)" stroke="url(#wkG2)" stroke-width="1.2" stroke-linejoin="round"/></svg></div><div class="brand-name">Wise King Ai 👑</div></div>
       <button class="sidebar-close-btn" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
     </div>
     <div class="sidebar-fixed-top">
@@ -458,11 +595,11 @@
         <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
       </div>
       <div class="top-profile-container" id="topProfileContainer">
-        <div class="top-profile-avatar" id="topProfileAvatar" role="button" tabindex="0">👑</div>
+        <div class="top-profile-avatar" id="topProfileAvatar" role="button" tabindex="0" style="background:transparent;border:none;box-shadow:none;padding:0"><span class="wk-logo md" style="width:100%;height:100%;border-radius:50%;background:transparent;box-shadow:none"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="wkG4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="0.5" stop-color="#a855f7"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs><path d="M14 22 L20 40 L32 28 L44 40 L50 22 L46 24 L44 20 L38 26 L32 18 L26 26 L20 20 L18 24 Z M18 44 L46 44 L44 50 L20 50 Z" fill="url(#wkG4)" stroke="url(#wkG4)" stroke-width="1.2" stroke-linejoin="round"/></svg></span></div>
         <div class="profile-menu-popup" id="topProfileMenu">
           <div class="pm-header">
             <div class="pm-user-info">
-              <div class="pm-avatar" id="pmAvatar">👑</div>
+              <div class="pm-avatar" id="pmAvatar" style="background:transparent;padding:0"><span class="wk-logo md" style="width:100%;height:100%;border-radius:50%;background:transparent;box-shadow:none"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="wkG5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="0.5" stop-color="#a855f7"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs><path d="M14 22 L20 40 L32 28 L44 40 L50 22 L46 24 L44 20 L38 26 L32 18 L26 26 L20 20 L18 24 Z M18 44 L46 44 L44 50 L20 50 Z" fill="url(#wkG5)" stroke="url(#wkG5)" stroke-width="1.2" stroke-linejoin="round"/></svg></span></div>
               <div class="pm-details"><div class="pm-name" id="pmName">Wise King User</div><div class="pm-email" id="pmEmail">Not signed in</div></div>
             </div>
             <button class="pm-close" onclick="closeTopProfileMenu()"><i class="fas fa-times"></i></button>
@@ -491,7 +628,7 @@
     <div class="chat-scroll" id="chatScroll">
       <div class="chat-inner" id="chatInner">
         <div class="welcome" id="welcomeScreen">
-          <div class="welcome-logo">👑</div>
+          <div class="welcome-logo wk-logo xl" style="background:transparent;box-shadow:none;font-size:0"><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="wkG3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="0.5" stop-color="#a855f7"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs><path d="M14 22 L20 40 L32 28 L44 40 L50 22 L46 24 L44 20 L38 26 L32 18 L26 26 L20 20 L18 24 Z M18 44 L46 44 L44 50 L20 50 Z" fill="url(#wkG3)" stroke="url(#wkG3)" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
           <h1>How can I help you today?</h1>
           <p>I'm <strong>Wise King AI</strong>. I can see photos, remember conversations, generate music, read PDFs, translate languages, and analyze data.</p>
           <div class="suggestions">
@@ -523,55 +660,10 @@
           </div>
         </div>
         <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.doc,.docx" style="display:none" multiple onchange="handleFiles(event)">
-        <div class="input-hint">Wise King Ai can make mistake, please double-check information</div>
+        <div class="input-hint">Wise King Ai can make mistake, please v info</div>
       </div>
     </div>
   </main>
-</div>
-
-<!-- ============ IMAGES PANEL ============ -->
-<div class="full-panel" id="imagesPanel">
-  <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-image"></i> Image Generator</div>
-    <button class="btn ghost" onclick="closeImagesPanel()"><i class="fas fa-arrow-left"></i> Back</button>
-  </div>
-  <div class="panel-body">
-    <div class="panel-inner">
-      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the image you want:</p>
-      <input type="text" class="search-big" id="imagesPromptInput" placeholder="e.g. beautiful Hausa woman OR logo for Wise King" onkeydown="if(event.key==='Enter'){generateImageFromPanel()}">
-      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:12px" onclick="generateImageFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Generate Image</button>
-      <div id="imagesPanelResults"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ============ VIDEOS PANEL ============ -->
-<div class="full-panel" id="videosPanel">
-  <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-video"></i> Video Prompt Creator</div>
-    <button class="btn ghost" onclick="closeVideosPanel()"><i class="fas fa-arrow-left"></i> Back</button>
-  </div>
-  <div class="panel-body">
-    <div class="panel-inner">
-      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:8px">Describe the video scene:</p>
-      <input type="text" class="search-big" id="videosPromptInput" placeholder="e.g. golden sunset over Kano city, drone shot...">
-      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="generateVideoFromPanel()"><i class="fas fa-clapperboard"></i> Generate Video Prompt</button>
-      <div id="videoPanelResults"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ============ VIDEO GALLERY PANEL ============ -->
-<div class="full-panel" id="videoGalleryPanel">
-  <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-film"></i> My Videos</div>
-    <button class="btn ghost" onclick="closeVideoGallery()"><i class="fas fa-arrow-left"></i> Back</button>
-  </div>
-  <div class="panel-body">
-    <div class="panel-inner">
-      <div id="videoGalleryContent"></div>
-    </div>
-  </div>
 </div>
 
 <!-- ============ MUSIC PANEL ============ -->
