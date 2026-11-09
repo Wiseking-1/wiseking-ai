@@ -10,6 +10,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 
+<!-- REQUIRED LIBRARIES FOR NEW FEATURES -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
 <style>
 :root{
   --bg-primary:#0a0a0f;--bg-secondary:#111118;--bg-elevated:#1a1a24;--bg-input:#1e1e2a;--bg-hover:#252533;
@@ -274,9 +278,6 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
 .lang-selector{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
 .lang-select{flex:1;min-width:140px;padding:12px 14px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:14px;outline:none;font-family:inherit}
 .lang-swap{width:44px;height:44px;border-radius:50%;background:var(--accent-gradient);border:none;color:white;font-size:16px;cursor:pointer;flex-shrink:0}
-.quick-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg-secondary);border:1px solid var(--border-default);border-radius:var(--radius-full);color:var(--text-primary);font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;transition:all var(--transition-fast);text-decoration:none}
-.quick-chip:hover{background:var(--bg-elevated);border-color:var(--accent);transform:translateY(-1px);box-shadow:var(--shadow-md)}
-.quick-chip i{font-size:14px;color:var(--accent-hover)}
 .gen-image-loading{padding:40px 20px;text-align:center;color:var(--text-secondary);font-size:13px}
 .gen-image-loading i{font-size:28px;color:var(--accent);margin-bottom:12px;display:block;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -464,8 +465,6 @@ window.__wkCodeBlocks = {};
         <span class="nav-icon" style="color:#fbbf24"><i class="fas fa-lightbulb"></i></span>
         Coach 💡
       </button>      
-      <button class="nav-btn" onclick="openImagesPanel()"><span class="nav-icon gradient-1"><i class="fas fa-image"></i></span>Images</button>
-      <button class="nav-btn" onclick="openVideosPanel()"><span class="nav-icon gradient-2"><i class="fas fa-video"></i></span>Videos</button>
       <button class="nav-btn" onclick="openMusicPanel()"><span class="nav-icon gradient-8"><i class="fas fa-music"></i></span>Music<span class="nav-badge" id="musicCountBadge">0</span></button>
       <button class="nav-btn" onclick="openPdfChatPanel()"><span class="nav-icon gradient-9"><i class="fas fa-file-pdf"></i></span>PDF Chat</button>
       <button class="nav-btn" onclick="openTranslatePanel()"><span class="nav-icon gradient-3"><i class="fas fa-language"></i></span>Translate</button>
@@ -504,6 +503,7 @@ window.__wkCodeBlocks = {};
         <button class="top-btn" onclick="openBuildAppPanel()"><i class="fas fa-code"></i><span class="label"> Build</span></button>
         <button class="top-btn" onclick="openVault()"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
         <button class="top-btn" onclick="toggleChatSearch()"><i class="fas fa-magnifying-glass"></i><span class="label"> Find</span></button>
+        <button class="top-btn" onclick="downloadChatAsPDF()"><i class="fas fa-file-pdf"></i><span class="label"> Save PDF</span></button>
         <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
       </div>
       <div class="top-profile-container" id="topProfileContainer">
@@ -565,7 +565,7 @@ window.__wkCodeBlocks = {};
             <div class="sc-title">Write a song</div>
             <div class="sc-desc">Full lyrics, real structure</div>
           </div>
-          <div class="suggestion-card" onclick="useSuggestion('Create a hyper-realistic image of a majestic African lion at sunset')">
+          <div class="suggestion-card" onclick="useSuggestion('Generate an image of a majestic African lion at sunset')">
             <i class="fas fa-image"></i>
             <div class="sc-title">Generate image</div>
             <div class="sc-desc">Hyper-realistic, 8k</div>
@@ -591,6 +591,7 @@ window.__wkCodeBlocks = {};
         <div class="gk-options-spacer"></div>
         <button class="gk-input-btn" aria-label="Attach file" onclick="document.getElementById('fileInput').click()" title="Attach"><i class="fas fa-plus"></i></button>
         <button class="gk-input-btn" aria-label="Voice input" onclick="startVoiceInput()" title="Voice input"><i class="fas fa-microphone"></i></button>
+        <button class="gk-input-btn" aria-label="Voice Chat" onclick="startVoiceChat()" title="Talk to AI"><i class="fas fa-headset"></i></button>
       </div>
     </div>
     <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.doc,.docx" style="display:none" multiple onchange="handleFiles(event)">
@@ -601,106 +602,285 @@ window.__wkCodeBlocks = {};
 </main>
 </div>
 
-<!-- PANELS -->
+<!-- ========================================== -->
+<!-- PANELS SECTION                             -->
+<!-- ========================================== -->
+
+<!-- 1. MUSIC PANEL -->
 <div class="full-panel" id="musicPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-music"></i> AI Music Studio 🎵</div><button class="btn ghost" onclick="closePanel('musicPanel')"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎼 Paste lyrics OR describe a style — AI will build your song prompt.</p>
-    <textarea class="search-big" id="musicInput" rows="6" placeholder="Describe the music style..." style="min-height:140px;resize:vertical;font-family:inherit"></textarea>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
-      <select class="input-field" id="musicGenre" style="margin-bottom:0"><option value="">🎵 Genre</option><option>Afrobeat</option><option>Amapiano</option><option>Hip-hop</option><option>R&B</option><option>Gospel</option><option>Reggae</option><option>Pop</option><option>Traditional Hausa</option><option>Fuji</option><option>Highlife</option></select>
-      <select class="input-field" id="musicMood" style="margin-bottom:0"><option value="">💫 Mood</option><option>Happy & Uplifting</option><option>Romantic</option><option>Motivational</option><option>Spiritual</option><option>Party Vibe</option><option>Chill & Relaxed</option></select>
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-music"></i> AI Music Studio 🎵</div>
+    <button class="btn ghost" onclick="closePanel('musicPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎼 Paste lyrics OR describe a style — AI will build your song prompt.</p>
+      
+      <textarea class="search-big" id="musicInput" rows="6" placeholder="Describe the music style..." style="min-height:140px;resize:vertical;font-family:inherit"></textarea>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
+        <select class="input-field" id="musicGenre" style="margin-bottom:0">
+          <option value="">🎵 Genre</option>
+          <option>Afrobeat</option>
+          <option>Amapiano</option>
+          <option>Hip-hop</option>
+          <option>R&B</option>
+          <option>Gospel</option>
+          <option>Reggae</option>
+          <option>Pop</option>
+          <option>Traditional Hausa</option>
+          <option>Fuji</option>
+          <option>Highlife</option>
+        </select>
+        <select class="input-field" id="musicMood" style="margin-bottom:0">
+          <option value="">💫 Mood</option>
+          <option>Happy & Uplifting</option>
+          <option>Romantic</option>
+          <option>Motivational</option>
+          <option>Spiritual</option>
+          <option>Party Vibe</option>
+          <option>Chill & Relaxed</option>
+        </select>
+      </div>
+      
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="generateMusicFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Build Music Prompt</button>
+        <button class="btn solid" style="flex:1;justify-content:center" onclick="generateLyricsFromPanel()"><i class="fas fa-pen-fancy"></i> Write Lyrics</button>
+      </div>
+      
+      <div id="musicPanelResults"></div>
+      
+      <h3 style="margin:24px 0 12px;color:var(--accent-hover);font-size:15px">🎧 My Music Library</h3>
+      <div id="musicLibraryBox"></div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-      <button class="btn accent" style="flex:1;justify-content:center" onclick="generateMusicFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Build Music Prompt</button>
-      <button class="btn solid" style="flex:1;justify-content:center" onclick="generateLyricsFromPanel()"><i class="fas fa-pen-fancy"></i> Write Lyrics</button>
-    </div>
-    <div id="musicPanelResults"></div>
-    <h3 style="margin:24px 0 12px;color:var(--accent-hover);font-size:15px">🎧 My Music Library</h3>
-    <div id="musicLibraryBox"></div>
-  </div></div>
+  </div>
 </div>
 
+<!-- 2. PDF CHAT PANEL -->
 <div class="full-panel" id="pdfChatPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-file-pdf"></i> PDF Chat 📄</div><button class="btn ghost" onclick="closePanel('pdfChatPanel')"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <div class="pdf-dropzone" onclick="document.getElementById('pdfFileInput').click()"><i class="fas fa-cloud-upload-alt"></i><p><strong>Click to upload PDF</strong> or drag & drop</p><small>Read, summarize, and ask questions about any PDF</small><input type="file" id="pdfFileInput" accept=".pdf" style="display:none" onchange="handlePdfUpload(event)"></div>
-    <div id="pdfFileInfo"></div>
-    <div id="pdfSummaryBox"></div>
-    <input type="text" class="search-big" id="pdfQuestionInput" placeholder="Ask anything about the PDF..." onkeydown="if(event.key==='Enter'){askPdfQuestion()}" style="margin-top:16px">
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="askPdfQuestion()"><i class="fas fa-question-circle"></i> Ask About PDF</button>
-    <div id="pdfChatResults"></div>
-  </div></div>
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-file-pdf"></i> PDF Chat 📄</div>
+    <button class="btn ghost" onclick="closePanel('pdfChatPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="pdf-dropzone" onclick="document.getElementById('pdfFileInput').click()">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p><strong>Click to upload PDF</strong> or drag & drop</p>
+        <small>Read, summarize, and ask questions about any PDF</small>
+        <input type="file" id="pdfFileInput" accept=".pdf" style="display:none" onchange="handlePdfUpload(event)">
+      </div>
+      
+      <div id="pdfFileInfo"></div>
+      <div id="pdfSummaryBox"></div>
+      
+      <input type="text" class="search-big" id="pdfQuestionInput" placeholder="Ask anything about the PDF..." onkeydown="if(event.key==='Enter'){askPdfQuestion()}" style="margin-top:16px">
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="askPdfQuestion()"><i class="fas fa-question-circle"></i> Ask About PDF</button>
+      
+      <div id="pdfChatResults"></div>
+    </div>
+  </div>
 </div>
 
+<!-- 3. TRANSLATE PANEL -->
 <div class="full-panel" id="translatePanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-language"></i> Real-time Translation 🌍</div><button class="btn ghost" onclick="closePanel('translatePanel')"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <div class="lang-selector">
-      <select class="lang-select" id="translateFrom"><option value="auto">🔍 Auto-detect</option><option value="en">🇬🇧 English</option><option value="ha">🇳🇬 Hausa</option><option value="ar">🇸🇦 Arabic</option><option value="fr">🇫🇷 French</option><option value="yo">🇳🇬 Yoruba</option><option value="ig">🇳🇬 Igbo</option><option value="sw">🌍 Swahili</option><option value="es">🇪🇸 Spanish</option></select>
-      <button class="lang-swap" aria-label="Swap languages" onclick="swapLanguages()"><i class="fas fa-right-left"></i></button>
-      <select class="lang-select" id="translateTo"><option value="en">🇬🇧 English</option><option value="ha">🇳🇬 Hausa</option><option value="ar">🇸🇦 Arabic</option><option value="fr">🇫🇷 French</option><option value="yo">🇳🇬 Yoruba</option><option value="ig">🇳🇬 Igbo</option><option value="sw">🌍 Swahili</option><option value="es">🇪🇸 Spanish</option></select>
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-language"></i> Real-time Translation 🌍</div>
+    <button class="btn ghost" onclick="closePanel('translatePanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="lang-selector">
+        <select class="lang-select" id="translateFrom">
+          <option value="auto">🔍 Auto-detect</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+        </select>
+        <button class="lang-swap" aria-label="Swap languages" onclick="swapLanguages()"><i class="fas fa-right-left"></i></button>
+        <select class="lang-select" id="translateTo">
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+        </select>
+      </div>
+      
+      <textarea class="search-big" id="translateInput" rows="6" placeholder="Type or paste text to translate..." style="min-height:130px;resize:vertical;font-family:inherit"></textarea>
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="doTranslate()"><i class="fas fa-language"></i> Translate Now</button>
+      
+      <div id="translateResults"></div>
     </div>
-    <textarea class="search-big" id="translateInput" rows="6" placeholder="Type or paste text to translate..." style="min-height:130px;resize:vertical;font-family:inherit"></textarea>
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="doTranslate()"><i class="fas fa-language"></i> Translate Now</button>
-    <div id="translateResults"></div>
-  </div></div>
+  </div>
 </div>
 
+<!-- 4. DATA ANALYSIS PANEL -->
 <div class="full-panel" id="dataAnalysisPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-chart-line"></i> Data Analysis 📊</div><button class="btn ghost" onclick="closePanel('dataAnalysisPanel')"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <div class="pdf-dropzone" onclick="document.getElementById('dataFileInput').click()"><i class="fas fa-file-csv"></i><p><strong>Upload CSV, Excel, or paste data</strong></p><small>Auto-generate stats, charts, and AI insights</small><input type="file" id="dataFileInput" accept=".csv,.json,.txt" style="display:none" onchange="handleDataUpload(event)"></div>
-    <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV data here..." style="min-height:120px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:12.5px"></textarea>
-    <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="analyzePastedData()"><i class="fas fa-chart-bar"></i> Analyze Data</button>
-    <div id="dataAnalysisResults"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="downloadHubPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-cloud-arrow-down"></i> Downloads Hub 📥</div><button class="btn ghost" onclick="closePanel('downloadHubPanel')"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px">📱 Everything you create — download directly to your phone.</p>
-    <div class="download-grid" id="downloadHubGrid"></div>
-  </div></div>
-</div>
-
-<div class="full-panel" id="pricingPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans</div><button class="btn ghost" onclick="closePanel('pricingPanel')"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;text-align:center">Choose the plan that fits your journey. Upgrade anytime. 👑</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
-      <div class="result-card" style="text-align:center"><div style="font-size:40px;margin-bottom:8px">🌱</div><h3 style="font-size:18px;margin-bottom:4px">Free</h3><div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦0</div><div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Forever free</div><ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px"><li>✅ Unlimited chats</li><li>✅ Image generation</li><li>✅ Voice & translation</li><li>✅ PDF chat</li></ul><button class="btn solid" style="width:100%;justify-content:center" disabled>Current Plan</button></div>
-      <div class="result-card" style="text-align:center;border:2px solid var(--accent);box-shadow:var(--shadow-glow)"><div style="font-size:40px;margin-bottom:8px">⚡</div><h3 style="font-size:18px;margin-bottom:4px">Pro</h3><div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400">/month</span></div><ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px"><li>✅ Everything in Free</li><li>✅ Unlimited AI messages</li><li>✅ Music generation</li><li>✅ Priority speed</li></ul><button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Pro', 5000)"><i class="fas fa-rocket"></i> Upgrade to Pro</button></div>
-      <div class="result-card" style="text-align:center"><div style="font-size:40px;margin-bottom:8px">👑</div><h3 style="font-size:18px;margin-bottom:4px">Premium</h3><div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400">/month</span></div><ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px"><li>✅ Everything in Pro</li><li>✅ Custom AI models</li><li>✅ Business account</li><li>✅ 24/7 priority support</li></ul><button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Premium', 15000)"><i class="fas fa-crown"></i> Go Premium</button></div>
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-chart-line"></i> Data Analysis 📊</div>
+    <button class="btn ghost" onclick="closePanel('dataAnalysisPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="pdf-dropzone" onclick="document.getElementById('dataFileInput').click()">
+        <i class="fas fa-file-csv"></i>
+        <p><strong>Upload CSV, Excel, or paste data</strong></p>
+        <small>Auto-generate stats, charts, and AI insights</small>
+        <input type="file" id="dataFileInput" accept=".csv,.json,.txt" style="display:none" onchange="handleDataUpload(event)">
+      </div>
+      
+      <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV data here..." style="min-height:120px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:12.5px"></textarea>
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="analyzePastedData()"><i class="fas fa-chart-bar"></i> Analyze Data</button>
+      
+      <div id="dataAnalysisResults"></div>
     </div>
-  </div></div>
+  </div>
 </div>
 
+<!-- 5. DOWNLOAD HUB PANEL -->
+<div class="full-panel" id="downloadHubPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-cloud-arrow-down"></i> Downloads Hub 📥</div>
+    <button class="btn ghost" onclick="closePanel('downloadHubPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px">📱 Everything you create — download directly to your phone.</p>
+      <div class="download-grid" id="downloadHubGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. PRICING PANEL -->
+<div class="full-panel" id="pricingPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans</div>
+    <button class="btn ghost" onclick="closePanel('pricingPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;text-align:center">Choose the plan that fits your journey. Upgrade anytime. 👑</p>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+        
+        <!-- Free Plan -->
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">🌱</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Free</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦0</div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Forever free</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Unlimited chats</li>
+            <li>✅ Image generation</li>
+            <li>✅ Voice & translation</li>
+            <li>✅ PDF chat</li>
+          </ul>
+          <button class="btn solid" style="width:100%;justify-content:center" disabled>Current Plan</button>
+        </div>
+        
+        <!-- Pro Plan -->
+        <div class="result-card" style="text-align:center;border:2px solid var(--accent);box-shadow:var(--shadow-glow)">
+          <div style="font-size:40px;margin-bottom:8px">⚡</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Pro</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400">/month</span></div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Free</li>
+            <li>✅ Unlimited AI messages</li>
+            <li>✅ Music generation</li>
+            <li>✅ Priority speed</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Pro', 5000)"><i class="fas fa-rocket"></i> Upgrade to Pro</button>
+        </div>
+        
+        <!-- Premium Plan -->
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">👑</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Premium</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400">/month</span></div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Pro</li>
+            <li>✅ Custom AI models</li>
+            <li>✅ Business account</li>
+            <li>✅ 24/7 priority support</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Premium', 15000)"><i class="fas fa-crown"></i> Go Premium</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. SEARCH WEB PANEL -->
 <div class="full-panel" id="searchWebPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-globe"></i> Search the web</div><button class="btn ghost" onclick="closePanel('searchWebPanel')"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
-    <div id="searchWebResults"></div>
-  </div></div>
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-globe"></i> Search the web</div>
+    <button class="btn ghost" onclick="closePanel('searchWebPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      
+      <div style="display:flex; gap:10px; margin-bottom:12px;">
+        <select id="searchEngineSelect" class="input-field" style="margin-bottom:0; flex:1; padding:12px;">
+          <option value="google">🔍 Google</option>
+          <option value="bing">🦆 Bing</option>
+          <option value="duckduckgo">🦆 DuckDuckGo</option>
+        </select>
+      </div>
+
+      <input type="text" class="search-big" id="searchWebInput" placeholder="What do you want to search for?" onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+      
+      <div style="display:flex; gap:10px; margin-bottom:16px;">
+        <button class="btn accent" style="flex:1; justify-content:center;" onclick="openSearchEngine()">
+          <i class="fas fa-external-link-alt"></i> Open in Browser
+        </button>
+        <button class="btn solid" style="flex:1; justify-content:center;" onclick="askAiToSearch(document.getElementById('searchWebInput').value)">
+          <i class="fas fa-robot"></i> Ask AI
+        </button>
+      </div>
+
+      <div id="searchWebResults"></div>
+    </div>
+  </div>
 </div>
 
+<!-- 8. BUILD APP PANEL -->
 <div class="full-panel" id="buildAppPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-code"></i> Build an app</div><button class="btn ghost" onclick="closePanel('buildAppPanel')"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <input type="text" class="search-big" id="buildAppInput" placeholder="Search or describe your app idea..." oninput="filterBuildIdeas(this.value)">
-    <div id="buildAppIdeas"></div>
-  </div></div>
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-code"></i> Build an app</div>
+    <button class="btn ghost" onclick="closePanel('buildAppPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <input type="text" class="search-big" id="buildAppInput" placeholder="Search or describe your app idea..." oninput="filterBuildIdeas(this.value)">
+      <div id="buildAppIdeas"></div>
+    </div>
+  </div>
 </div>
 
+<!-- 9. MEMORY PANEL -->
 <div class="full-panel" id="memoryPanel">
-  <div class="panel-header"><div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory</div><button class="btn ghost" onclick="closePanel('memoryPanel')"><i class="fas fa-arrow-left"></i> Back</button></div>
-  <div class="panel-body"><div class="panel-inner">
-    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King remembers facts from your vault and chats.</p>
-    <div id="memoryPanelResults"></div>
-  </div></div>
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory</div>
+    <button class="btn ghost" onclick="closePanel('memoryPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King remembers facts from your vault and chats.</p>
+      <div id="memoryPanelResults"></div>
+    </div>
+  </div>
 </div>
-
+  
 <!-- COACH PANEL -->
 <div class="full-panel" id="coachPanel">
   <div class="panel-header">
@@ -790,6 +970,20 @@ window.__wkCodeBlocks = {};
     <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
     <div class="settings-group"><div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div><div class="settings-card"><div class="toggle-row"><div class="toggle-label">Light Mode</div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div></div></div>
     <div class="settings-group"><div class="settings-group-title"><i class="fas fa-user"></i> Profile & Account</div><div class="settings-card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar" style="width:52px;height:52px;font-size:20px" id="settingsAvatar">WK</div><div style="flex:1"><div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">Not signed in</div><button class="btn accent" style="font-size:12px;padding:6px 12px" onclick="signInWithGoogle()"><i class="fab fa-google"></i> Link Google</button></div></div></div></div>
+    
+    <!-- AI Persona -->
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-masks-theater"></i> AI Persona</div>
+      <div class="settings-card">
+        <select class="input-field" id="personaSelect" style="margin-bottom:0">
+          <option value="default">🤖 Wise King (Default)</option>
+          <option value="coder">💻 Strict Senior Developer</option>
+          <option value="teacher">🍎 Patient Teacher</option>
+          <option value="comedian">😂 Funny Nigerian Comedian</option>
+        </select>
+      </div>
+    </div>
+
     <div class="settings-group"><div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div><div class="settings-card"><div class="toggle-row"><div class="toggle-label">Enable Web Search</div><div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div></div><div style="height:1px;background:var(--border-subtle);margin:10px 0"></div><div class="toggle-row"><div class="toggle-label">Enable Cross-Chat Memory</div><div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div></div><div style="height:1px;background:var(--border-subtle);margin:10px 0"></div><div class="toggle-row"><div class="toggle-label">Enable Streaming</div><div class="toggle-switch on" id="streamingToggle" onclick="toggleStreamingSetting()"></div></div></div></div>
     <div class="settings-group"><div class="settings-group-title"><i class="fas fa-key"></i> API Keys (optional)</div><div class="settings-card"><input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off"><input type="password" class="input-field" id="deepseekKeyInput" placeholder="DeepSeek API key (optional fallback)" autocomplete="off" style="margin-bottom:0"></div></div>
     <div class="settings-group"><div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div><div class="settings-card"><select class="input-field" id="modelSelect" style="margin-bottom:0"><option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast ✅</option><option value="gemini-3.1-flash">Gemini 3.1 Flash — Best for Web Search 🔍</option><option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant</option></select></div></div>
@@ -801,6 +995,7 @@ window.__wkCodeBlocks = {};
 
 <div class="toast" id="toast"></div>
 
+<!-- LOAD REQUIRED LIBRARIES -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
@@ -810,18 +1005,13 @@ window.__wkCodeBlocks = {};
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <script>
-  // ⚠️ SECURITY WARNING: Client-side API keys are visible to anyone.
-  // For production: rotate this key and proxy through a backend (Cloudflare Worker recommended).
   window.__WK_ENV__ = {
     GEMINI_API_KEY: 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU',
     DEEPSEEK_API_KEY: ''
   };
-  if (window.__WK_ENV__.GEMINI_API_KEY) {
-    console.warn('[WiseKing] ⚠️ Client-side API key detected. Rotate & proxy before production.');
-  }
 </script>
 
-<!-- Firebase auth (module) -->
+<!-- FIREBASE AUTH -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
@@ -853,7 +1043,6 @@ window.__wkCodeBlocks = {};
     }
   };
 
-  // Merge helper: prefer latest by updatedAt/createdAt/id
   function mergeById(local, remote) {
     const map = new Map();
     (remote || []).forEach(x => { if (x && x.id) map.set(x.id, x); });
@@ -2753,7 +2942,7 @@ If the writing cannot be passed on, it is not finished.
 ==================================================
 END — MASTER WRITING, TIPS, SUMMARY & SUGGESTION ENGINE
 ==================================================
-`; 
+`;
 
 window.chats = [];
 window.activeChatId = null;
@@ -3093,12 +3282,15 @@ function openSettings(){
   const k1 = localStorage.getItem('wk_api_key'); if (k1) $('apiKeyInput').value = k1;
   const dk = localStorage.getItem('wk_deepseek_key'); if (dk) $('deepseekKeyInput').value = dk;
   const m = localStorage.getItem('wk_model'); if (m) $('modelSelect').value = m;
+  const p = localStorage.getItem('wk_persona') || 'default'; 
+  if($('personaSelect')) $('personaSelect').value = p;
 }
 window.openSettings = openSettings;
 function saveSettings(){
   const g = $('apiKeyInput').value.trim(); if (g) localStorage.setItem('wk_api_key', g); else localStorage.removeItem('wk_api_key');
   const dk = $('deepseekKeyInput').value.trim(); if (dk) localStorage.setItem('wk_deepseek_key', dk); else localStorage.removeItem('wk_deepseek_key');
   const m = $('modelSelect').value; localStorage.setItem('wk_model', m);
+  if($('personaSelect')) localStorage.setItem('wk_persona', $('personaSelect').value);
   updateModelBadge(); closeModal('settingsModal'); showToast('✅ Saved');
 }
 window.saveSettings = saveSettings;
@@ -3311,18 +3503,38 @@ function downloadText(encoded, filename){
 }
 window.downloadText = downloadText;
 
-// ---- Search Web ----
+/* ---- Search Web ---- */
 function openSearchWebPanel(){ $('searchWebPanel').classList.add('show'); closeSidebar(); }
 window.openSearchWebPanel = openSearchWebPanel;
-async function doSearchWeb(query){
-  const q = (query||'').trim(); if (!q) return;
-  const results = $('searchWebResults');
-  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
-  const res = await sendMessageWithFallback('Search the live web: '+q);
-  if (res.success){ results.innerHTML = '<div class="result-card"><h4>Answer</h4><div class="md">'+renderMarkdown(res.reply)+'</div></div>'; highlightCodeBlocks(); }
-  else results.innerHTML = '<div class="result-card"><p>⚠️ Failed</p></div>';
+
+function openSearchEngine() {
+  const query = document.getElementById('searchWebInput').value.trim();
+  if (!query) return showToast('⚠️ Please enter a search query');
+  const engine = document.getElementById('searchEngineSelect').value;
+  let url = '';
+  if (engine === 'google') url = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+  else if (engine === 'bing') url = 'https://www.bing.com/search?q=' + encodeURIComponent(query);
+  else if (engine === 'duckduckgo') url = 'https://duckduckgo.com/?q=' + encodeURIComponent(query);
+  window.open(url, '_blank');
+  showToast('🌐 Opening ' + engine + '...');
 }
-window.doSearchWeb = doSearchWeb;
+window.openSearchEngine = openSearchEngine;
+
+async function askAiToSearch(query) {
+  const q = (query || '').trim(); 
+  if (!q) return showToast('⚠️ Please enter a search query');
+  const results = $('searchWebResults');
+  results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>AI is searching its knowledge base...</div>';
+  const prompt = 'Act as a web search aggregator. The user is looking for: "' + q + '".\n\nProvide a comprehensive summary of the latest news, facts, and website links related to this topic. Structure it clearly with bullet points and include the names of the websites (e.g., BBC, CNN, Wikipedia) where this information is typically found.';
+  const res = await sendMessageWithFallback(prompt);
+  if (res.success) { 
+    results.innerHTML = '<div class="result-card"><h4>🤖 AI Knowledge Summary</h4><div class="md">' + renderMarkdown(res.reply) + '</div></div>'; 
+    highlightCodeBlocks(); 
+  } else { 
+    results.innerHTML = '<div class="result-card"><p>⚠️ AI Failed to process.</p></div>'; 
+  }
+}
+window.askAiToSearch = askAiToSearch;
 
 // ---- Build App ----
 const BUILD_IDEAS = [
@@ -3352,11 +3564,34 @@ function buildApp(name){
 }
 window.buildApp = buildApp;
 
-// ---- Pricing ----
+// ---- Pricing & Paystack ----
 function openPricingPanel(){ $('pricingPanel').classList.add('show'); closeSidebar(); }
 window.openPricingPanel = openPricingPanel;
+
 function upgradeToPlan(plan, amount){
-  showToast('💳 To enable payments, add a Paystack key in Settings.');
+  // IMPORTANT: Replace this with your actual Paystack public key
+  const PAYSTACK_PUBLIC_KEY = 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE'; 
+  
+  if (PAYSTACK_PUBLIC_KEY === 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE') {
+    return showToast('💳 Please add your Paystack Public Key in the code to enable payments.');
+  }
+
+  let handler = PaystackPop.setup({
+    key: PAYSTACK_PUBLIC_KEY,
+    email: localStorage.getItem('wk_user_email') || 'guest@wiseking.com',
+    amount: amount * 100, // Paystack uses Kobo (₦5,000 = 500000)
+    currency: 'NGN',
+    ref: 'WK_' + Math.floor((Math.random() * 1000000000) + 1),
+    onClose: function(){
+      showToast('⚠️ Payment window closed.');
+    },
+    callback: function(response){
+      showToast('✅ Payment successful! Ref: ' + response.reference);
+      localStorage.setItem('wk_plan', plan);
+      closePanel('pricingPanel');
+    }
+  });
+  handler.openIframe();
 }
 window.upgradeToPlan = upgradeToPlan;
 
@@ -3376,9 +3611,10 @@ document.addEventListener('input', e => {
   });
 });
 
-// ---- Modes ----
+// ---- Modes & Voice ----
 function toggleThinkMode(){ thinkMode = !thinkMode; $('chipThink').classList.toggle('active', thinkMode); showToast(thinkMode ? '🧠 ON' : '🧠 OFF'); }
 function toggleSearchMode(){ searchMode = !searchMode; $('chipSearch').classList.toggle('active', searchMode); showToast(searchMode ? '🌐 ON' : '🌐 OFF'); }
+
 function startVoiceInput(){
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return showToast('⚠️ Voice not supported');
@@ -3387,9 +3623,58 @@ function startVoiceInput(){
   rec.onerror = () => showToast('⚠️ Voice error');
   rec.start(); showToast('🎙️ Listening...');
 }
+
+// NEW: Voice Chat Mode (Speaks back)
+function startVoiceChat() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return showToast('⚠️ Voice not supported');
+  
+  const rec = new SR(); 
+  rec.lang = 'en-NG';
+  
+  rec.onresult = async (ev) => { 
+    const t = ev.results[0][0].transcript; 
+    const input = document.getElementById('messageInput');
+    input.value = t;
+    handleInputChange();
+    
+    // Send the message
+    sendMessage(); 
+    
+    // Wait a moment for AI to reply, then read it aloud
+    setTimeout(() => {
+      const chat = window.chats.find(c => c.id === window.activeChatId);
+      const lastMsg = chat.messages[chat.messages.length - 1];
+      if (lastMsg && lastMsg.role === 'ai') {
+        speakText(lastMsg.content);
+      }
+    }, 4000); 
+  };
+  
+  rec.start(); 
+  showToast('🎙️ Listening (Voice Mode)...');
+}
+
+// NEW: Text-to-Speech (Read Aloud)
+function speakText(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel(); 
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-NG'; 
+    utterance.rate = 1.0; 
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+    showToast('🔊 Reading aloud...');
+  } else {
+    showToast('⚠️ Text-to-Speech not supported');
+  }
+}
+
 window.toggleThinkMode = toggleThinkMode;
 window.toggleSearchMode = toggleSearchMode;
 window.startVoiceInput = startVoiceInput;
+window.startVoiceChat = startVoiceChat;
+window.speakText = speakText;
 
 // ---- Input handling ----
 function handleInputChange(){
@@ -3513,7 +3798,13 @@ function buildMessageEl(msg, idx, chatId){
     content.classList.add('thinking');
     content.innerHTML = '<span class="thinking-crown">'+window.WK_LOGO_INLINE(26)+'</span><span class="thinking-text">Wise King is thinking</span><span class="thinking-dots"><span></span><span></span><span></span></span>';
   } else {
-    content.innerHTML = '<div class="md">' + renderMarkdown(msg.content || '') + '</div>';
+    let htmlContent = '<div class="md">' + renderMarkdown(msg.content || '') + '</div>';
+    
+    // AI Image Generation Display
+    if (msg.imageUrl) {
+      htmlContent += `<div style="margin-top:12px;"><img src="${msg.imageUrl}" alt="AI Generated" style="max-width:100%;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);"><br><a href="${msg.imageUrl}" target="_blank" download class="btn solid" style="margin-top:8px;font-size:12px;padding:6px 12px;"><i class="fas fa-download"></i> Download Image</a></div>`;
+    }
+
     if (msg.attachments && msg.attachments.length){
       const aHtml = msg.attachments.map(att => {
         if (att.type === 'image') return '<img src="'+att.dataUrl+'" style="max-width:220px;border-radius:10px;margin-top:8px;display:block" alt="attachment">';
@@ -3521,8 +3812,9 @@ function buildMessageEl(msg, idx, chatId){
         if (att.type === 'text') return '<div style="display:inline-flex;align-items:center;gap:8px;padding:8px 12px;background:var(--bg-elevated);border:1px solid var(--border-default);border-radius:10px;margin-top:8px;font-size:13px"><i class="fas fa-file-alt" style="color:#60a5fa"></i><span>'+esc(att.name)+'</span></div>';
         return '';
       }).join('');
-      content.innerHTML = aHtml + content.innerHTML;
+      htmlContent = aHtml + htmlContent;
     }
+    content.innerHTML = htmlContent;
   }
   wrap.appendChild(content); body.appendChild(wrap);
   if (!isThinking){
@@ -3530,6 +3822,7 @@ function buildMessageEl(msg, idx, chatId){
     if (isAI){
       bar.innerHTML = '<button class="msg-action-btn '+(msg.feedback==='up'?'active':'')+'" aria-label="Like" onclick="handleLikeMessage('+idx+')"><i class="fas fa-thumbs-up"></i></button>'
         + '<button class="msg-action-btn '+(msg.feedback==='down'?'active':'')+'" aria-label="Dislike" onclick="handleDislikeMessage('+idx+')"><i class="fas fa-thumbs-down"></i></button>'
+        + '<button class="msg-action-btn" aria-label="Read Aloud" onclick="speakText(document.getElementById(\'msg-text-'+idx+'\').innerText)"><i class="fas fa-volume-up"></i></button>'
         + '<button class="msg-action-btn" aria-label="Copy" onclick="handleCopyMessage('+idx+')"><i class="fas fa-copy"></i></button>'
         + '<button class="msg-action-btn" aria-label="Regenerate" onclick="handleRegenerateMessage('+idx+')"><i class="fas fa-sync-alt"></i></button>'
         + '<button class="msg-action-btn" aria-label="Share" onclick="handleShareMessage('+idx+')"><i class="fas fa-share"></i></button>';
@@ -3541,6 +3834,11 @@ function buildMessageEl(msg, idx, chatId){
     body.appendChild(bar);
   }
   el.appendChild(body);
+  
+  // Add ID to md div for TTS reading
+  const mdDiv = el.querySelector('.md');
+  if (mdDiv) mdDiv.id = 'msg-text-' + idx;
+
   return el;
 }
 
@@ -3601,6 +3899,14 @@ function buildMemoryContext(){
   return parts.join('\n');
 }
 
+// Personas for the AI
+const PERSONAS = {
+  default: "", 
+  coder: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a strict, highly efficient senior software engineer. Only provide code and brief, technical explanations. No fluff, no motivational talk.]",
+  teacher: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a patient primary school teacher. Explain things using simple analogies, step-by-step, and always encourage the user.]",
+  comedian: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a funny Nigerian stand-up comedian. Answer the user's questions with humour, pidgin slang, and jokes while still giving the correct, useful answer.]"
+};
+
 async function sendMessageWithFallback(userText, chatHistory, signal){
   if (!__canCallApi()) {
     return { success: false, error: 'Slow down — sending too fast. Try again in a moment.' };
@@ -3611,7 +3917,11 @@ async function sendMessageWithFallback(userText, chatHistory, signal){
   const url = 'https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent?key='+apiKey;
   const now = new Date().toLocaleString('en-NG', {weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true});
   const memoryBlock = getMemoryEnabled() ? buildMemoryContext() : '';
-  const systemText = SYSTEM_PROMPT + (memoryBlock ? '\n\n' + memoryBlock : '');
+  
+  const activePersona = localStorage.getItem('wk_persona') || 'default';
+  const personaBlock = PERSONAS[activePersona] || '';
+
+  const systemText = SYSTEM_PROMPT + personaBlock + (memoryBlock ? '\n\n' + memoryBlock : '');
   const contents = [];
   chatHistory.slice(-MEMORY_HISTORY_LIMIT).forEach(m => {
     const role = m.role === 'user' ? 'user' : 'model';
@@ -3672,6 +3982,21 @@ function sendMessage(){
     }
     if (chat.title === 'New chat' && text) chat.title = text.slice(0, 32);
 
+    // Intercept Image Requests
+    const isImageReq = text.toLowerCase().includes('generate image') || text.toLowerCase().includes('create image') || text.toLowerCase().includes('draw ');
+    if (isImageReq && text.length > 15) {
+      chat.messages.push({role:'user', content: text, createdAt: Date.now()});
+      input.value = '';
+      saveChats(); renderMessages();
+      
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(text)}?width=1024&height=1024&nologo=true`;
+      const aiMsg = { role: 'ai', content: `Here is your generated image for: *"${text}"*`, imageUrl: imageUrl, createdAt: Date.now() };
+      chat.messages.push(aiMsg);
+      saveChats(); renderMessages();
+      showToast('🎨 Generating image...');
+      return;
+    }
+
     const attachments = uploadedFiles.slice();
     uploadedFiles = [];
     updatePreview();
@@ -3713,6 +4038,37 @@ async function triggerResponse(chat, userMsg){
     handleInputChange(); saveChats(); renderMessages();
   }
 }
+
+// Export Chat to PDF
+function downloadChatAsPDF() {
+  const chat = window.chats.find(c => c.id === window.activeChatId);
+  if (!chat || chat.messages.length === 0) return showToast('No chat to export');
+  
+  showToast('📄 Generating PDF...');
+  const element = document.createElement('div');
+  element.style.padding = '20px';
+  element.style.fontFamily = 'Arial, sans-serif';
+  element.innerHTML = `<h1 style="text-align:center; color:#6366f1;">Wise King AI Chat</h1><hr>`;
+  
+  chat.messages.forEach(msg => {
+    element.innerHTML += `
+      <div style="margin-bottom: 20px; page-break-inside: avoid;">
+        <strong style="color: ${msg.role === 'user' ? '#6366f1' : '#10b981'}">
+          ${msg.role === 'user' ? 'User' : 'Wise King AI'}:
+        </strong>
+        <p style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${msg.content}</p>
+      </div>
+    `;
+  });
+  
+  html2pdf().from(element).set({
+    margin: 1,
+    filename: 'WiseKing-Chat.pdf',
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  }).save().then(() => showToast('✅ PDF Downloaded!'));
+}
+window.downloadChatAsPDF = downloadChatAsPDF;
 
 // ---- Export / Import ----
 function exportData(){
