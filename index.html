@@ -487,130 +487,97 @@ window.__wkCodeBlocks = {};
         <div class="user-info"><div class="user-name" id="sidebarName">Wise King User</div><div class="user-plan" id="userPlanBadge">Free plan</div></div>
       </div>
       <button class="icon-action" aria-label="Settings" onclick="openSettings()"><i class="fas fa-cog"></i></button>
-   </div>
- </aside>
-
-<main class="chat-main">
-  <div class="chat-topbar">
-    <!-- Left Side: Menu & Title -->
-    <button class="menu-btn" aria-label="Open menu" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-    <div class="chat-title-wrap">
-      <span class="chat-title" id="chatTitle">New chat</span>
-      <span class="chat-model-badge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 3.5 Flash-lite</span></span>
     </div>
+  </aside>
 
-    <!-- Center/Right: Voice Controls -->
-    <div class="chat-actions" style="display:flex; align-items:center; gap:6px;">
-      <!-- Voice Selector Dropdown -->
-      <select id="voiceSelector" class="input-field" style="width:auto; padding:4px 8px; font-size:11px; margin-bottom:0; background:var(--bg-elevated); border-radius:20px; max-width:110px;" onchange="changeVoice()">
-        <option value="en-NG">🇳🇬 NG Female</option>
-        <option value="en-GB">🇬🇧 UK Female</option>
-        <option value="en-US">🇺🇸 US Female</option>
-        <option value="ha-NG">🇳🇬 Hausa Male</option>
-      </select>
-      
-      <!-- Talk Button (Starts listening) -->
-      <button class="top-btn" onclick="startVoiceChat()" title="Talk to AI"><i class="fas fa-microphone"></i></button>
-      
-      <!-- Stop Speaking Button -->
-      <button class="top-btn" onclick="window.speechSynthesis.cancel()" title="Stop Voice"><i class="fas fa-volume-mute"></i></button>
-
-      <!-- Home Button -->
-      <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i></button>
-    </div>
-
-    <!-- Profile Avatar -->
-    <div class="top-profile-container" id="topProfileContainer">
-      <div class="top-profile-avatar" id="topProfileAvatar" role="button" tabindex="0" aria-label="Open profile menu"></div>
-      <div class="profile-menu-popup" id="topProfileMenu">
-        <div class="pm-header">
-          <div class="pm-user-info">
-            <div class="pm-avatar" id="pmAvatar"></div>
-            <div class="pm-details"><div class="pm-name" id="pmName">Wise King User</div><div class="pm-email" id="pmEmail">Not signed in</div></div>
+  <main class="chat-main">
+    <div class="chat-topbar">
+      <button class="menu-btn" aria-label="Open menu" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="chat-title-wrap">
+        <span class="chat-title" id="chatTitle">New chat</span>
+        <span class="chat-model-badge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 3.5 Flash-lite</span></span>
+      </div>
+      <div class="chat-actions">
+        <button class="top-btn install-btn" id="installAppBtn" onclick="promptInstallApp()" style="display:none"><i class="fas fa-download"></i><span class="label"> Install</span></button>
+        <button class="top-btn" onclick="openSearchWebPanel()"><i class="fas fa-globe"></i><span class="label"> Search</span></button>
+        <button class="top-btn" onclick="openBuildAppPanel()"><i class="fas fa-code"></i><span class="label"> Build</span></button>
+        <button class="top-btn" onclick="openVault()"><i class="fas fa-shield-halved"></i><span class="label"> Vault</span></button>
+        <button class="top-btn" onclick="toggleChatSearch()"><i class="fas fa-magnifying-glass"></i><span class="label"> Find</span></button>
+        <button class="top-btn" onclick="downloadChatAsPDF()"><i class="fas fa-file-pdf"></i><span class="label"> Save PDF</span></button>
+        <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i><span class="label"> Home</span></button>
+      </div>
+      <div class="top-profile-container" id="topProfileContainer">
+        <div class="top-profile-avatar" id="topProfileAvatar" role="button" tabindex="0" aria-label="Open profile menu"></div>
+        <div class="profile-menu-popup" id="topProfileMenu">
+          <div class="pm-header">
+            <div class="pm-user-info">
+              <div class="pm-avatar" id="pmAvatar"></div>
+              <div class="pm-details"><div class="pm-name" id="pmName">Wise King User</div><div class="pm-email" id="pmEmail">Not signed in</div></div>
+            </div>
+            <button class="pm-close" aria-label="Close profile menu" onclick="closeTopProfileMenu()"><i class="fas fa-times"></i></button>
           </div>
-          <button class="pm-close" aria-label="Close profile menu" onclick="closeTopProfileMenu()"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="pm-body">
-          <button class="pm-item" onclick="openPricingPanel(); closeTopProfileMenu();"><i class="fas fa-crown" style="color:#fbbf24"></i> Upgrade Plan 👑</button>
-          <button class="pm-item" onclick="document.getElementById('profilePhotoInput').click(); closeTopProfileMenu();"><i class="fas fa-camera"></i> Upload Photo</button>
-          <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)">
-          <button class="pm-item" onclick="openSettings(); closeTopProfileMenu();"><i class="fas fa-gear"></i> Settings</button>
-          <div class="pm-divider"></div>
-          <button class="pm-item" onclick="addAnotherAccount();"><i class="fas fa-user-plus"></i> Add Account</button>
-          <button class="pm-item" onclick="switchAccount();"><i class="fas fa-right-left"></i> Switch Account</button>
-          <div class="pm-divider"></div>
-          <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+          <div class="pm-body">
+            <button class="pm-item" onclick="openPricingPanel(); closeTopProfileMenu();"><i class="fas fa-crown" style="color:#fbbf24"></i> Upgrade Plan 👑</button>
+            <button class="pm-item" onclick="document.getElementById('profilePhotoInput').click(); closeTopProfileMenu();"><i class="fas fa-camera"></i> Upload Photo</button>
+            <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)">
+            <button class="pm-item" onclick="openSettings(); closeTopProfileMenu();"><i class="fas fa-gear"></i> Settings</button>
+            <div class="pm-divider"></div>
+            <button class="pm-item" onclick="addAnotherAccount();"><i class="fas fa-user-plus"></i> Add Account</button>
+            <button class="pm-item" onclick="switchAccount();"><i class="fas fa-right-left"></i> Switch Account</button>
+            <div class="pm-divider"></div>
+            <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div id="chatSearchBar">
-    <i class="fas fa-magnifying-glass" style="color:var(--text-secondary);font-size:13px"></i>
-    <input type="text" id="chatSearchInput" placeholder="Search in this chat...">
-    <button aria-label="Close search" onclick="toggleChatSearch()"><i class="fas fa-times"></i></button>
-  </div> <main class="chat-main">
-  <div class="chat-topbar">
-    <!-- Left Side: Menu & Title -->
-    <button class="menu-btn" aria-label="Open menu" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-    <div class="chat-title-wrap">
-      <span class="chat-title" id="chatTitle">New chat</span>
-      <span class="chat-model-badge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 3.5 Flash-lite</span></span>
+    <div id="chatSearchBar">
+      <i class="fas fa-magnifying-glass" style="color:var(--text-secondary);font-size:13px"></i>
+      <input type="text" id="chatSearchInput" placeholder="Search in this chat...">
+      <button aria-label="Close search" onclick="toggleChatSearch()"><i class="fas fa-times"></i></button>
     </div>
 
-    <!-- Center/Right: Voice Controls -->
-    <div class="chat-actions" style="display:flex; align-items:center; gap:6px;">
-      <!-- Voice Selector Dropdown -->
-      <select id="voiceSelector" class="input-field" style="width:auto; padding:4px 8px; font-size:11px; margin-bottom:0; background:var(--bg-elevated); border-radius:20px; max-width:110px;" onchange="changeVoice()">
-        <option value="en-NG">🇳🇬 NG Female</option>
-        <option value="en-GB">🇬🇧 UK Female</option>
-        <option value="en-US">🇺🇸 US Female</option>
-        <option value="ha-NG">🇳🇬 Hausa Male</option>
-      </select>
-      
-      <!-- Talk Button (Starts listening) -->
-      <button class="top-btn" onclick="startVoiceChat()" title="Talk to AI"><i class="fas fa-microphone"></i></button>
-      
-      <!-- Stop Speaking Button -->
-      <button class="top-btn" onclick="window.speechSynthesis.cancel()" title="Stop Voice"><i class="fas fa-volume-mute"></i></button>
-
-      <!-- Home Button -->
-      <button class="top-btn" onclick="goToWelcome()"><i class="fas fa-house"></i></button>
-    </div>
-
-    <!-- Profile Avatar -->
-    <div class="top-profile-container" id="topProfileContainer">
-      <div class="top-profile-avatar" id="topProfileAvatar" role="button" tabindex="0" aria-label="Open profile menu"></div>
-      <div class="profile-menu-popup" id="topProfileMenu">
-        <div class="pm-header">
-          <div class="pm-user-info">
-            <div class="pm-avatar" id="pmAvatar"></div>
-            <div class="pm-details"><div class="pm-name" id="pmName">Wise King User</div><div class="pm-email" id="pmEmail">Not signed in</div></div>
-          </div>
-          <button class="pm-close" aria-label="Close profile menu" onclick="closeTopProfileMenu()"><i class="fas fa-times"></i></button>
+<div class="chat-scroll" id="chatScroll">
+  <div class="chat-inner" id="chatInner">
+    <div class="welcome" id="welcomeScreen">
+      <div class="welcome-logo" id="welcomeLogo"></div>
+      <h1>How can I help you today?</h1>
+      <p>I'm <strong>Wise King AI</strong>. I can see photos, remember conversations, generate music, read PDFs, translate languages, and analyze data.</p>
+      <div class="suggestions" style="grid-template-columns:1fr;max-width:640px;gap:12px">
+        <div class="suggestion-card" style="grid-column:1/-1;cursor:default;border-color:var(--accent);background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(168,85,247,0.08))">
+          <i class="fas fa-lightbulb" style="color:#fbbf24"></i>
+          <div class="sc-title">💡 Today's Tip</div>
+          <div class="sc-desc" id="welcomeTipText">Tap "Coach 💡" in the sidebar for your daily improvement tip.</div>
         </div>
-        <div class="pm-body">
-          <button class="pm-item" onclick="openPricingPanel(); closeTopProfileMenu();"><i class="fas fa-crown" style="color:#fbbf24"></i> Upgrade Plan 👑</button>
-          <button class="pm-item" onclick="document.getElementById('profilePhotoInput').click(); closeTopProfileMenu();"><i class="fas fa-camera"></i> Upload Photo</button>
-          <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)">
-          <button class="pm-item" onclick="openSettings(); closeTopProfileMenu();"><i class="fas fa-gear"></i> Settings</button>
-          <div class="pm-divider"></div>
-          <button class="pm-item" onclick="addAnotherAccount();"><i class="fas fa-user-plus"></i> Add Account</button>
-          <button class="pm-item" onclick="switchAccount();"><i class="fas fa-right-left"></i> Switch Account</button>
-          <div class="pm-divider"></div>
-          <button class="pm-item danger" onclick="askSignOut();"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%">
+          <div class="suggestion-card" onclick="useSuggestion('Teach me something useful in 3 minutes')">
+            <i class="fas fa-brain"></i>
+            <div class="sc-title">Learn something</div>
+            <div class="sc-desc">Knowledge in 3 minutes</div>
+          </div>
+          <div class="suggestion-card" onclick="useSuggestion('Give me one business idea I can start this week in Nigeria with small capital')">
+            <i class="fas fa-coins"></i>
+            <div class="sc-title">Business idea</div>
+            <div class="sc-desc">Small-capital, practical</div>
+          </div>
+          <div class="suggestion-card" onclick="useSuggestion('Write me a complete Afrobeat song about hope and hard work')">
+            <i class="fas fa-music"></i>
+            <div class="sc-title">Write a song</div>
+            <div class="sc-desc">Full lyrics, real structure</div>
+          </div>
+          <div class="suggestion-card" onclick="useSuggestion('Generate an image of a majestic African lion at sunset')">
+            <i class="fas fa-image"></i>
+            <div class="sc-title">Generate image</div>
+            <div class="sc-desc">Hyper-realistic, 8k</div>
+          </div>
         </div>
       </div>
     </div>
+    <div id="messagesArea"></div>
   </div>
+</div>
 
-  <div id="chatSearchBar">
-    <i class="fas fa-magnifying-glass" style="color:var(--text-secondary);font-size:13px"></i>
-    <input type="text" id="chatSearchInput" placeholder="Search in this chat...">
-    <button aria-label="Close search" onclick="toggleChatSearch()"><i class="fas fa-times"></i></button>                                                                                                                       
-  </div> 
-
- <div class="input-dock">
+<div class="input-dock">
   <div class="input-inner-wrap">
     <div class="preview-area" id="previewArea"></div>
     <div class="gk-input-box" id="gkInputBox">
@@ -4265,86 +4232,6 @@ async function coachAskFree(){
   }
 }
 window.coachAskFree = coachAskFree;
-
-// ============================================================
-// VOICE ENGINE
-// ============================================================
-
-// 1. Change the voice based on the dropdown
-function changeVoice() {
-  const selectedVoice = document.getElementById('voiceSelector').value;
-  localStorage.setItem('wk_voice_lang', selectedVoice);
-  showToast('🗣️ Voice changed!');
-}
-window.changeVoice = changeVoice;
-
-// 2. Speak function (Reads Aloud)
-function speakText(text) {
-  if (!('speechSynthesis' in window)) return showToast('⚠️ Voice not supported');
-  
-  // Stop any currently playing voice immediately
-  window.speechSynthesis.cancel(); 
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  
-  // Get the selected voice from the dropdown
-  const selectedLang = document.getElementById('voiceSelector')?.value || localStorage.getItem('wk_voice_lang') || 'en-NG';
-  utterance.lang = selectedLang; 
-  
-  // Try to find a matching local voice (e.g., a male Hausa voice if selected)
-  const voices = window.speechSynthesis.getVoices();
-  const matchedVoice = voices.find(v => v.lang === selectedLang);
-  if (matchedVoice) utterance.voice = matchedVoice;
-
-  utterance.rate = 1.0; 
-  utterance.pitch = 1.0;
-  
-  window.speechSynthesis.speak(utterance);
-  showToast('🔊 Speaking... Click the mute button to stop.');
-}
-
-// 3. Voice Chat Mode (Listens, AI replies, AI speaks)
-function startVoiceChat() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) return showToast('⚠️ Voice not supported on this browser');
-  
-  const rec = new SR(); 
-  // Use the language selected in the dropdown for listening too
-  rec.lang = document.getElementById('voiceSelector')?.value || 'en-NG';
-  
-  rec.onresult = async (ev) => { 
-    const t = ev.results[0][0].transcript; 
-    const input = document.getElementById('messageInput');
-    input.value = t;
-    handleInputChange();
-    
-    // 1. Send the message
-    sendMessage(); 
-    
-    // 2. Wait for AI to generate the answer, then speak it
-    setTimeout(() => {
-      const chat = window.chats.find(c => c.id === window.activeChatId);
-      if (chat && chat.messages.length > 0) {
-        const lastMsg = chat.messages[chat.messages.length - 1];
-        if (lastMsg && lastMsg.role === 'ai' && lastMsg.content) {
-          speakText(lastMsg.content); // Automatically speaks the reply!
-        }
-      }
-    }, 3500); // 3.5 seconds delay to let the AI type the answer
-  };
-  
-  rec.onerror = (e) => showToast('⚠️ Voice error: ' + e.error);
-  rec.start(); 
-  showToast('🎙️ Listening... (Speak now)');
-}
-
-window.speakText = speakText;
-window.startVoiceChat = startVoiceChat;
-
-// 4. Load Voices on Startup
-window.speechSynthesis.onvoiceschanged = () => {
-  window.speechSynthesis.getVoices();
-};  
 
 // ============================================================
 // INIT
