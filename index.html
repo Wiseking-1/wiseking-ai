@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 
-<!-- REQUIRED LIBRARIES FOR NEW FEATURES -->
+<!-- REQUIRED LIBRARIES -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://js.paystack.co/v1/inline.js"></script>
 
@@ -384,7 +384,7 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
     </linearGradient>
   </defs>
 </svg>
-  
+
 <script>
 window.WK_LOGO_INLINE = function(size){
   size = size || 36;
@@ -438,15 +438,6 @@ window.__wkCodeBlocks = {};
   </div>
 </div>
 
-<div id="welcomePopup" style="position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:99998;padding:20px">
-  <div style="background:#fff;color:#0d0d0d;border-radius:24px;max-width:420px;width:100%;padding:40px 32px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,0.6)">
-    <div style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:white;font-size:40px;font-weight:700" id="wpAvatar"></div>
-    <h2 style="font-size:24px;font-weight:700;margin-bottom:12px">Welcome, <span id="wpName">Friend</span>! 🎉</h2>
-    <p style="font-size:14.5px;color:#4b5563;margin-bottom:26px">You are now signed in to <strong style="color:#6366f1">Wise King AI</strong>.<br>Your chats and memories will sync across devices.</p>
-    <button style="width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#a855f7);border:none;border-radius:14px;color:white;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit" onclick="closeWelcomePopup()"><i class="fas fa-comments"></i> Start Chatting</button>
-  </div>
-</div>
-
 <div class="app" id="mainApp" style="opacity:0;transition:opacity .4s;display:none">
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -495,7 +486,7 @@ window.__wkCodeBlocks = {};
       <button class="menu-btn" aria-label="Open menu" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
       <div class="chat-title-wrap">
         <span class="chat-title" id="chatTitle">New chat</span>
-        <span class="chat-model-badge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 3.5 Flash-lite</span></span>
+        <span class="chat-model-badge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 2.5 Flash</span></span>
       </div>
       <div class="chat-actions">
         <button class="top-btn install-btn" id="installAppBtn" onclick="promptInstallApp()" style="display:none"><i class="fas fa-download"></i><span class="label"> Install</span></button>
@@ -971,7 +962,7 @@ window.__wkCodeBlocks = {};
   <div class="modal"><div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Permanent locked memories the AI will never forget.</p><div class="settings-card" style="margin-bottom:16px"><textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim Abdullahi..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea><button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock this memory</button></div><div id="vaultList"></div><div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div></div>
 </div>
 
-<!-- SETTINGS MODAL (Fixed) -->
+<!-- SETTINGS MODAL -->
 <div class="modal-bg" id="settingsModal">
   <div class="modal">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
@@ -993,89 +984,14 @@ window.__wkCodeBlocks = {};
       </div>
     </div>
 
-    <!-- AI Model (single dropdown) -->
+    <!-- AI Model (Corrected) -->
     <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
       <div class="settings-card">
         <select class="input-field" id="modelSelect" style="margin-bottom:0">
-          <option value="gemini-4-hydrogen">Gemini 4 Hydrogen — Fast & Smart 🚀</option>
-          <option value="gemini-3.8-flash">Gemini 3.8 Flash — Stable Fallback ⚡</option>
-          <option value="gemini-3.6-flash">Gemini 3.6 Flash — Legacy</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Features -->
-    <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div>
-      <div class="settings-card">
-        <div class="toggle-row">
-          <div class="toggle-label">Enable Web Search</div>
-          <div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div>
-        </div>
-        <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
-        <div class="toggle-row">
-          <div class="toggle-label">Enable Cross-Chat Memory</div>
-          <div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div>
-        </div>
-        <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
-        <div class="toggle-row">
-          <div class="toggle-label">Enable Streaming</div>
-          <div class="toggle-switch on" id="streamingToggle" onclick="toggleStreamingSetting()"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- API Keys -->
-    <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys (optional)</div>
-      <div class="settings-card">
-        <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off">
-        <input type="password" class="input-field" id="deepseekKeyInput" placeholder="DeepSeek API key (optional fallback)" autocomplete="off" style="margin-bottom:0">
-      </div>
-    </div>
-
-    <!-- Accent color -->
-    <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-palette"></i> Accent color</div>
-      <div class="settings-card">
-        <div class="theme-swatches">
-          <div class="theme-swatch" style="background:#6366f1" data-color="#6366f1"></div>
-          <div class="theme-swatch" style="background:#8b5cf6" data-color="#8b5cf6"></div>
-          <div class="theme-swatch" style="background:#ec4899" data-color="#ec4899"></div>
-          <div class="theme-swatch" style="background:#10b981" data-color="#10b981"></div>
-          <div class="theme-swatch" style="background:#f59e0b" data-color="#f59e0b"></div>
-          <div class="theme-swatch" style="background:#3b82f6" data-color="#3b82f6"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Backup & Restore -->
-    <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-file-export"></i> Backup & Restore</div>
-      <div class="settings-card">
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn solid" style="flex:1;justify-content:center" onclick="exportData()"><i class="fas fa-download"></i> Export</button>
-          <button class="btn solid" style="flex:1;justify-content:center" onclick="document.getElementById('importInput').click()"><i class="fas fa-upload"></i> Import</button>
-          <input type="file" id="importInput" accept="application/json" style="display:none" onchange="importData(event)">
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer actions -->
-    <div class="modal-actions" style="justify-content:space-between">
-      <button class="btn ghost" style="color:#f87171" onclick="closeModal('settingsModal'); setTimeout(() => askSignOut(), 150);"><i class="fas fa-sign-out-alt"></i> Sign out</button>
-      <button class="btn accent" onclick="saveSettings()">Save changes</button>
-    </div>
-  </div>
-        </div>        <!-- AI Model (single dropdown) -->
-    <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
-      <div class="settings-card">
-        <select class="input-field" id="modelSelect" style="margin-bottom:0">
-          <option value="gemini-4-hydrogen">Gemini 4 Hydrogen — Fast & Smart 🚀</option>
-          <option value="gemini-3.8-flash">Gemini 3.8 Flash — Stable Fallback ⚡</option>
-          <option value="gemini-3.6-flash">Gemini 3.6 Flash — Legacy</option>
+          <option value="gemini-3.5-flash">Gemini 3.5 Flash — Fastest Speed ⚡</option>
+          <option value="gemini-2.5-flash">Gemini 2.5 Flash — Quick Backup 🚀</option>
+          <option value="gemini-3.8-flash-8b">Gemini 3.8 Flash 8B — Ultra-Light 🪶</option>
         </select>
       </div>
     </div>
@@ -1161,8 +1077,8 @@ window.__wkCodeBlocks = {};
     GEMINI_API_KEY: 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU',
     DEEPSEEK_API_KEY: ''
   };
-                                                                    </script>
-                                                                                                         
+</script>
+
 <!-- FIREBASE AUTH -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
@@ -1357,10 +1273,7 @@ window.__wkCodeBlocks = {};
 const ENV_GEMINI_KEY = window.__WK_ENV__.GEMINI_API_KEY;
 const ENV_DEEPSEEK_KEY = window.__WK_ENV__.DEEPSEEK_API_KEY;
 
-// ✏️ REPLACE THIS with your full rules anytime.
-// Keep it short here so you can drop in your own extensive prompt.
 const SYSTEM_PROMPT = `
-
 # ═══════════════════════════════════════════════════════════════
 # WISE KING AI 9.0
 # WORLDWIDE MASTER INTELLIGENCE & HUMAN IMPROVEMENT SYSTEM
@@ -3176,7 +3089,6 @@ function skipLoginAsGuest(){
 }
 window.skipLoginAsGuest = skipLoginAsGuest;
 
-// Fixed avatar rendering with initials
 function applyAvatar(data){
   if (!data || typeof data !== 'string') data = 'WK';
   let html;
@@ -3449,8 +3361,8 @@ function saveSettings(){
 }
 window.saveSettings = saveSettings;
 function updateModelBadge(){
-  const m = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
-  const labels = {'gemini-3.5-flash-lite':'Gemini 3.5 Flash-lite','gemini-3.1-flash':'Gemini 3.1 Flash','gemini-2.5-flash':'Gemini 2.5 Flash'};
+  const m = localStorage.getItem('wk_model') || 'gemini-2.5-flash';
+  const labels = {'gemini-2.5-flash':'Gemini 2.5 Flash','gemini-1.5-flash':'Gemini 1.5 Flash','gemini-1.5-flash-8b':'Gemini 1.5 Flash 8B'};
   $('modelBadgeText').textContent = labels[m] || m;
 }
 window.updateModelBadge = updateModelBadge;
@@ -3723,7 +3635,6 @@ function openPricingPanel(){ $('pricingPanel').classList.add('show'); closeSideb
 window.openPricingPanel = openPricingPanel;
 
 function upgradeToPlan(plan, amount){
-  // IMPORTANT: Replace this with your actual Paystack public key
   const PAYSTACK_PUBLIC_KEY = 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE'; 
   
   if (PAYSTACK_PUBLIC_KEY === 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE') {
@@ -3733,12 +3644,10 @@ function upgradeToPlan(plan, amount){
   let handler = PaystackPop.setup({
     key: PAYSTACK_PUBLIC_KEY,
     email: localStorage.getItem('wk_user_email') || 'guest@wiseking.com',
-    amount: amount * 100, // Paystack uses Kobo (₦5,000 = 500000)
+    amount: amount * 100,
     currency: 'NGN',
     ref: 'WK_' + Math.floor((Math.random() * 1000000000) + 1),
-    onClose: function(){
-      showToast('⚠️ Payment window closed.');
-    },
+    onClose: function(){ showToast('⚠️ Payment window closed.'); },
     callback: function(response){
       showToast('✅ Payment successful! Ref: ' + response.reference);
       localStorage.setItem('wk_plan', plan);
@@ -3778,7 +3687,6 @@ function startVoiceInput(){
   rec.start(); showToast('🎙️ Listening...');
 }
 
-// NEW: Voice Chat Mode (Speaks back)
 function startVoiceChat() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return showToast('⚠️ Voice not supported');
@@ -3792,24 +3700,21 @@ function startVoiceChat() {
     input.value = t;
     handleInputChange();
     
-    // Send the message
     sendMessage(); 
     
-    // Wait a moment for AI to reply, then read it aloud
     setTimeout(() => {
       const chat = window.chats.find(c => c.id === window.activeChatId);
       const lastMsg = chat.messages[chat.messages.length - 1];
       if (lastMsg && lastMsg.role === 'ai') {
         speakText(lastMsg.content);
       }
-    }, 4000); 
+    }, 3500); 
   };
   
   rec.start(); 
   showToast('🎙️ Listening (Voice Mode)...');
 }
 
-// NEW: Text-to-Speech (Read Aloud)
 function speakText(text) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel(); 
@@ -3954,7 +3859,6 @@ function buildMessageEl(msg, idx, chatId){
   } else {
     let htmlContent = '<div class="md">' + renderMarkdown(msg.content || '') + '</div>';
     
-    // AI Image Generation Display
     if (msg.imageUrl) {
       htmlContent += `<div style="margin-top:12px;"><img src="${msg.imageUrl}" alt="AI Generated" style="max-width:100%;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);"><br><a href="${msg.imageUrl}" target="_blank" download class="btn solid" style="margin-top:8px;font-size:12px;padding:6px 12px;"><i class="fas fa-download"></i> Download Image</a></div>`;
     }
@@ -3989,7 +3893,6 @@ function buildMessageEl(msg, idx, chatId){
   }
   el.appendChild(body);
   
-  // Add ID to md div for TTS reading
   const mdDiv = el.querySelector('.md');
   if (mdDiv) mdDiv.id = 'msg-text-' + idx;
 
@@ -4120,7 +4023,6 @@ async function sendMessageWithFallback(userText, chatHistory, signal){
         let errMsg = 'HTTP '+res.status;
         try { const j = await res.json(); errMsg = j.error?.message || errMsg; } catch(e){}
         
-        // If busy (503) or rate-limited (429), instantly try the next fastest model
         if ((res.status === 503 || res.status === 429) && i < MODELS_TO_TRY.length - 1) {
           console.warn(`[WiseKing] ${currentModel} busy. Switching to backup...`);
           continue; 
@@ -4163,7 +4065,6 @@ function sendMessage(){
     }
     if (chat.title === 'New chat' && text) chat.title = text.slice(0, 32);
 
-    // Intercept Image Requests
     const isImageReq = text.toLowerCase().includes('generate image') || text.toLowerCase().includes('create image') || text.toLowerCase().includes('draw ');
     if (isImageReq && text.length > 15) {
       chat.messages.push({role:'user', content: text, createdAt: Date.now()});
@@ -4419,7 +4320,6 @@ window.coachAskFree = coachAskFree;
 // ============================================================
 function init(){
   try {
-    // ---- Logos ----
     $('loginLogo').innerHTML = window.WK_LOGO_INLINE(72);
     $('brandLogo').innerHTML = window.WK_LOGO_INLINE(32);
     $('welcomeLogo').innerHTML = window.WK_LOGO_INLINE(80);
@@ -4427,7 +4327,6 @@ function init(){
     $('pmAvatar').innerHTML = window.WK_LOGO_INLINE(48);
     $('sidebarAvatar').innerHTML = window.WK_LOGO_INLINE(36);
 
-    // ---- Load persisted state ----
     loadVault();
     loadCrossChatMemory();
     loadMusic();
@@ -4438,14 +4337,12 @@ function init(){
     const av = localStorage.getItem('wk_user_avatar');
     if (av) applyAvatar(av);
 
-    // ---- Settings toggles ----
     $('webSearchToggle')?.classList.toggle('on', getWebSearchEnabled());
     $('memoryToggle')?.classList.toggle('on', getMemoryEnabled());
     $('streamingToggle')?.classList.toggle('on', getStreamingEnabled());
     updateModelBadge();
     handleInputChange();
 
-    // ---- Theme swatches ----
     document.querySelectorAll('.theme-swatch').forEach(sw => {
       sw.addEventListener('click', () => {
         const c = sw.dataset.color;
@@ -4457,10 +4354,8 @@ function init(){
     const savedAccent = localStorage.getItem('wk_accent');
     if (savedAccent) document.documentElement.style.setProperty('--accent', savedAccent);
 
-    // ---- Profile popup ----
     setupProfileButton();
 
-    // ---- Modals close on backdrop ----
     document.querySelectorAll('.modal-bg').forEach(m =>
       m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); })
     );
@@ -4468,7 +4363,6 @@ function init(){
       if (e.target.id === 'sharePopup') closeSharePopup();
     });
 
-    // ---- Escape key closes modals ----
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape'){
         document.querySelectorAll('.modal-bg.show').forEach(m => m.classList.remove('show'));
@@ -4476,20 +4370,17 @@ function init(){
       }
     });
 
-    // ---- PDF.js worker ----
     if (typeof pdfjsLib !== 'undefined'){
       pdfjsLib.GlobalWorkerOptions.workerSrc =
         'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
-    // ---- Auto highlight code blocks ----
     const area = $('messagesArea');
     if (area){
       new MutationObserver(() => highlightCodeBlocks())
         .observe(area, {childList: true, subtree: true});
     }
 
-    // ---- Auth unlock ----
     if (localStorage.getItem('wk_logged_in') === '1' &&
         localStorage.getItem('wk_guest_mode') === '1'){
       unlockApp('Guest', 'Local Mode', null);
@@ -4498,7 +4389,6 @@ function init(){
       loadChatsFromLocalStorage();
     }
 
-    // ---- Cached daily tip (once per day) ----
     setTimeout(() => {
       const tipEl = document.getElementById('welcomeTipText');
       if (!tipEl) return;
@@ -4532,4 +4422,4 @@ if (document.readyState === 'loading'){
 }
 </script>
 </body>
-</html>
+  </html>
