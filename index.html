@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://js.paystack.co/v1/inline.js"></script>
+
 <style>
 :root{--bg-primary:#0a0a0f;--bg-secondary:#111118;--bg-elevated:#1a1a24;--bg-input:#1e1e2a;--bg-hover:#252533;--border-subtle:rgba(255,255,255,0.06);--border-default:rgba(255,255,255,0.1);--border-strong:rgba(255,255,255,0.16);--text-primary:#f5f5f7;--text-secondary:#a1a1aa;--text-tertiary:#71717a;--accent:#6366f1;--accent-hover:#818cf8;--accent-glow:rgba(99,102,241,0.35);--accent-gradient:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#a855f7 100%);--success:#10b981;--danger:#ef4444;--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-xl:24px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(0,0,0,0.3);--shadow-md:0 4px 16px rgba(0,0,0,0.4);--shadow-lg:0 12px 40px rgba(0,0,0,0.5);--shadow-glow:0 0 24px var(--accent-glow);--sidebar-width:290px;--transition-fast:0.15s cubic-bezier(0.4,0,0.2,1);--transition-smooth:0.28s cubic-bezier(0.4,0,0.2,1);}
 body.light-mode{--bg-primary:#ffffff;--bg-secondary:#f7f7f8;--bg-elevated:#ececf1;--bg-input:#f0f0f2;--bg-hover:#e5e5e8;--border-subtle:rgba(0,0,0,0.06);--border-default:rgba(0,0,0,0.12);--border-strong:rgba(0,0,0,0.2);--text-primary:#0d0d0d;--text-secondary:#4b5563;--text-tertiary:#9ca3af;}
@@ -872,9 +873,9 @@ window.__wkCodeBlocks = {};
       if (typeof window.forceShowLoginScreen === 'function') window.forceShowLoginScreen();
     }).catch(() => { if (typeof window.forceShowLoginScreen === 'function') window.forceShowLoginScreen(); });
   };
-  </script>
+</script>
 
-  <script>
+<script>
 // ============ CORE ============
 const ENV_GEMINI_KEY = window.__WK_ENV__.GEMINI_API_KEY;
 const ENV_DEEPSEEK_KEY = window.__WK_ENV__.DEEPSEEK_API_KEY;
