@@ -483,12 +483,11 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
   </defs>
 </svg>
 
-<!-- ═══ LOGIN SCREEN ═══ -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo" id="loginLogo"></div>
     <h1 class="login-title">Welcome to Wise King AI</h1>
-    <p class="login-subtitle">Your conversations, memories, and creations — synced forever. Truth. Cloud. Hope.</p>
+    <p class="login-subtitle">Your conversations, memories, and creations — synced forever.</p>
     <div class="auth-error" id="authError"></div>
     <div class="auth-success" id="authSuccess"></div>
     <button class="social-btn" onclick="signInWithGoogle()"><i class="fab fa-google" style="color:#ea4335"></i> Continue with Google</button>
@@ -518,20 +517,7 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
   </div>
 </div>
 
-<!-- ═══ WELCOME POPUP ═══ -->
-<div id="welcomePopup" style="position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:99998;padding:20px">
-  <div style="background:#fff;color:#0d0d0d;border-radius:24px;max-width:420px;width:100%;padding:40px 32px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,0.6)">
-    <div style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:white;font-size:40px;font-weight:700" id="wpAvatar"></div>
-    <h2 style="font-size:24px;font-weight:700;margin-bottom:12px">Welcome, <span id="wpName">Friend</span>! 🎉</h2>
-    <p style="font-size:14.5px;color:#4b5563;margin-bottom:26px">You are now signed in to <strong style="color:#6366f1">Wise King AI</strong>.<br>Your chats and memories will sync across devices.</p>
-    <button style="width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#a855f7);border:none;border-radius:14px;color:white;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit" onclick="closeWelcomePopup()"><i class="fas fa-comments"></i> Start Chatting</button>
-  </div>
-</div>
-
-<!-- ═══ MAIN APP ═══ -->
 <div class="app" id="mainApp" style="opacity:0;transition:opacity .4s;display:none">
-
-  <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="brand">
@@ -545,7 +531,6 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
       <div class="sidebar-search"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search chats" oninput="filterChats()"></div>
     </div>
     <div class="sidebar-scrollable">
-      <button class="nav-btn" onclick="openCoachPanel()"><span class="nav-icon" style="color:#fbbf24"><i class="fas fa-lightbulb"></i></span>Coach 💡</button>
       <button class="nav-btn" onclick="openMusicPanel()"><span class="nav-icon gradient-8"><i class="fas fa-music"></i></span>Music<span class="nav-badge" id="musicCountBadge">0</span></button>
       <button class="nav-btn" onclick="openPdfChatPanel()"><span class="nav-icon gradient-9"><i class="fas fa-file-pdf"></i></span>PDF Chat</button>
       <button class="nav-btn" onclick="openTranslatePanel()"><span class="nav-icon gradient-3"><i class="fas fa-language"></i></span>Translate</button>
@@ -571,7 +556,6 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
     </div>
   </aside>
 
-  <!-- Main chat -->
   <main class="chat-main">
     <div class="chat-topbar">
       <button class="menu-btn" aria-label="Open menu" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
@@ -629,7 +613,7 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
             <div class="suggestion-card" style="grid-column:1/-1;cursor:default;border-color:var(--accent);background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(168,85,247,0.08))">
               <i class="fas fa-lightbulb" style="color:#fbbf24"></i>
               <div class="sc-title">💡 Today's Tip</div>
-              <div class="sc-desc" id="welcomeTipText">Tap "Coach 💡" in the sidebar for your daily improvement tip.</div>
+              <div class="sc-desc" id="welcomeTipText">Ask me anything to get started.</div>
             </div>
             <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;width:100%">
               <div class="suggestion-card" onclick="useSuggestion('Teach me something useful in 3 minutes')">
@@ -637,7 +621,7 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
                 <div class="sc-title">Learn something</div>
                 <div class="sc-desc">Knowledge in 3 minutes</div>
               </div>
-              <div class="suggestion-card" onclick="useSuggestion('Give me one business idea I can start this week in Nigeria with small capital')">
+              <div class="suggestion-card" onclick="useSuggestion('Give me one business idea I can start this week with small capital')">
                 <i class="fas fa-coins"></i>
                 <div class="sc-title">Business idea</div>
                 <div class="sc-desc">Small-capital, practical</div>
@@ -683,7 +667,6 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
   </main>
 </div>
 
-<!-- ═══ PANELS ═══ -->
 <div class="full-panel" id="musicPanel">
   <div class="panel-header">
     <div class="panel-title"><i class="fas fa-music"></i> AI Music Studio 🎵</div>
@@ -854,40 +837,6 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
   </div></div>
 </div>
 
-<div class="full-panel" id="coachPanel">
-  <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-lightbulb"></i> Wise King Coach 💡</div>
-    <button class="btn ghost" onclick="closePanel('coachPanel')"><i class="fas fa-arrow-left"></i> Back</button>
-  </div>
-  <div class="panel-body"><div class="panel-inner">
-    <div class="result-card" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(168,85,247,0.12));border:1px solid var(--accent)">
-      <h4 style="color:var(--accent-hover);margin-bottom:8px">🌅 TIP OF THE DAY</h4>
-      <div id="coachDailyTip" style="font-size:14px;line-height:1.7;color:var(--text-primary)">Loading your daily tip...</div>
-      <button class="btn accent" style="margin-top:12px" onclick="generateDailyTip()"><i class="fas fa-sync-alt"></i> New Tip</button>
-    </div>
-    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--accent-hover)">🎯 5 Pillars of Growth</h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
-      <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Knowledge')"><div style="font-size:28px">📚</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Knowledge</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Learn a new thing</div></div>
-      <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Skill')"><div style="font-size:28px">🛠️</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Skill</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Practice a craft</div></div>
-      <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Wealth')"><div style="font-size:28px">💰</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Wealth</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Grow your money</div></div>
-      <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Health')"><div style="font-size:28px">💪</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Health</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Strengthen body</div></div>
-      <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Character')"><div style="font-size:28px">🤲</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Character</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Build integrity</div></div>
-    </div>
-    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--accent-hover)">📅 7-Day Improvement Plan</h3>
-    <div class="settings-card">
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Tell Wise King your goal — health, business, study, faith, or skill — and get a day-by-day 7-day plan you can actually follow.</p>
-      <input type="text" class="input-field" id="coachGoalInput" placeholder="e.g. Start a small business in Kano" style="margin-bottom:10px">
-      <button class="btn accent" style="width:100%;justify-content:center" onclick="generate7DayPlan()"><i class="fas fa-calendar-check"></i> Generate My 7-Day Plan</button>
-    </div>
-    <div id="coachPlanOutput" style="margin-top:14px"></div>
-    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--accent-hover)">💬 Ask Your Coach</h3>
-    <input type="text" class="search-big" id="coachAskInput" placeholder="What do you want to improve today?" onkeydown="if(event.key==='Enter'){coachAskFree()}" style="margin-bottom:10px">
-    <button class="btn accent" style="width:100%;justify-content:center" onclick="coachAskFree()"><i class="fas fa-paper-plane"></i> Ask Coach</button>
-    <div id="coachAnswerOutput" style="margin-top:14px"></div>
-  </div></div>
-</div>
-
-<!-- ═══ POPUP MENU ═══ -->
 <div class="popup-menu" id="chatPopupMenu">
   <button class="popup-menu-item pin-item" id="chatPinBtn" onclick="togglePinCurrentChat()"><i class="fas fa-thumbtack"></i> <span id="chatPinLabel">Pin chat</span></button>
   <button class="popup-menu-item" onclick="renameCurrentChat()"><i class="fas fa-pen"></i> Rename</button>
@@ -895,7 +844,6 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
   <button class="popup-menu-item" onclick="shareCurrentChat()"><i class="fas fa-share"></i> Share</button>
 </div>
 
-<!-- ═══ SHARE POPUP ═══ -->
 <div id="sharePopup">
   <div class="share-card">
     <div class="share-head"><div class="share-title"><i class="fas fa-share-nodes"></i> Share to</div><button class="share-close" aria-label="Close share" onclick="closeSharePopup()"><i class="fas fa-times"></i></button></div>
@@ -911,19 +859,12 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
   </div>
 </div>
 
-<!-- ═══ MODALS ═══ -->
 <div class="modal-bg" id="editMessageModal"><div class="modal" style="max-width:520px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Editing this message will regenerate the AI's response.</p><textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;resize:vertical"></textarea><div class="modal-actions"><button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button><button class="btn accent" onclick="saveEditedMessage()"><i class="fas fa-check"></i> Save & Regenerate</button></div></div></div>
-
 <div class="modal-bg" id="renameChatModal"><div class="modal" style="max-width:420px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div><input type="text" class="input-field" id="renameChatInput" placeholder="Enter new name" maxlength="60"><div class="modal-actions"><button class="btn ghost" onclick="closeModal('renameChatModal')">Cancel</button><button class="btn accent" onclick="saveRenamedChat()"><i class="fas fa-check"></i> Save</button></div></div></div>
-
 <div class="modal-bg" id="deleteChatModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this chat?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0"><button class="btn ghost" style="flex:1" onclick="closeModal('deleteChatModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmDeleteChat()">Delete</button></div></div></div>
-
 <div class="modal-bg" id="deleteMessageModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this message?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0"><button class="btn ghost" style="flex:1" onclick="closeModal('deleteMessageModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmDeleteMessage()">Delete</button></div></div></div>
-
 <div class="modal-bg" id="dislikeModal"><div class="modal" style="max-width:400px"><div class="modal-head"><div class="modal-title"><i class="fas fa-thumbs-down"></i> Tell us more</div><button class="modal-close" onclick="closeModal('dislikeModal')"><i class="fas fa-times"></i></button></div><p class="modal-text" style="margin-bottom:12px">Help us improve. What went wrong?</p><textarea class="input-field" id="dislikeFeedbackInput" rows="3" placeholder="Type your feedback here (optional)..." style="min-height:80px;resize:vertical;margin-bottom:0"></textarea><div class="modal-actions"><button class="btn ghost" onclick="closeModal('dislikeModal')">Cancel</button><button class="btn accent" onclick="submitDislikeFeedback()"><i class="fas fa-paper-plane"></i> Submit</button></div></div></div>
-
 <div class="modal-bg" id="signOutModal"><div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">⚠️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Sign out?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Your sync session will be closed on this device.</p><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0"><button class="btn ghost" style="flex:1" onclick="closeModal('signOutModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmSignOut()">Sign Out</button></div></div></div>
-
 <div class="modal-bg" id="vaultModal"><div class="modal"><div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Permanent locked memories the AI will never forget.</p><div class="settings-card" style="margin-bottom:16px"><textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim Abdullahi..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea><button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock this memory</button></div><div id="vaultList"></div><div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div></div></div>
 
 <div class="modal-bg" id="settingsModal">
@@ -942,7 +883,6 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
 
 <div class="toast" id="toast"></div>
 
-<!-- ═══ LOAD REMAINING LIBS ═══ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
@@ -953,19 +893,11 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
 
 <script>
 // ═══════════════════════════════════════════════════════════
-// WISE KING AI — BACKEND CONFIG
-// ⚠️ Deploy the Cloudflare Worker (Part 1 of my previous msg)
-// and paste its URL here. Never expose Gemini keys in frontend.
+// FIXED API CONFIGURATION (Direct Gemini Link)
 // ═══════════════════════════════════════════════════════════
-window.__WK_ENV__ = {
-  BACKEND_URL: 'https://wiseking-api.YOURNAME.workers.dev', // ← CHANGE THIS
-};
+const GEMINI_API_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
+const SYSTEM_PROMPT = `You are WISE KING AI — a worldwide professional intelligence, knowledge assistant, creative partner, problem solver, research assistant, educator, strategic thinker and PERSONAL IMPROVEMENT COACH. CREATOR: IBRAHIM ABDULLAHI. BRAND: WISE KING INDUSTRY. COUNTRY: NIGERIA 🇳🇬. Be ambitious without exaggeration. Be intelligent without inventing evidence. Be creative without losing continuity.`;
 
-const BACKEND = window.__WK_ENV__.BACKEND_URL;
-
-// ═══════════════════════════════════════════════════════════
-// SYSTEM PROMPT — keep your full prompt here (shortened for space)
-// ═══════════════════════════════════════════════════════════
 const SYSTEM_PROMPT = `# ═══════════════════════════════════════════════════════════════
 # WISE KING AI 10.2 — FINAL EDITION
 # SELF-PRESIDENT + MEMORY LEDGER + QUICK-LOAD SYSTEM
@@ -2994,12 +2926,7 @@ professionally formatted document, not raw text.
 # END OF WISE KING AI 10.2 — FINAL EDITION SYSTEM PROMPT
 # ═══════════════════════════════════════════════════════════════
 `;
-  
-window.SYSTEM_PROMPT = SYSTEM_PROMPT;
-
-// ═══════════════════════════════════════════════════════════
-// GLOBAL STATE
-// ═══════════════════════════════════════════════════════════
+   
 window.chats = [];
 window.activeChatId = null;
 let uploadedFiles = [];
@@ -3013,18 +2940,13 @@ let currentShareTarget = null;
 let thinkMode = false, searchMode = false;
 const MEMORY_HISTORY_LIMIT = 60;
 
-// Personas
 const PERSONAS = {
   default: "",
   coder: "\n\n[PERSONA: You are a strict, efficient senior software engineer. Only provide code and brief technical explanations. No fluff.]",
   teacher: "\n\n[PERSONA: You are a patient teacher. Use simple analogies, step-by-step explanations, and encourage the user.]",
-  comedian: "\n\n[PERSONA: You are a funny Nigerian stand-up comedian. Answer with humour, pidgin slang, and jokes while still giving correct, useful answers.]",
+  comedian: "\n\n[PERSONA: You are a funny Nigerian stand-up comedian. Answer with humour, pidgin slang, and jokes while still giving correct, useful answers.]"
 };
-window.PERSONAS = PERSONAS;
 
-// ═══════════════════════════════════════════════════════════
-// HELPERS
-// ═══════════════════════════════════════════════════════════
 const $ = id => document.getElementById(id);
 const esc = t => { const d = document.createElement('div'); d.textContent = String(t==null?'':t); return d.innerHTML; };
 
@@ -3049,9 +2971,6 @@ window.switchAuthTab = switchAuthTab;
 function showResetPasswordForm(){ switchAuthTab('reset'); }
 window.showResetPasswordForm = showResetPasswordForm;
 
-// ═══════════════════════════════════════════════════════════
-// LOGO INLINE SVG
-// ═══════════════════════════════════════════════════════════
 window.WK_LOGO_INLINE = function(size){
   size = size || 36;
   const id = 'g' + Math.random().toString(36).slice(2,8);
@@ -3069,9 +2988,6 @@ window.WK_LOGO_INLINE = function(size){
 };
 window.__wkCodeBlocks = {};
 
-// ═══════════════════════════════════════════════════════════
-// UNLOCK APP
-// ═══════════════════════════════════════════════════════════
 function unlockApp(name, email, photoURL){
   $('loginScreen')?.classList.add('hidden');
   const ma = $('mainApp');
@@ -3088,36 +3004,16 @@ function unlockApp(name, email, photoURL){
 }
 window.unlockApp = unlockApp;
 
-function forceShowLoginScreen(){
-  const ls = $('loginScreen'), ma = $('mainApp');
-  if (ma){ ma.style.opacity = '0'; ma.style.display = 'none'; }
-  if (ls){ ls.classList.remove('hidden'); ls.style.opacity = '1'; ls.style.pointerEvents = 'auto'; }
-  ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => { const el = $(id); if (el) el.value = ''; });
-  $('authError')?.classList.remove('show');
-  $('authSuccess')?.classList.remove('show');
-  window.chats = []; window.activeChatId = null;
-  renderChats(); renderMessages();
-  switchAuthTab('signin');
-}
-window.forceShowLoginScreen = forceShowLoginScreen;
-
 function skipLoginAsGuest(){
   localStorage.setItem('wk_logged_in', '1');
   localStorage.setItem('wk_guest_mode', '1');
   localStorage.setItem('wk_user_email', 'guest@local.mode');
   localStorage.setItem('wk_user_name', 'Guest');
-  if (!localStorage.getItem('wk_joined')) localStorage.setItem('wk_joined', new Date().toLocaleDateString());
   unlockApp('Guest', 'Local Mode', null);
   showToast('👤 Welcome, Guest — Local Mode');
 }
 window.skipLoginAsGuest = skipLoginAsGuest;
 
-function closeWelcomePopup(){ $('welcomePopup').style.display = 'none'; }
-window.closeWelcomePopup = closeWelcomePopup;
-
-// ═══════════════════════════════════════════════════════════
-// AVATAR
-// ═══════════════════════════════════════════════════════════
 function applyAvatar(data){
   if (!data || typeof data !== 'string') data = 'WK';
   let html;
@@ -3147,25 +3043,13 @@ function handleProfilePhotoUpload(e){
 }
 window.handleProfilePhotoUpload = handleProfilePhotoUpload;
 
-// ═══════════════════════════════════════════════════════════
-// MARKDOWN RENDERER — powered by markdown-it
-// ═══════════════════════════════════════════════════════════
+// Markdown
 let __mdParser = null;
-
 function getMarkdownParser() {
   if (__mdParser) return __mdParser;
-  __mdParser = window.markdownit({
-    html: false,
-    linkify: true,
-    breaks: true,
-    typographer: true,
-  });
+  __mdParser = window.markdownit({ html: false, linkify: true, breaks: true, typographer: true });
+  if (window.markdownitTaskLists) __mdParser.use(window.markdownitTaskLists, { enabled: false });
 
-  if (window.markdownitTaskLists) {
-    __mdParser.use(window.markdownitTaskLists, { enabled: false });
-  }
-
-  // Custom fence rule: wrap code blocks with copy/download/run buttons
   __mdParser.renderer.rules.fence = (tokens, idx) => {
     const token = tokens[idx];
     const info = (token.info || '').trim();
@@ -3182,80 +3066,46 @@ function getMarkdownParser() {
     return `<pre><div class="code-header"><div class="code-lang">${lang.toUpperCase()}</div><div class="code-actions">${runBtn}<button class="code-action-btn" onclick="wkCopyCode('${blockId}', this)"><i class="fas fa-copy"></i> Copy</button><button class="code-action-btn" onclick="wkDownloadCode('${blockId}', 'wiseking.${ext}')"><i class="fas fa-download"></i></button></div></div><code class="language-${prismLang}">${safeCode}</code></pre>`;
   };
 
-  // Link rule: open in new tab
   const defaultLink = __mdParser.renderer.rules.link_open || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
   __mdParser.renderer.rules.link_open = (tokens, idx, options, env, self) => {
     tokens[idx].attrSet('target', '_blank');
     tokens[idx].attrSet('rel', 'noopener noreferrer');
     return defaultLink(tokens, idx, options, env, self);
   };
-
-  // Table wrapper for horizontal scroll
   const defaultTableOpen = __mdParser.renderer.rules.table_open || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
   __mdParser.renderer.rules.table_open = (tokens, idx, options, env, self) => '<div class="md-table-wrap">' + defaultTableOpen(tokens, idx, options, env, self);
   const defaultTableClose = __mdParser.renderer.rules.table_close || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
   __mdParser.renderer.rules.table_close = (tokens, idx, options, env, self) => defaultTableClose(tokens, idx, options, env, self) + '</div>';
-
   return __mdParser;
 }
-
 function renderMarkdown(src) {
   try { return getMarkdownParser().render(String(src || '')); }
-  catch (err) {
-    console.warn('Markdown render error:', err);
-    return '<pre style="white-space:pre-wrap">' + String(src || '').replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</pre>';
-  }
+  catch (err) { return '<pre style="white-space:pre-wrap">' + String(src || '').replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</pre>'; }
 }
 window.renderMarkdown = renderMarkdown;
 
-// ═══════════════════════════════════════════════════════════
-// CODE BLOCK ACTIONS
-// ═══════════════════════════════════════════════════════════
 window.wkCopyCode = async function(blockId, btn){
   const code = window.__wkCodeBlocks[blockId] || '';
-  try {
-    await navigator.clipboard.writeText(code);
-    if (btn){ const old = btn.innerHTML; btn.innerHTML = '<i class="fas fa-check"></i> Copied'; btn.classList.add('copied'); setTimeout(()=>{btn.innerHTML = old; btn.classList.remove('copied');}, 1400); }
-    showToast('📋 Code copied');
-  } catch(e){
-    const ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast('📋 Code copied');
-  }
+  try { await navigator.clipboard.writeText(code); if (btn){ const old = btn.innerHTML; btn.innerHTML = '<i class="fas fa-check"></i> Copied'; btn.classList.add('copied'); setTimeout(()=>{btn.innerHTML = old; btn.classList.remove('copied');}, 1400); } showToast('📋 Code copied'); }
+  catch(e){ const ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast('📋 Code copied'); }
 };
-
 window.wkDownloadCode = function(blockId, filename){
-  try {
-    const blob = new Blob([window.__wkCodeBlocks[blockId] || ''], {type:'text/plain'});
-    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename || 'wiseking.txt';
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url), 1000);
-    showToast('✅ Downloaded');
-  } catch(e){ showToast('⚠️ Download failed'); }
+  try { const blob = new Blob([window.__wkCodeBlocks[blockId] || ''], {type:'text/plain'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename || 'wiseking.txt'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url), 1000); showToast('✅ Downloaded'); }
+  catch(e){ showToast('⚠️ Download failed'); }
 };
-
 window.wkRunCode = function(blockId){
-  const code = window.__wkCodeBlocks[blockId] || '';
-  if (!code) return;
-  const w = window.open('', '_blank');
-  if (!w) return showToast('⚠️ Allow popups');
+  const code = window.__wkCodeBlocks[blockId] || ''; if (!code) return;
+  const w = window.open('', '_blank'); if (!w) return showToast('⚠️ Allow popups');
   w.document.open(); w.document.write(code); w.document.close();
 };
-
-// ═══════════════════════════════════════════════════════════
-// PRISM HIGHLIGHT
-// ═══════════════════════════════════════════════════════════
 let _hlTimer = null;
 function highlightCodeBlocks(){
   if (typeof Prism === 'undefined') return;
   clearTimeout(_hlTimer);
-  _hlTimer = setTimeout(() => {
-    document.querySelectorAll('.md pre code:not([data-highlighted])').forEach(b => { try { Prism.highlightElement(b); } catch(e){} });
-  }, 60);
+  _hlTimer = setTimeout(() => { document.querySelectorAll('.md pre code:not([data-highlighted])').forEach(b => { try { Prism.highlightElement(b); } catch(e){} }); }, 60);
 }
 window.highlightCodeBlocks = highlightCodeBlocks;
 
-// ═══════════════════════════════════════════════════════════
-// CHAT STORAGE
-// ═══════════════════════════════════════════════════════════
 let _saveTimer = null;
 function loadChatsFromLocalStorage(){
   try { const s = localStorage.getItem('wk_chats'); if (s) window.chats = JSON.parse(s); } catch(e){ window.chats = []; }
@@ -3271,14 +3121,9 @@ function saveChats(){
   localStorage.setItem('wk_chats', JSON.stringify(window.chats));
   localStorage.setItem('wk_active_chat', window.activeChatId || '');
   renderChats();
-  // Cloud sync (Firebase) — optional
   if (window.WK_CLOUD && localStorage.getItem('wk_user_uid') && !localStorage.getItem('wk_guest_mode')){
     clearTimeout(_saveTimer);
-    _saveTimer = setTimeout(() => {
-      window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), {
-        chats: window.chats, vault: vaultMemories, memory: crossChatMemory, music: musicLibrary
-      });
-    }, 900);
+    _saveTimer = setTimeout(() => { window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { chats: window.chats, vault: vaultMemories, memory: crossChatMemory, music: musicLibrary }); }, 900);
   }
 }
 window.saveChats = saveChats;
@@ -3306,10 +3151,8 @@ function createNewChat(){
   $('messageInput')?.focus();
 }
 window.createNewChat = createNewChat;
-
 function switchToChat(id){ window.activeChatId = id; saveChats(); renderMessages(); closeSidebar(); }
 window.switchToChat = switchToChat;
-
 function filterChats(){
   const q = $('searchInput').value.toLowerCase();
   document.querySelectorAll('#chatsList .chat-item').forEach(el => {
@@ -3320,8 +3163,7 @@ function filterChats(){
 window.filterChats = filterChats;
 
 function openChatMenu(e, chatId){
-  closeChatMenu();
-  popupMenuChatId = chatId;
+  closeChatMenu(); popupMenuChatId = chatId;
   const menu = $('chatPopupMenu'), chat = window.chats.find(c => c.id === chatId);
   $('chatPinLabel').textContent = chat?.pinned ? 'Unpin chat' : 'Pin chat';
   const rect = e.currentTarget.getBoundingClientRect();
@@ -3334,11 +3176,7 @@ function openChatMenu(e, chatId){
 function closeChatMenu(){ $('chatPopupMenu')?.classList.remove('show'); popupMenuChatId = null; }
 window.closeChatMenu = closeChatMenu;
 
-function togglePinCurrentChat(){
-  const chat = window.chats.find(c => c.id === popupMenuChatId); if (!chat) return;
-  chat.pinned = !chat.pinned; saveChats(); closeChatMenu();
-  showToast(chat.pinned ? '📌 Pinned' : '📍 Unpinned');
-}
+function togglePinCurrentChat(){ const chat = window.chats.find(c => c.id === popupMenuChatId); if (!chat) return; chat.pinned = !chat.pinned; saveChats(); closeChatMenu(); showToast(chat.pinned ? '📌 Pinned' : '📍 Unpinned'); }
 function renameCurrentChat(){ const chat = window.chats.find(c => c.id === popupMenuChatId); if (!chat) return; renamingChatId = chat.id; $('renameChatInput').value = chat.title; $('renameChatModal').classList.add('show'); closeChatMenu(); }
 function saveRenamedChat(){ const n = $('renameChatInput').value.trim(); if (!n) return showToast('Name required'); const chat = window.chats.find(c => c.id === renamingChatId); if (!chat) return; chat.title = n; saveChats(); renderMessages(); closeModal('renameChatModal'); showToast('✅ Renamed'); }
 function deleteCurrentChat(){ deletingChatId = popupMenuChatId; $('deleteChatModal').classList.add('show'); closeChatMenu(); }
@@ -3346,10 +3184,7 @@ function confirmDeleteChat(){
   if (!deletingChatId) return;
   const idx = window.chats.findIndex(c => c.id === deletingChatId);
   if (idx >= 0) window.chats.splice(idx, 1);
-  if (window.activeChatId === deletingChatId){
-    window.activeChatId = window.chats[0]?.id || null;
-    if (!window.activeChatId){ const id = 'chat-' + Date.now(); window.chats.unshift({id, title:'New chat', messages:[], createdAt:Date.now()}); window.activeChatId = id; }
-  }
+  if (window.activeChatId === deletingChatId){ window.activeChatId = window.chats[0]?.id || null; if (!window.activeChatId){ const id = 'chat-' + Date.now(); window.chats.unshift({id, title:'New chat', messages:[], createdAt:Date.now()}); window.activeChatId = id; } }
   saveChats(); renderMessages(); closeModal('deleteChatModal'); deletingChatId = null; showToast('🗑️ Deleted');
 }
 function shareCurrentChat(){ const chat = window.chats.find(c => c.id === popupMenuChatId); if (!chat) return; currentShareTarget = {type:'chat', title:chat.title, text:'Check out this chat: "'+chat.title+'"'}; closeChatMenu(); openSharePopup(); }
@@ -3368,14 +3203,7 @@ function shareTo(platform){
   if (url) window.open(url, '_blank');
   closeSharePopup();
 }
-window.togglePinCurrentChat = togglePinCurrentChat;
-window.renameCurrentChat = renameCurrentChat;
-window.saveRenamedChat = saveRenamedChat;
-window.deleteCurrentChat = deleteCurrentChat;
-window.confirmDeleteChat = confirmDeleteChat;
-window.shareCurrentChat = shareCurrentChat;
-window.closeSharePopup = closeSharePopup;
-window.shareTo = shareTo;
+window.togglePinCurrentChat = togglePinCurrentChat; window.renameCurrentChat = renameCurrentChat; window.saveRenamedChat = saveRenamedChat; window.deleteCurrentChat = deleteCurrentChat; window.confirmDeleteChat = confirmDeleteChat; window.shareCurrentChat = shareCurrentChat; window.closeSharePopup = closeSharePopup; window.shareTo = shareTo;
 
 document.addEventListener('click', e => {
   const menu = $('chatPopupMenu'); if (!menu || !menu.classList.contains('show')) return;
@@ -3383,17 +3211,11 @@ document.addEventListener('click', e => {
   closeChatMenu();
 }, true);
 
-// ═══════════════════════════════════════════════════════════
-// PROFILE MENU
-// ═══════════════════════════════════════════════════════════
 function setupProfileButton(){
   const avatar = $('topProfileAvatar'), menu = $('topProfileMenu');
   if (!avatar || !menu || avatar._bound) return;
   avatar._bound = true;
   avatar.addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('show'); });
-  avatar.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); menu.classList.toggle('show'); }
-  });
   document.addEventListener('click', e => {
     if (!menu.classList.contains('show')) return;
     if (e.target.closest('#topProfileMenu') || e.target === avatar || avatar.contains(e.target)) return;
@@ -3404,9 +3226,6 @@ window.setupProfileButton = setupProfileButton;
 function closeTopProfileMenu(){ $('topProfileMenu')?.classList.remove('show'); }
 window.closeTopProfileMenu = closeTopProfileMenu;
 
-// ═══════════════════════════════════════════════════════════
-// SETTINGS
-// ═══════════════════════════════════════════════════════════
 function openSettings(){
   $('settingsModal').classList.add('show'); closeSidebar();
   const m = localStorage.getItem('wk_model'); if (m) $('modelSelect').value = m;
@@ -3426,13 +3245,7 @@ function updateModelBadge(){
   const el = $('modelBadgeText'); if (el) el.textContent = labels[m] || m;
 }
 window.updateModelBadge = updateModelBadge;
-function toggleLightMode(){
-  document.body.classList.toggle('light-mode');
-  const isLight = document.body.classList.contains('light-mode');
-  localStorage.setItem('wk_light_mode', isLight ? '1' : '0');
-  $('lightModeToggle')?.classList.toggle('on', isLight);
-  showToast(isLight ? '☀️ Light Mode' : '🌙 Dark Mode');
-}
+function toggleLightMode(){ document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('wk_light_mode', isLight ? '1' : '0'); $('lightModeToggle')?.classList.toggle('on', isLight); showToast(isLight ? '☀️ Light Mode' : '🌙 Dark Mode'); }
 window.toggleLightMode = toggleLightMode;
 function loadTheme(){ if (localStorage.getItem('wk_light_mode') === '1'){ document.body.classList.add('light-mode'); $('lightModeToggle')?.classList.add('on'); } }
 
@@ -3442,57 +3255,32 @@ function getMemoryEnabled(){ return localStorage.getItem('wk_memory_on') !== '0'
 function toggleMemorySetting(){ const n = !getMemoryEnabled(); localStorage.setItem('wk_memory_on', n?'1':'0'); $('memoryToggle')?.classList.toggle('on', n); showToast(n ? '🧠 ON' : '🚫 OFF'); }
 function getStreamingEnabled(){ return localStorage.getItem('wk_streaming') !== '0'; }
 function toggleStreamingSetting(){ const n = !getStreamingEnabled(); localStorage.setItem('wk_streaming', n?'1':'0'); $('streamingToggle')?.classList.toggle('on', n); showToast(n ? '⚡ ON' : '🚫 OFF'); }
-window.toggleWebSearchSetting = toggleWebSearchSetting;
-window.toggleMemorySetting = toggleMemorySetting;
-window.toggleStreamingSetting = toggleStreamingSetting;
+window.toggleWebSearchSetting = toggleWebSearchSetting; window.toggleMemorySetting = toggleMemorySetting; window.toggleStreamingSetting = toggleStreamingSetting;
 
-// ═══════════════════════════════════════════════════════════
-// VAULT & MEMORY
-// ═══════════════════════════════════════════════════════════
 function loadVault(){ try { vaultMemories = JSON.parse(localStorage.getItem('wk_vault') || '[]'); } catch(e){ vaultMemories = []; } updateVaultBadge(); }
 function saveVault(){ localStorage.setItem('wk_vault', JSON.stringify(vaultMemories)); updateVaultBadge(); }
 function updateVaultBadge(){ const b = $('vaultCountBadge'); if (b) b.textContent = vaultMemories.length; }
 function openVault(){ $('vaultModal').classList.add('show'); renderVault(); }
-function renderVault(){
-  const list = $('vaultList'); if (!list) return;
-  if (!vaultMemories.length){ list.innerHTML = '<div class="vault-empty">No locked memories yet.</div>'; return; }
-  list.innerHTML = vaultMemories.map((m,i) => '<div class="vault-item"><div class="vi-text">'+esc(m)+'</div><button class="vi-del" aria-label="Delete memory" onclick="deleteVaultMemory('+i+')"><i class="fas fa-trash"></i></button></div>').join('');
-}
+function renderVault(){ const list = $('vaultList'); if (!list) return; if (!vaultMemories.length){ list.innerHTML = '<div class="vault-empty">No locked memories yet.</div>'; return; } list.innerHTML = vaultMemories.map((m,i) => '<div class="vault-item"><div class="vi-text">'+esc(m)+'</div><button class="vi-del" aria-label="Delete memory" onclick="deleteVaultMemory('+i+')"><i class="fas fa-trash"></i></button></div>').join(''); }
 function addVaultMemory(){ const input = $('vaultNewInput'); const text = input.value.trim(); if (!text) return showToast('Type a memory first'); vaultMemories.unshift(text); saveVault(); renderVault(); input.value = ''; showToast('🔒 Locked'); }
 function deleteVaultMemory(i){ vaultMemories.splice(i,1); saveVault(); renderVault(); showToast('Removed'); }
-window.openVault = openVault;
-window.addVaultMemory = addVaultMemory;
-window.deleteVaultMemory = deleteVaultMemory;
+window.openVault = openVault; window.addVaultMemory = addVaultMemory; window.deleteVaultMemory = deleteVaultMemory;
 
 function loadCrossChatMemory(){ try { crossChatMemory = JSON.parse(localStorage.getItem('wk_cross_memory') || '[]'); } catch(e){ crossChatMemory = []; } updateMemoryBadge(); }
 function saveCrossChatMemory(){ localStorage.setItem('wk_cross_memory', JSON.stringify(crossChatMemory.slice(0,100))); updateMemoryBadge(); }
 function updateMemoryBadge(){ const b = $('memoryCountBadge'); if (b) b.textContent = crossChatMemory.length; }
 function openMemoryPanel(){ $('memoryPanel').classList.add('show'); closeSidebar(); renderMemoryPanel(); }
-function renderMemoryPanel(){
-  const box = $('memoryPanelResults'); if (!box) return;
-  if (!crossChatMemory.length){ box.innerHTML = '<div class="result-card"><p>No memories saved yet. Add to your Vault to teach Wise King.</p></div>'; return; }
-  box.innerHTML = crossChatMemory.map((m,i) => '<div class="memory-item"><div class="mi-text">'+esc(m)+'</div><button class="mi-del" aria-label="Delete memory" onclick="deleteMemoryItem('+i+')"><i class="fas fa-trash"></i></button></div>').join('');
-}
+function renderMemoryPanel(){ const box = $('memoryPanelResults'); if (!box) return; if (!crossChatMemory.length){ box.innerHTML = '<div class="result-card"><p>No memories saved yet.</p></div>'; return; } box.innerHTML = crossChatMemory.map((m,i) => '<div class="memory-item"><div class="mi-text">'+esc(m)+'</div><button class="mi-del" aria-label="Delete memory" onclick="deleteMemoryItem('+i+')"><i class="fas fa-trash"></i></button></div>').join(''); }
 function deleteMemoryItem(i){ crossChatMemory.splice(i,1); saveCrossChatMemory(); renderMemoryPanel(); }
-window.openMemoryPanel = openMemoryPanel;
-window.deleteMemoryItem = deleteMemoryItem;
+window.openMemoryPanel = openMemoryPanel; window.deleteMemoryItem = deleteMemoryItem;
 
-// ═══════════════════════════════════════════════════════════
-// MUSIC LIBRARY
-// ═══════════════════════════════════════════════════════════
 function loadMusic(){ try { musicLibrary = JSON.parse(localStorage.getItem('wk_music') || '[]'); } catch(e){ musicLibrary = []; } updateMusicBadge(); }
 function saveMusic(){ localStorage.setItem('wk_music', JSON.stringify(musicLibrary.slice(0,200))); updateMusicBadge(); }
 function updateMusicBadge(){ const b = $('musicCountBadge'); if (b) b.textContent = musicLibrary.length; }
 function openMusicPanel(){ $('musicPanel').classList.add('show'); closeSidebar(); renderMusicLibrary(); }
-function renderMusicLibrary(){
-  const box = $('musicLibraryBox'); if (!box) return;
-  if (!musicLibrary.length){ box.innerHTML = '<div class="result-card"><p>No music prompts saved yet.</p></div>'; return; }
-  box.innerHTML = musicLibrary.map((m,i) => '<div class="music-card"><div class="music-title">🎵 '+esc(m.title||'Untitled')+'</div><div class="music-meta">'+esc(m.genre||'')+' • '+new Date(m.createdAt).toLocaleDateString()+'</div><div class="music-actions"><button class="btn solid" onclick="deleteMusicItem('+i+')"><i class="fas fa-trash"></i> Delete</button></div></div>').join('');
-}
+function renderMusicLibrary(){ const box = $('musicLibraryBox'); if (!box) return; if (!musicLibrary.length){ box.innerHTML = '<div class="result-card"><p>No music prompts saved yet.</p></div>'; return; } box.innerHTML = musicLibrary.map((m,i) => '<div class="music-card"><div class="music-title">🎵 '+esc(m.title||'Untitled')+'</div><div class="music-meta">'+esc(m.genre||'')+' • '+new Date(m.createdAt).toLocaleDateString()+'</div><div class="music-actions"><button class="btn solid" onclick="deleteMusicItem('+i+')"><i class="fas fa-trash"></i> Delete</button></div></div>').join(''); }
 function deleteMusicItem(i){ musicLibrary.splice(i,1); saveMusic(); renderMusicLibrary(); showToast('Removed'); }
-window.openMusicPanel = openMusicPanel;
-window.deleteMusicItem = deleteMusicItem;
-window.closePanel = function(id){ $(id)?.classList.remove('show'); };
+window.openMusicPanel = openMusicPanel; window.deleteMusicItem = deleteMusicItem; window.closePanel = function(id){ $(id)?.classList.remove('show'); };
 
 async function generateMusicFromPanel(){
   const input = $('musicInput').value.trim(); if (!input) return showToast('Enter music style');
@@ -3511,12 +3299,8 @@ async function generateLyricsFromPanel(){
   if (res.success){ results.innerHTML = '<div class="music-card"><div class="md">'+renderMarkdown(res.reply)+'</div></div>'; highlightCodeBlocks(); showToast('✅ Lyrics ready!'); }
   else results.innerHTML = '<div class="result-card"><p>⚠️ Failed: '+esc(res.error||'unknown')+'</p></div>';
 }
-window.generateMusicFromPanel = generateMusicFromPanel;
-window.generateLyricsFromPanel = generateLyricsFromPanel;
+window.generateMusicFromPanel = generateMusicFromPanel; window.generateLyricsFromPanel = generateLyricsFromPanel;
 
-// ═══════════════════════════════════════════════════════════
-// PDF CHAT
-// ═══════════════════════════════════════════════════════════
 function openPdfChatPanel(){ $('pdfChatPanel').classList.add('show'); closeSidebar(); }
 window.openPdfChatPanel = openPdfChatPanel;
 let currentPdfText = '', currentPdfName = '';
@@ -3545,18 +3329,9 @@ async function askPdfQuestion(){
 }
 window.askPdfQuestion = askPdfQuestion;
 
-// ═══════════════════════════════════════════════════════════
-// TRANSLATE
-// ═══════════════════════════════════════════════════════════
 function openTranslatePanel(){ $('translatePanel').classList.add('show'); closeSidebar(); }
-function swapLanguages(){
-  const from = $('translateFrom'), to = $('translateTo');
-  if (from.value === 'auto') return showToast('Cannot swap auto');
-  const t = from.value; from.value = to.value; to.value = t;
-  if ($('translateInput').value) doTranslate();
-}
-window.openTranslatePanel = openTranslatePanel;
-window.swapLanguages = swapLanguages;
+function swapLanguages(){ const from = $('translateFrom'), to = $('translateTo'); if (from.value === 'auto') return showToast('Cannot swap auto'); const t = from.value; from.value = to.value; to.value = t; if ($('translateInput').value) doTranslate(); }
+window.openTranslatePanel = openTranslatePanel; window.swapLanguages = swapLanguages;
 const LANG_NAMES = {auto:'auto-detect',en:'English',ha:'Hausa',ar:'Arabic',fr:'French',yo:'Yoruba',ig:'Igbo',sw:'Swahili',es:'Spanish'};
 async function doTranslate(){
   const text = $('translateInput').value.trim(); if (!text) return showToast('Enter text');
@@ -3569,9 +3344,6 @@ async function doTranslate(){
 }
 window.doTranslate = doTranslate;
 
-// ═══════════════════════════════════════════════════════════
-// DATA ANALYSIS
-// ═══════════════════════════════════════════════════════════
 function openDataAnalysisPanel(){ $('dataAnalysisPanel').classList.add('show'); closeSidebar(); }
 window.openDataAnalysisPanel = openDataAnalysisPanel;
 async function handleDataUpload(e){
@@ -3583,28 +3355,18 @@ async function handleDataUpload(e){
   } catch(err){ showToast('⚠️ '+err.message); }
 }
 window.handleDataUpload = handleDataUpload;
-function analyzePastedData(){
-  const raw = $('dataPasteInput').value.trim(); if (!raw) return showToast('Paste data');
-  const rows = raw.split(/\r?\n/).map(l => l.split(',').map(c => c.trim()));
-  analyzeTable(rows, 'Pasted Data');
-}
+function analyzePastedData(){ const raw = $('dataPasteInput').value.trim(); if (!raw) return showToast('Paste data'); const rows = raw.split(/\r?\n/).map(l => l.split(',').map(c => c.trim())); analyzeTable(rows, 'Pasted Data'); }
 window.analyzePastedData = analyzePastedData;
 function analyzeTable(rows, name){
   if (!rows || rows.length < 2) return showToast('Not enough data');
   const headers = rows[0].map(h => String(h||'').trim());
   const data = rows.slice(1).filter(r => r.some(c => c!=='' && c!=null));
   const numericCols = [];
-  headers.forEach((h,i) => {
-    const vals = data.map(r => parseFloat(r[i])).filter(v => !isNaN(v));
-    if (vals.length > data.length * 0.5) numericCols.push({index:i, name:h, values:vals});
-  });
+  headers.forEach((h,i) => { const vals = data.map(r => parseFloat(r[i])).filter(v => !isNaN(v)); if (vals.length > data.length * 0.5) numericCols.push({index:i, name:h, values:vals}); });
   let html = '<div class="data-stat-grid"><div class="data-stat"><div class="ds-label">Rows</div><div class="ds-value">'+data.length+'</div></div><div class="data-stat"><div class="ds-label">Columns</div><div class="ds-value">'+headers.length+'</div></div></div>';
   if (numericCols.length){
     html += '<div class="result-card"><h4>📊 Statistics</h4><table class="md" style="font-size:12.5px"><thead><tr><th>Column</th><th>Mean</th><th>Min</th><th>Max</th></tr></thead><tbody>';
-    numericCols.forEach(c => {
-      const sum = c.values.reduce((a,b) => a+b, 0), mean = sum/c.values.length;
-      html += '<tr><td>'+esc(c.name)+'</td><td>'+mean.toFixed(2)+'</td><td>'+Math.min(...c.values).toFixed(2)+'</td><td>'+Math.max(...c.values).toFixed(2)+'</td></tr>';
-    });
+    numericCols.forEach(c => { const sum = c.values.reduce((a,b) => a+b, 0), mean = sum/c.values.length; html += '<tr><td>'+esc(c.name)+'</td><td>'+mean.toFixed(2)+'</td><td>'+Math.min(...c.values).toFixed(2)+'</td><td>'+Math.max(...c.values).toFixed(2)+'</td></tr>'; });
     html += '</tbody></table></div>';
   }
   $('dataAnalysisResults').innerHTML = '<div class="result-card"><h4>✅ '+esc(name)+'</h4></div>' + html + '<div id="dataAIInsights"></div>';
@@ -3619,9 +3381,6 @@ async function aiDataInsight(headers, data){
   else box.innerHTML = '<div class="result-card"><p>⚠️ Failed</p></div>';
 }
 
-// ═══════════════════════════════════════════════════════════
-// DOWNLOADS HUB
-// ═══════════════════════════════════════════════════════════
 function openDownloadHub(){ $('downloadHubPanel').classList.add('show'); closeSidebar(); renderDownloadHub(); }
 window.openDownloadHub = openDownloadHub;
 function renderDownloadHub(){
@@ -3630,22 +3389,13 @@ function renderDownloadHub(){
   grid.innerHTML = musicLibrary.map((m,i) => '<div class="download-item"><div class="di-preview">🎵</div><div class="di-title">'+esc((m.title||'').slice(0,40))+'</div><button class="di-btn" onclick="downloadText(\''+encodeURIComponent((m.prompt||'').slice(0,9000))+'\', \'wiseking-music-'+i+'.txt\')"><i class="fas fa-download"></i> Download</button></div>').join('');
 }
 function downloadText(encoded, filename){
-  try {
-    const text = decodeURIComponent(encoded);
-    const blob = new Blob([text], {type:'text/plain'});
-    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url), 1000); showToast('✅ Downloaded!');
-  } catch(e){ showToast('⚠️ Failed'); }
+  try { const text = decodeURIComponent(encoded); const blob = new Blob([text], {type:'text/plain'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url), 1000); showToast('✅ Downloaded!'); }
+  catch(e){ showToast('⚠️ Failed'); }
 }
 window.downloadText = downloadText;
 
-// ═══════════════════════════════════════════════════════════
-// SEARCH WEB
-// ═══════════════════════════════════════════════════════════
 function openSearchWebPanel(){ $('searchWebPanel').classList.add('show'); closeSidebar(); }
 window.openSearchWebPanel = openSearchWebPanel;
-
 function openSearchEngine() {
   const query = document.getElementById('searchWebInput').value.trim();
   if (!query) return showToast('⚠️ Please enter a search query');
@@ -3654,39 +3404,22 @@ function openSearchEngine() {
   if (engine === 'google') url = 'https://www.google.com/search?q=' + encodeURIComponent(query);
   else if (engine === 'bing') url = 'https://www.bing.com/search?q=' + encodeURIComponent(query);
   else if (engine === 'duckduckgo') url = 'https://duckduckgo.com/?q=' + encodeURIComponent(query);
-  window.open(url, '_blank');
-  showToast('🌐 Opening ' + engine + '...');
+  window.open(url, '_blank'); showToast('🌐 Opening ' + engine + '...');
 }
 window.openSearchEngine = openSearchEngine;
-
 async function askAiToSearch(query) {
   const q = (query || '').trim();
   if (!q) return showToast('⚠️ Please enter a search query');
   const results = $('searchWebResults');
   results.innerHTML = '<div class="gen-image-loading"><i class="fas fa-spinner fa-spin"></i>AI is searching...</div>';
-  const res = await sendMessageWithFallback('The user is looking for: "' + q + '".\n\nProvide a comprehensive summary of the latest news, facts, and website links related to this topic. Structure it with bullet points and include the names of websites (e.g., BBC, CNN, Wikipedia) where this information is typically found.');
-  if (res.success) {
-    results.innerHTML = '<div class="result-card"><h4>🤖 AI Knowledge Summary</h4><div class="md">' + renderMarkdown(res.reply) + '</div></div>';
-    highlightCodeBlocks();
-  } else {
-    results.innerHTML = '<div class="result-card"><p>⚠️ AI Failed to process.</p></div>';
-  }
+  const res = await sendMessageWithFallback('The user is looking for: "' + q + '".\n\nProvide a comprehensive summary of the latest news, facts, and website links related to this topic.');
+  if (res.success) { results.innerHTML = '<div class="result-card"><h4>🤖 AI Knowledge Summary</h4><div class="md">' + renderMarkdown(res.reply) + '</div></div>'; highlightCodeBlocks(); }
+  else { results.innerHTML = '<div class="result-card"><p>⚠️ AI Failed to process.</p></div>'; }
 }
 window.askAiToSearch = askAiToSearch;
 
-// ═══════════════════════════════════════════════════════════
-// BUILD APP
-// ═══════════════════════════════════════════════════════════
 const BUILD_IDEAS = [
-  {t:'Todo List App',d:'Track daily tasks',icon:'✅'},
-  {t:'Calculator',d:'Full working calculator',icon:'🧮'},
-  {t:'Digital Clock',d:'Live clock + countdown',icon:'⏰'},
-  {t:'Expense Tracker',d:'Track income & spending',icon:'💰'},
-  {t:'Notes App',d:'Simple notes with save',icon:'📝'},
-  {t:'Habit Tracker',d:'Daily habits & streaks',icon:'🎯'},
-  {t:'Password Generator',d:'Strong random passwords',icon:'🔐'},
-  {t:'Quiz App',d:'Multiple choice quiz',icon:'🧠'},
-  {t:'Landing Page',d:'Modern responsive page',icon:'💼'}
+  {t:'Todo List App',d:'Track daily tasks',icon:'✅'}, {t:'Calculator',d:'Full working calculator',icon:'🧮'}, {t:'Digital Clock',d:'Live clock + countdown',icon:'⏰'}, {t:'Expense Tracker',d:'Track income & spending',icon:'💰'}, {t:'Notes App',d:'Simple notes with save',icon:'📝'}, {t:'Habit Tracker',d:'Daily habits & streaks',icon:'🎯'}, {t:'Password Generator',d:'Strong random passwords',icon:'🔐'}, {t:'Quiz App',d:'Multiple choice quiz',icon:'🧠'}, {t:'Landing Page',d:'Modern responsive page',icon:'💼'}
 ];
 function openBuildAppPanel(){ $('buildAppPanel').classList.add('show'); closeSidebar(); filterBuildIdeas(''); }
 window.openBuildAppPanel = openBuildAppPanel;
@@ -3704,37 +3437,20 @@ function buildApp(name){
 }
 window.buildApp = buildApp;
 
-// ═══════════════════════════════════════════════════════════
-// PRICING / PAYSTACK
-// ═══════════════════════════════════════════════════════════
 function openPricingPanel(){ $('pricingPanel').classList.add('show'); closeSidebar(); }
 window.openPricingPanel = openPricingPanel;
-
 function upgradeToPlan(plan, amount){
   const PAYSTACK_PUBLIC_KEY = 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE';
-  if (PAYSTACK_PUBLIC_KEY === 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE') {
-    return showToast('💳 Add your Paystack Public Key in the code to enable payments.');
-  }
+  if (PAYSTACK_PUBLIC_KEY === 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE') { return showToast('💳 Add your Paystack Public Key in the code to enable payments.'); }
   let handler = PaystackPop.setup({
-    key: PAYSTACK_PUBLIC_KEY,
-    email: localStorage.getItem('wk_user_email') || 'guest@wiseking.com',
-    amount: amount * 100,
-    currency: 'NGN',
-    ref: 'WK_' + Math.floor((Math.random() * 1000000000) + 1),
+    key: PAYSTACK_PUBLIC_KEY, email: localStorage.getItem('wk_user_email') || 'guest@wiseking.com', amount: amount * 100, currency: 'NGN', ref: 'WK_' + Math.floor((Math.random() * 1000000000) + 1),
     onClose: function(){ showToast('⚠️ Payment window closed.'); },
-    callback: function(response){
-      showToast('✅ Payment successful! Ref: ' + response.reference);
-      localStorage.setItem('wk_plan', plan);
-      closePanel('pricingPanel');
-    }
+    callback: function(response){ showToast('✅ Payment successful! Ref: ' + response.reference); localStorage.setItem('wk_plan', plan); closePanel('pricingPanel'); }
   });
   handler.openIframe();
 }
 window.upgradeToPlan = upgradeToPlan;
 
-// ═══════════════════════════════════════════════════════════
-// CHAT SEARCH
-// ═══════════════════════════════════════════════════════════
 function toggleChatSearch(){
   const bar = $('chatSearchBar'); if (!bar) return;
   const showing = bar.classList.toggle('show');
@@ -3745,14 +3461,9 @@ window.toggleChatSearch = toggleChatSearch;
 document.addEventListener('input', e => {
   if (e.target.id !== 'chatSearchInput') return;
   const q = e.target.value.toLowerCase().trim();
-  document.querySelectorAll('#messagesArea .message').forEach(m => {
-    m.style.display = !q || (m.textContent||'').toLowerCase().includes(q) ? '' : 'none';
-  });
+  document.querySelectorAll('#messagesArea .message').forEach(m => { m.style.display = !q || (m.textContent||'').toLowerCase().includes(q) ? '' : 'none'; });
 });
 
-// ═══════════════════════════════════════════════════════════
-// MODES & VOICE
-// ═══════════════════════════════════════════════════════════
 function toggleThinkMode(){ thinkMode = !thinkMode; $('chipThink').classList.toggle('active', thinkMode); showToast(thinkMode ? '🧠 ON' : '🧠 OFF'); }
 function toggleSearchMode(){ searchMode = !searchMode; $('chipSearch').classList.toggle('active', searchMode); showToast(searchMode ? '🌐 ON' : '🌐 OFF'); }
 
@@ -3764,65 +3475,32 @@ function startVoiceInput(){
   rec.onerror = () => showToast('⚠️ Voice error');
   rec.start(); showToast('🎙️ Listening...');
 }
-
 function startVoiceChat() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return showToast('⚠️ Voice not supported');
-  const rec = new SR();
-  rec.lang = 'en-NG';
-  rec.onresult = async (ev) => {
-    const t = ev.results[0][0].transcript;
-    const input = document.getElementById('messageInput');
-    input.value = t;
-    handleInputChange();
-    sendMessage();
-    setTimeout(() => {
-      const chat = window.chats.find(c => c.id === window.activeChatId);
-      const lastMsg = chat.messages[chat.messages.length - 1];
-      if (lastMsg && lastMsg.role === 'ai') speakText(lastMsg.content);
-    }, 4000);
-  };
-  rec.start();
-  showToast('🎙️ Listening (Voice Mode)...');
+  const rec = new SR(); rec.lang = 'en-NG';
+  rec.onresult = async (ev) => { const t = ev.results[0][0].transcript; const input = document.getElementById('messageInput'); input.value = t; handleInputChange(); sendMessage(); setTimeout(() => { const chat = window.chats.find(c => c.id === window.activeChatId); const lastMsg = chat.messages[chat.messages.length - 1]; if (lastMsg && lastMsg.role === 'ai') speakText(lastMsg.content); }, 4000); };
+  rec.start(); showToast('🎙️ Listening (Voice Mode)...');
 }
-
 function speakText(text) {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-NG'; utterance.rate = 1.0; utterance.pitch = 1.0;
-    window.speechSynthesis.speak(utterance);
-    showToast('🔊 Reading aloud...');
-  } else {
-    showToast('⚠️ Text-to-Speech not supported');
-  }
+  if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-NG'; utterance.rate = 1.0; utterance.pitch = 1.0; window.speechSynthesis.speak(utterance); showToast('🔊 Reading aloud...'); }
+  else { showToast('⚠️ Text-to-Speech not supported'); }
 }
-window.toggleThinkMode = toggleThinkMode;
-window.toggleSearchMode = toggleSearchMode;
-window.startVoiceInput = startVoiceInput;
-window.startVoiceChat = startVoiceChat;
-window.speakText = speakText;
+window.toggleThinkMode = toggleThinkMode; window.toggleSearchMode = toggleSearchMode; window.startVoiceInput = startVoiceInput; window.startVoiceChat = startVoiceChat; window.speakText = speakText;
 
-// ═══════════════════════════════════════════════════════════
-// INPUT HANDLING
-// ═══════════════════════════════════════════════════════════
 function handleInputChange(){
   const input = $('messageInput'), btn = $('sendBtn');
   if (!input || !btn) return;
   const has = input.value.trim().length > 0 || uploadedFiles.length > 0;
-  if (isSending) btn.classList.remove('hidden');
-  else btn.classList.toggle('hidden', !has);
-  input.style.height = 'auto';
-  const max = window.innerHeight * 0.7;
+  if (isSending) btn.classList.remove('hidden'); else btn.classList.toggle('hidden', !has);
+  input.style.height = 'auto'; const max = window.innerHeight * 0.7;
   input.style.height = Math.min(input.scrollHeight, max) + 'px';
   input.style.overflowY = input.scrollHeight > max ? 'auto' : 'hidden';
 }
 function handleKeyDown(e){ if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); if (!isSending) sendMessage(); } }
 function handleSendOrCancel(){ if (isSending) cancelRequest(); else sendMessage(); }
 function cancelRequest(){ if (currentAbortController) currentAbortController.abort(); isSending = false; }
-window.handleInputChange = handleInputChange;
-window.handleKeyDown = handleKeyDown;
-window.handleSendOrCancel = handleSendOrCancel;
+window.handleInputChange = handleInputChange; window.handleKeyDown = handleKeyDown; window.handleSendOrCancel = handleSendOrCancel;
 
 async function handleFiles(e){
   const files = Array.from(e.target.files || []); if (!files.length) return;
@@ -3833,33 +3511,17 @@ async function handleFiles(e){
       if (ftype.startsWith('image/')){
         const dataUrl = await new Promise((resolve, reject) => {
           const fr = new FileReader();
-          fr.onload = ev => {
-            const img = new Image();
-            img.onload = () => {
-              const canvas = document.createElement('canvas');
-              const MAX = 1280; let w = img.width, h = img.height;
-              if (w > h && w > MAX){ h = Math.round(h*MAX/w); w = MAX; } else if (h > MAX){ w = Math.round(w*MAX/h); h = MAX; }
-              canvas.width = w; canvas.height = h;
-              canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-              resolve(canvas.toDataURL('image/jpeg', 0.85));
-            };
-            img.onerror = () => resolve(ev.target.result);
-            img.src = ev.target.result;
-          };
-          fr.onerror = reject;
-          fr.readAsDataURL(file);
+          fr.onload = ev => { const img = new Image(); img.onload = () => { const canvas = document.createElement('canvas'); const MAX = 1280; let w = img.width, h = img.height; if (w > h && w > MAX){ h = Math.round(h*MAX/w); w = MAX; } else if (h > MAX){ w = Math.round(w*MAX/h); h = MAX; } canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h); resolve(canvas.toDataURL('image/jpeg', 0.85)); }; img.onerror = () => resolve(ev.target.result); img.src = ev.target.result; };
+          fr.onerror = reject; fr.readAsDataURL(file);
         });
         uploadedFiles.push({type:'image', dataUrl, mime:'image/jpeg', name:file.name});
       } else if (fname.endsWith('.pdf')){
         if (typeof pdfjsLib === 'undefined'){ showToast('⚠️ PDF lib loading'); return; }
-        const buf = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({data: buf}).promise;
-        let text = ''; const max = Math.min(pdf.numPages, 30);
+        const buf = await file.arrayBuffer(); const pdf = await pdfjsLib.getDocument({data: buf}).promise; let text = ''; const max = Math.min(pdf.numPages, 30);
         for (let i=1; i<=max; i++){ const p = await pdf.getPage(i); const c = await p.getTextContent(); text += c.items.map(it => it.str).join(' ') + '\n\n'; }
         uploadedFiles.push({type:'pdf', dataUrl:null, mime:'application/pdf', name:file.name, text: text.trim(), pages: pdf.numPages});
       } else if (ftype.startsWith('text/') || /\.(txt|md|json|csv|js|html|css|py)$/i.test(fname)){
-        const text = await file.text();
-        uploadedFiles.push({type:'text', dataUrl:null, mime:ftype||'text/plain', name:file.name, text: text.slice(0,50000)});
+        const text = await file.text(); uploadedFiles.push({type:'text', dataUrl:null, mime:ftype||'text/plain', name:file.name, text: text.slice(0,50000)});
       } else showToast('⚠️ Unsupported: '+file.name);
     } catch(err){ showToast('⚠️ '+file.name+' failed'); }
   }));
@@ -3880,8 +3542,7 @@ function removeFile(i){ uploadedFiles.splice(i, 1); updatePreview(); handleInput
 window.removeFile = removeFile;
 function insertQuickPrompt(t){ $('messageInput').value = t; handleInputChange(); sendMessage(); }
 function useSuggestion(t){ insertQuickPrompt(t); }
-window.useSuggestion = useSuggestion;
-window.insertQuickPrompt = insertQuickPrompt;
+window.useSuggestion = useSuggestion; window.insertQuickPrompt = insertQuickPrompt;
 
 function goToWelcome(){ window.activeChatId = null; saveChats(); renderMessages(); }
 window.goToWelcome = goToWelcome;
@@ -3890,13 +3551,8 @@ window.closeModal = closeModal;
 function toggleSection(h){ h.classList.toggle('open'); h.nextElementSibling.classList.toggle('open'); }
 function toggleSidebar(){ $('sidebar').classList.toggle('open'); }
 function closeSidebar(){ $('sidebar').classList.remove('open'); }
-window.toggleSection = toggleSection;
-window.toggleSidebar = toggleSidebar;
-window.closeSidebar = closeSidebar;
+window.toggleSection = toggleSection; window.toggleSidebar = toggleSidebar; window.closeSidebar = closeSidebar;
 
-// ═══════════════════════════════════════════════════════════
-// MESSAGE RENDERING
-// ═══════════════════════════════════════════════════════════
 function renderMessages(){
   const area = $('messagesArea'); if (!area) return;
   area.innerHTML = '';
@@ -3927,9 +3583,7 @@ function buildMessageEl(msg, idx, chatId){
     content.innerHTML = '<span class="thinking-crown">'+window.WK_LOGO_INLINE(26)+'</span><span class="thinking-text">Wise King is thinking</span><span class="thinking-dots"><span></span><span></span><span></span></span>';
   } else {
     let htmlContent = '<div class="md" id="msg-text-'+idx+'">' + renderMarkdown(msg.content || '') + '</div>';
-    if (msg.imageUrl) {
-      htmlContent += `<div style="margin-top:12px;"><img src="${msg.imageUrl}" alt="AI Generated" style="max-width:100%;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);"><br><a href="${msg.imageUrl}" target="_blank" download class="btn solid" style="margin-top:8px;font-size:12px;padding:6px 12px;"><i class="fas fa-download"></i> Download Image</a></div>`;
-    }
+    if (msg.imageUrl) { htmlContent += `<div style="margin-top:12px;"><img src="${msg.imageUrl}" alt="AI Generated" style="max-width:100%;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);"><br><a href="${msg.imageUrl}" target="_blank" download class="btn solid" style="margin-top:8px;font-size:12px;padding:6px 12px;"><i class="fas fa-download"></i> Download Image</a></div>`; }
     if (msg.attachments && msg.attachments.length){
       const aHtml = msg.attachments.map(att => {
         if (att.type === 'image') return '<img src="'+att.dataUrl+'" style="max-width:220px;border-radius:10px;margin-top:8px;display:block" alt="attachment">';
@@ -3997,23 +3651,9 @@ function confirmDeleteMessage(){
   else c.messages.splice(deletingMessageIdx, 1);
   closeModal('deleteMessageModal'); deletingMessageIdx = -1; saveChats(); renderMessages(); showToast('🗑️ Deleted');
 }
-window.handleLikeMessage = handleLikeMessage;
-window.handleDislikeMessage = handleDislikeMessage;
-window.submitDislikeFeedback = submitDislikeFeedback;
-window.handleRegenerateMessage = handleRegenerateMessage;
-window.handleCopyMessage = handleCopyMessage;
-window.handleShareMessage = handleShareMessage;
-window.handleEditMessage = handleEditMessage;
-window.handleDeleteMessage = handleDeleteMessage;
-window.saveEditedMessage = saveEditedMessage;
-window.confirmDeleteMessage = confirmDeleteMessage;
+window.handleLikeMessage = handleLikeMessage; window.handleDislikeMessage = handleDislikeMessage; window.submitDislikeFeedback = submitDislikeFeedback; window.handleRegenerateMessage = handleRegenerateMessage; window.handleCopyMessage = handleCopyMessage; window.handleShareMessage = handleShareMessage; window.handleEditMessage = handleEditMessage; window.handleDeleteMessage = handleDeleteMessage; window.saveEditedMessage = saveEditedMessage; window.confirmDeleteMessage = confirmDeleteMessage;
 
-// ═══════════════════════════════════════════════════════════
-// API — STREAMING CHAT VIA BACKEND
-// ═══════════════════════════════════════════════════════════
-function parseDataUrl(dataUrl){
-  try { const m = dataUrl.match(/^data:([^;]+);base64,(.+)$/); return m ? {mime: m[1], base64: m[2]} : null; } catch(e){ return null; }
-}
+function parseDataUrl(dataUrl){ try { const m = dataUrl.match(/^data:([^;]+);base64,(.+)$/); return m ? {mime: m[1], base64: m[2]} : null; } catch(e){ return null; } }
 function buildMemoryContext(){
   const parts = [];
   if (vaultMemories.length){ parts.push('<USER_VAULT>'); vaultMemories.slice(0,15).forEach(m => parts.push('- '+String(m).slice(0,250))); parts.push('</USER_VAULT>'); }
@@ -4021,31 +3661,23 @@ function buildMemoryContext(){
   return parts.join('\n');
 }
 
-// Rate limiter (client-side basic)
 const __rateLimit = { timestamps: [], maxPerMinute: 20 };
-function __canCallApi() {
-  const now = Date.now();
-  __rateLimit.timestamps = __rateLimit.timestamps.filter(t => now - t < 60000);
-  if (__rateLimit.timestamps.length >= __rateLimit.maxPerMinute) return false;
-  __rateLimit.timestamps.push(now);
-  return true;
-}
+function __canCallApi() { const now = Date.now(); __rateLimit.timestamps = __rateLimit.timestamps.filter(t => now - t < 60000); if (__rateLimit.timestamps.length >= __rateLimit.maxPerMinute) return false; __rateLimit.timestamps.push(now); return true; }
 
-// ─── Core streaming function ───
-async function streamChat(userText, chatHistory, onChunk, signal) {
+// ═══════════════════════════════════════════════════════════
+// GEMINI API FETCH (RESTORED TO DIRECT CALL)
+// ═══════════════════════════════════════════════════════════
+async function fetchGemini(userText, chatHistory, signal) {
   if (!__canCallApi()) throw new Error('Slow down — sending too fast. Wait a moment.');
-
   const model = localStorage.getItem('wk_model') || 'gemini-2.5-flash';
   const activePersona = localStorage.getItem('wk_persona') || 'default';
   const personaBlock = PERSONAS[activePersona] || '';
   const memoryBlock = getMemoryEnabled() ? buildMemoryContext() : '';
   const now = new Date().toLocaleString('en-NG', { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
 
-  const systemPrompt = (window.SYSTEM_PROMPT || '') + personaBlock +
-    (memoryBlock ? '\n\n' + memoryBlock : '') +
-    '\n\nToday is ' + now + '.';
+  const systemPrompt = (window.SYSTEM_PROMPT || '') + personaBlock + (memoryBlock ? '\n\n' + memoryBlock : '') + '\n\nToday is ' + now + '.';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
 
-  // Build Gemini contents
   const contents = [];
   (chatHistory || []).slice(-60).forEach(m => {
     const role = m.role === 'user' ? 'user' : 'model';
@@ -4064,83 +3696,30 @@ async function streamChat(userText, chatHistory, onChunk, signal) {
   });
   contents.push({ role: 'user', parts: [{ text: userText }] });
 
-  const res = await fetch(BACKEND + '/chat', {
+  const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents, systemPrompt, model }),
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: systemPrompt }] },
+      contents,
+      generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
+    }),
     signal,
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: 'HTTP ' + res.status }));
-    throw new Error(err.error || 'Chat failed');
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'HTTP ' + res.status);
   }
 
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let full = '';
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    const chunk = decoder.decode(value, { stream: true });
-    full += chunk;
-    onChunk(chunk, full);
-  }
-  return full;
+  const data = await res.json();
+  return data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || 'No response generated.';
 }
-window.streamChat = streamChat;
+window.fetchGemini = fetchGemini;
 
-// ─── Retry wrapper ───
-async function streamChatWithRetry(userText, history, onChunk, signal, attempts = 3) {
-  let lastErr;
-  for (let i = 0; i < attempts; i++) {
-    try {
-      return await streamChat(userText, history, onChunk, signal);
-    } catch (err) {
-      lastErr = err;
-      if (err.name === 'AbortError' || i === attempts - 1) throw err;
-      const wait = 800 * Math.pow(2, i);
-      showToast(`🔁 Retrying (${i + 1}/${attempts})…`);
-      await new Promise(r => setTimeout(r, wait));
-    }
-  }
-  throw lastErr;
-}
-
-// ─── Real web search ───
-async function realWebSearch(query) {
-  try {
-    const res = await fetch(BACKEND + '/search', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, maxResults: 5 }),
-    });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch { return null; }
-}
-window.realWebSearch = realWebSearch;
-
-// ─── Auto-title ───
-async function autoTitle(userText, aiText) {
-  try {
-    const res = await fetch(BACKEND + '/title', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userText, aiText }),
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.title;
-  } catch { return null; }
-}
-window.autoTitle = autoTitle;
-
-// ─── Non-streaming wrapper for utility calls ───
 async function sendMessageWithFallback(userText, chatHistory, signal) {
   try {
-    let reply = '';
-    await streamChat(userText, chatHistory || [], (chunk, full) => { reply = full; }, signal);
+    const reply = await fetchGemini(userText, chatHistory || [], signal);
     return { success: true, reply };
   } catch (err) {
     if (err.name === 'AbortError') throw err;
@@ -4149,9 +3728,6 @@ async function sendMessageWithFallback(userText, chatHistory, signal) {
 }
 window.sendMessageWithFallback = sendMessageWithFallback;
 
-// ═══════════════════════════════════════════════════════════
-// SEND MESSAGE
-// ═══════════════════════════════════════════════════════════
 let __sendLock = false;
 function sendMessage(){
   if (__sendLock || isSending) return;
@@ -4170,7 +3746,6 @@ function sendMessage(){
     }
     if (chat.title === 'New chat' && text) chat.title = text.slice(0, 32);
 
-    // ─── Image generation intercept ───
     const isImageReq = /\b(generate|create|make|draw|paint)\b.*\b(image|picture|photo|art)\b/i.test(text) || text.toLowerCase().startsWith('imagine ');
     if (isImageReq && text.length > 10) {
       chat.messages.push({ role: 'user', content: text, createdAt: Date.now() });
@@ -4180,30 +3755,12 @@ function sendMessage(){
       chat.messages.push(aiMsg);
       saveChats(); renderMessages();
 
-      (async () => {
-        try {
-          const res = await fetch(BACKEND + '/image', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: text }),
-          });
-          const data = await res.json();
-          if (data.dataUrl) {
-            aiMsg.content = `Here is your image for: *"${text}"*`;
-            aiMsg.imageUrl = data.dataUrl;
-            showToast('✅ Image generated');
-          } else {
-            aiMsg.error = true;
-            aiMsg.content = '⚠️ Image failed: ' + (data.error || 'unknown');
-          }
-        } catch (err) {
-          aiMsg.error = true;
-          aiMsg.content = '⚠️ Image failed: ' + err.message;
-        } finally {
-          aiMsg.streaming = false;
-          saveChats(); renderMessages();
-        }
-      })();
+      setTimeout(() => {
+        aiMsg.content = `Here is your image for: *"${text}"*`;
+        aiMsg.imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(text)}?width=1024&height=1024&nologo=true`;
+        aiMsg.streaming = false;
+        saveChats(); renderMessages();
+      }, 1500);
       return;
     }
 
@@ -4228,28 +3785,11 @@ function sendMessage(){
 }
 window.sendMessage = sendMessage;
 
-// ═══════════════════════════════════════════════════════════
-// TRIGGER RESPONSE — STREAMING UI
-// ═══════════════════════════════════════════════════════════
 async function triggerResponse(chat, userMsg) {
   isSending = true;
   const btn = $('sendBtn');
   if (btn) { btn.classList.remove('hidden'); btn.classList.add('stop'); btn.innerHTML = '<i class="fas fa-stop"></i>'; }
   currentAbortController = new AbortController();
-
-  // Real web search if Search chip was on
-  let searchContext = '';
-  if (searchMode) {
-    const searchData = await realWebSearch(userMsg.content);
-    if (searchData?.results?.length) {
-      searchContext = '\n\n[WEB SEARCH RESULTS — use as current facts]\n' +
-        (searchData.answer ? 'Summary: ' + searchData.answer + '\n\n' : '') +
-        searchData.results.map((r, i) => `${i + 1}. ${r.title}\n   ${r.url}\n   ${r.content}`).join('\n\n') +
-        '\n[END WEB SEARCH]';
-      showToast('🌐 Found ' + searchData.results.length + ' sources');
-    }
-  }
-  const enrichedText = userMsg.content + searchContext;
 
   const aiMsg = { role: 'ai', content: '', createdAt: Date.now(), streaming: true };
   chat.messages.push(aiMsg);
@@ -4260,38 +3800,11 @@ async function triggerResponse(chat, userMsg) {
 
   try {
     const history = chat.messages.filter(m => m !== aiMsg);
-    let rafPending = false;
-
-    await streamChatWithRetry(enrichedText, history, (chunk, full) => {
-      aiMsg.content = full;
-      if (!rafPending) {
-        rafPending = true;
-        requestAnimationFrame(() => {
-          rafPending = false;
-          const els = area.querySelectorAll('.message.ai .md');
-          const last = els[els.length - 1];
-          if (last) {
-            last.innerHTML = renderMarkdown(aiMsg.content);
-            highlightCodeBlocks();
-            scroll.scrollTop = scroll.scrollHeight;
-          }
-        });
-      }
-    }, currentAbortController.signal);
-
+    const reply = await fetchGemini(userMsg.content, history, currentAbortController.signal);
+    aiMsg.content = reply;
     if (!aiMsg.content) {
       aiMsg.error = true;
       aiMsg.content = '⚠️ Empty response. Try again.';
-    }
-
-    // Auto-title if new chat
-    if (chat.title === 'New chat' && aiMsg.content) {
-      autoTitle(userMsg.content, aiMsg.content).then(t => {
-        if (t && chat.title === 'New chat') {
-          chat.title = t;
-          saveChats(); renderMessages();
-        }
-      });
     }
   } catch (err) {
     if (err.name === 'AbortError') {
@@ -4310,9 +3823,6 @@ async function triggerResponse(chat, userMsg) {
 }
 window.triggerResponse = triggerResponse;
 
-// ═══════════════════════════════════════════════════════════
-// EXPORT CHAT AS PDF
-// ═══════════════════════════════════════════════════════════
 function downloadChatAsPDF() {
   const chat = window.chats.find(c => c.id === window.activeChatId);
   if (!chat || chat.messages.length === 0) return showToast('No chat to export');
@@ -4322,26 +3832,12 @@ function downloadChatAsPDF() {
   element.style.fontFamily = 'Arial, sans-serif';
   element.innerHTML = `<h1 style="text-align:center;color:#6366f1;">Wise King AI Chat</h1><hr>`;
   chat.messages.forEach(msg => {
-    element.innerHTML += `
-      <div style="margin-bottom:20px;page-break-inside:avoid;">
-        <strong style="color:${msg.role === 'user' ? '#6366f1' : '#10b981'}">
-          ${msg.role === 'user' ? 'User' : 'Wise King AI'}:
-        </strong>
-        <p style="white-space:pre-wrap;font-size:14px;line-height:1.6;">${msg.content}</p>
-      </div>`;
+    element.innerHTML += `<div style="margin-bottom:20px;page-break-inside:avoid;"><strong style="color:${msg.role === 'user' ? '#6366f1' : '#10b981'}">${msg.role === 'user' ? 'User' : 'Wise King AI'}:</strong><p style="white-space:pre-wrap;font-size:14px;line-height:1.6;">${msg.content}</p></div>`;
   });
-  html2pdf().from(element).set({
-    margin: 1,
-    filename: 'WiseKing-Chat.pdf',
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-  }).save().then(() => showToast('✅ PDF Downloaded!'));
+  html2pdf().from(element).set({ margin: 1, filename: 'WiseKing-Chat.pdf', html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } }).save().then(() => showToast('✅ PDF Downloaded!'));
 }
 window.downloadChatAsPDF = downloadChatAsPDF;
 
-// ═══════════════════════════════════════════════════════════
-// EXPORT / IMPORT
-// ═══════════════════════════════════════════════════════════
 function exportData(){
   const data = {chats: window.chats, vault: vaultMemories, memory: crossChatMemory, music: musicLibrary, exportedAt: new Date().toISOString()};
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
@@ -4370,109 +3866,19 @@ function importData(e){
 }
 window.importData = importData;
 
-// ═══════════════════════════════════════════════════════════
-// INSTALL
-// ═══════════════════════════════════════════════════════════
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredInstallPrompt = e;
-  $('installAppBtn').style.display = 'inline-flex';
-});
-window.addEventListener('appinstalled', () => {
-  deferredInstallPrompt = null;
-  $('installAppBtn').style.display = 'none';
-  showToast('✅ Installed!');
-});
-async function promptInstallApp(){
-  if (!deferredInstallPrompt) return showToast('Menu → "Add to Home Screen"');
-  deferredInstallPrompt.prompt();
-  await deferredInstallPrompt.userChoice;
-  deferredInstallPrompt = null;
-}
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstallPrompt = e; $('installAppBtn').style.display = 'inline-flex'; });
+window.addEventListener('appinstalled', () => { deferredInstallPrompt = null; $('installAppBtn').style.display = 'none'; showToast('✅ Installed!'); });
+async function promptInstallApp(){ if (!deferredInstallPrompt) return showToast('Menu → "Add to Home Screen"'); deferredInstallPrompt.prompt(); await deferredInstallPrompt.userChoice; deferredInstallPrompt = null; }
 window.promptInstallApp = promptInstallApp;
 
-// ═══════════════════════════════════════════════════════════
-// SAVE ON CLOSE
-// ═══════════════════════════════════════════════════════════
-window.addEventListener('beforeunload', () => {
-  try { localStorage.setItem('wk_chats', JSON.stringify(window.chats || [])); localStorage.setItem('wk_active_chat', window.activeChatId || ''); } catch(e){}
-});
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') {
-    try { localStorage.setItem('wk_chats', JSON.stringify(window.chats || [])); localStorage.setItem('wk_active_chat', window.activeChatId || ''); } catch(e){}
-  }
-});
+window.addEventListener('beforeunload', () => { try { localStorage.setItem('wk_chats', JSON.stringify(window.chats || [])); localStorage.setItem('wk_active_chat', window.activeChatId || ''); } catch(e){} });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') { try { localStorage.setItem('wk_chats', JSON.stringify(window.chats || [])); localStorage.setItem('wk_active_chat', window.activeChatId || ''); } catch(e){} } });
 
 // ═══════════════════════════════════════════════════════════
-// COACH
-// ═══════════════════════════════════════════════════════════
-function openCoachPanel(){
-  document.getElementById('coachPanel').classList.add('show');
-  closeSidebar();
-  generateDailyTip();
-}
-window.openCoachPanel = openCoachPanel;
-
-async function generateDailyTip(){
-  const box = document.getElementById('coachDailyTip');
-  if (!box) return;
-  box.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Crafting your tip...';
-  const pillars = ['Knowledge','Skill','Wealth','Health','Character'];
-  const pillar = pillars[Math.floor(Math.random() * pillars.length)];
-  const day = new Date().toLocaleDateString('en-NG', {weekday:'long', month:'short', day:'numeric'});
-  const prompt = 'Give me ONE Daily Tip in this exact format:\n\n🌅 TIP OF THE DAY\nPillar: ' + pillar + '\nTip: [2–3 practical sentences for a user in Nigeria. ' + day + '.]\nAction: [one thing to do in the next 24 hours]\nBismillah. Go and become better.';
-  const res = await sendMessageWithFallback(prompt);
-  if (res.success){ box.innerHTML = '<div class="md">' + renderMarkdown(res.reply) + '</div>'; highlightCodeBlocks(); }
-  else box.innerHTML = '<span style="color:#fca5a5">⚠️ ' + esc(res.error||'Try again') + '</span>';
-}
-window.generateDailyTip = generateDailyTip;
-
-async function coachAskPillar(pillar){
-  const out = document.getElementById('coachAnswerOutput');
-  if (!out) return;
-  out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Coach is thinking about ' + pillar + '...</div>';
-  const prompt = 'You are Wise King Coach. Teach me one improvement in the ' + pillar + ' pillar.\nFormat:\n🎯 PILLAR: ' + pillar + '\nINSIGHT: [2 sentences]\nTODAY\'S ACTION: [one concrete step]\nCOMMON MISTAKE: [one warning]\nKeep it short, practical, Nigeria-aware where relevant.';
-  const res = await sendMessageWithFallback(prompt);
-  if (res.success){ out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>'; highlightCodeBlocks(); }
-  else out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
-}
-window.coachAskPillar = coachAskPillar;
-
-async function generate7DayPlan(){
-  const goal = document.getElementById('coachGoalInput').value.trim();
-  if (!goal) return showToast('Type your goal first');
-  const out = document.getElementById('coachPlanOutput');
-  out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Building your 7-day plan...</div>';
-  const prompt = 'Create a 7-Day Improvement Plan for this goal: "' + goal + '".\nFormat each day:\n\nDAY 1 — [Theme]\n  • Action: [one clear task]\n  • Time: [minutes]\n  • Success marker: [how I know it is done]\n\n...continue for Days 2–7.\nMake each action realistic for one person with limited budget and time.\nEnd with: "Bismillah. Consistency beats intensity."';
-  const res = await sendMessageWithFallback(prompt);
-  if (res.success){ out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>'; highlightCodeBlocks(); showToast('✅ Plan ready!'); }
-  else out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
-}
-window.generate7DayPlan = generate7DayPlan;
-
-async function coachAskFree(){
-  const q = document.getElementById('coachAskInput').value.trim();
-  if (!q) return showToast('Type your question');
-  const out = document.getElementById('coachAnswerOutput');
-  out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Coach is answering...</div>';
-  const prompt = 'As Wise King Coach, answer this self-improvement question:\n\n' + q + '\n\nFormat:\n💬 ANSWER: [clear, direct]\n💡 TIP: [one extra insight]\n➡️ NEXT STEP: [one action today]\nKeep it practical and short.';
-  const res = await sendMessageWithFallback(prompt);
-  if (res.success){
-    out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>';
-    highlightCodeBlocks();
-    document.getElementById('coachAskInput').value = '';
-  } else {
-    out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
-  }
-}
-window.coachAskFree = coachAskFree;
-
-// ═══════════════════════════════════════════════════════════
-// INIT
+// INIT & FORCE UNLOCK
 // ═══════════════════════════════════════════════════════════
 function init(){
   try {
-    // Logos
     $('loginLogo').innerHTML = window.WK_LOGO_INLINE(72);
     $('brandLogo').innerHTML = window.WK_LOGO_INLINE(32);
     $('welcomeLogo').innerHTML = window.WK_LOGO_INLINE(80);
@@ -4480,7 +3886,6 @@ function init(){
     $('pmAvatar').innerHTML = window.WK_LOGO_INLINE(48);
     $('sidebarAvatar').innerHTML = window.WK_LOGO_INLINE(36);
 
-    // Load state
     loadVault(); loadCrossChatMemory(); loadMusic(); loadTheme();
 
     const savedName = localStorage.getItem('wk_user_name');
@@ -4488,14 +3893,12 @@ function init(){
     const av = localStorage.getItem('wk_user_avatar');
     if (av) applyAvatar(av);
 
-    // Toggles
     $('webSearchToggle')?.classList.toggle('on', getWebSearchEnabled());
     $('memoryToggle')?.classList.toggle('on', getMemoryEnabled());
     $('streamingToggle')?.classList.toggle('on', getStreamingEnabled());
     updateModelBadge();
     handleInputChange();
 
-    // Theme swatches
     document.querySelectorAll('.theme-swatch').forEach(sw => {
       sw.addEventListener('click', () => {
         const c = sw.dataset.color;
@@ -4507,75 +3910,50 @@ function init(){
     const savedAccent = localStorage.getItem('wk_accent');
     if (savedAccent) document.documentElement.style.setProperty('--accent', savedAccent);
 
-    // Profile menu
     setupProfileButton();
 
-    // Modal backdrop close
-    document.querySelectorAll('.modal-bg').forEach(m =>
-      m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); })
-    );
+    document.querySelectorAll('.modal-bg').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); }));
     $('sharePopup')?.addEventListener('click', e => { if (e.target.id === 'sharePopup') closeSharePopup(); });
 
-    // Escape closes modals
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape'){
-        document.querySelectorAll('.modal-bg.show').forEach(m => m.classList.remove('show'));
-        closeTopProfileMenu();
-      }
+      if (e.key === 'Escape'){ document.querySelectorAll('.modal-bg.show').forEach(m => m.classList.remove('show')); closeTopProfileMenu(); }
     });
 
-    // Keyboard shortcuts
-    document.addEventListener('keydown', e => {
-      const mod = e.ctrlKey || e.metaKey;
-      if (!mod) return;
-      if (e.key === 'k') { e.preventDefault(); $('searchInput')?.focus(); }
-      if (e.key === 'o' && e.shiftKey) { e.preventDefault(); createNewChat(); }
-      if (e.key === 'e' && e.shiftKey) { e.preventDefault(); exportData(); }
-    });
-
-    // PDF.js worker
     if (typeof pdfjsLib !== 'undefined'){
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
-    // Auto high-light code blocks
     const area = $('messagesArea');
-    if (area){
-      new MutationObserver(() => highlightCodeBlocks()).observe(area, {childList: true, subtree: true});
-    }
+    if (area){ new MutationObserver(() => highlightCodeBlocks()).observe(area, {childList: true, subtree: true}); }
 
-    // Unlock if logged in
     if (localStorage.getItem('wk_logged_in') === '1'){
       const name = localStorage.getItem('wk_user_name') || 'Wise King User';
       const email = localStorage.getItem('wk_user_email') || '';
       unlockApp(name, email, localStorage.getItem('wk_user_avatar') || null);
     }
 
-    // Daily tip caching
-    setTimeout(() => {
-      const tipEl = document.getElementById('welcomeTipText');
-      if (!tipEl) return;
-      const todayKey = 'wk_tip_' + new Date().toDateString();
-      const cached = localStorage.getItem(todayKey);
-      if (cached) { tipEl.textContent = cached; return; }
-      sendMessageWithFallback('Give me ONE short Daily Tip in this format: 🌅 TIP: [1 sentence] — ACTION: [1 short step]. Be practical and Nigeria-aware.')
-        .then(r => {
-          if (r && r.success){
-            const clean = String(r.reply).replace(/\n+/g, ' ').slice(0, 220);
-            tipEl.textContent = clean;
-            localStorage.setItem(todayKey, clean);
-            Object.keys(localStorage).filter(k => k.startsWith('wk_tip_') && k !== todayKey).forEach(k => localStorage.removeItem(k));
-          }
-        }).catch(() => {});
-    }, 2000);
   } catch(e){ console.warn('Init error:', e); }
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
 else init();
+
+// 🚨 FORCE UNLOCK FALLBACK (This was missing before!)
+setTimeout(() => {
+  const loginScreen = document.getElementById('loginScreen');
+  if (loginScreen && !loginScreen.classList.contains('hidden')) {
+    console.log("Auto-unlocking screen...");
+    if (typeof window.skipLoginAsGuest === 'function') {
+      window.skipLoginAsGuest();
+    } else {
+      loginScreen.classList.add('hidden');
+      const ma = document.getElementById('mainApp');
+      if (ma) { ma.style.display = 'flex'; ma.style.opacity = '1'; }
+    }
+  }
+}, 2000);
 </script>
 
-<!-- ═══ FIREBASE AUTH (OPTIONAL) ═══ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
@@ -4597,12 +3975,8 @@ else init();
   setPersistence(auth, browserLocalPersistence).catch(() => {});
 
   window.WK_CLOUD = {
-    async loadUserData(uid) {
-      try { const snap = await getDoc(doc(db, 'users', uid)); return snap.exists() ? snap.data() : null; } catch { return null; }
-    },
-    async saveUserData(uid, data) {
-      try { await setDoc(doc(db, 'users', uid), { ...data, updatedAt: serverTimestamp() }, { merge: true }); return true; } catch { return false; }
-    }
+    async loadUserData(uid) { try { const snap = await getDoc(doc(db, 'users', uid)); return snap.exists() ? snap.data() : null; } catch { return null; } },
+    async saveUserData(uid, data) { try { await setDoc(doc(db, 'users', uid), { ...data, updatedAt: serverTimestamp() }, { merge: true }); return true; } catch { return false; } }
   };
 
   onAuthStateChanged(auth, async (user) => {
@@ -4617,20 +3991,18 @@ else init();
   });
 
   window.signInWithGoogle = function() {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-        localStorage.setItem('wk_logged_in', '1');
-        localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
-        localStorage.setItem('wk_user_email', user.email || '');
-        localStorage.setItem('wk_user_uid', user.uid);
-        localStorage.removeItem('wk_guest_mode');
-        window.showToast('Welcome, ' + (user.displayName || 'Friend') + '! 🎉');
-      })
-      .catch((error) => {
-        if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
-        if (typeof window.showAuthError === 'function') window.showAuthError("Login failed: " + error.message);
-      });
+    signInWithPopup(auth, provider).then((result) => {
+      const user = result.user;
+      localStorage.setItem('wk_logged_in', '1');
+      localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+      localStorage.setItem('wk_user_email', user.email || '');
+      localStorage.setItem('wk_user_uid', user.uid);
+      localStorage.removeItem('wk_guest_mode');
+      window.showToast('Welcome, ' + (user.displayName || 'Friend') + '! 🎉');
+    }).catch((error) => {
+      if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
+      if (typeof window.showAuthError === 'function') window.showAuthError("Login failed: " + error.message);
+    });
   };
 
   window.emailSignIn = function() {
@@ -4639,26 +4011,24 @@ else init();
     if (!email || !password) return window.showAuthError("Please enter both email and password.");
     const btn = document.getElementById('signInBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-    signInWithEmailAndPassword(auth, email, password)
-      .then((uc) => {
-        const user = uc.user;
-        localStorage.setItem('wk_logged_in', '1');
-        localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
-        localStorage.setItem('wk_user_email', user.email);
-        localStorage.setItem('wk_user_uid', user.uid);
-        localStorage.removeItem('wk_guest_mode');
-        window.showToast('Welcome back! 🎉');
-      })
-      .catch((error) => {
-        let msg = "Login failed. ";
-        if (error.code === 'auth/user-not-found') msg = "No account found with that email.";
-        else if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
-        else if (error.code === 'auth/invalid-credential') msg = "Wrong email or password.";
-        else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
-        else if (error.code === 'auth/too-many-requests') msg = "Too many attempts. Try again later.";
-        else msg += error.message;
-        window.showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
-      });
+    signInWithEmailAndPassword(auth, email, password).then((uc) => {
+      const user = uc.user;
+      localStorage.setItem('wk_logged_in', '1');
+      localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
+      localStorage.setItem('wk_user_email', user.email);
+      localStorage.setItem('wk_user_uid', user.uid);
+      localStorage.removeItem('wk_guest_mode');
+      window.showToast('Welcome back! 🎉');
+    }).catch((error) => {
+      let msg = "Login failed. ";
+      if (error.code === 'auth/user-not-found') msg = "No account found with that email.";
+      else if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
+      else if (error.code === 'auth/invalid-credential') msg = "Wrong email or password.";
+      else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
+      else if (error.code === 'auth/too-many-requests') msg = "Too many attempts. Try again later.";
+      else msg += error.message;
+      window.showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+    });
   };
 
   window.emailSignUp = function() {
@@ -4671,25 +4041,23 @@ else init();
     if (name.length < 2) return window.showAuthError("Please enter your full name.");
     const btn = document.getElementById('signUpBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async (uc) => {
-        const user = uc.user;
-        try { await updateProfile(user, { displayName: name }); } catch(e) {}
-        localStorage.setItem('wk_logged_in', '1');
-        localStorage.setItem('wk_user_name', name);
-        localStorage.setItem('wk_user_email', user.email);
-        localStorage.setItem('wk_user_uid', user.uid);
-        localStorage.removeItem('wk_guest_mode');
-        window.showToast('Account created! Welcome, ' + name + ' 🎉');
-      })
-      .catch((error) => {
-        let msg = "Sign up failed. ";
-        if (error.code === 'auth/email-already-in-use') msg = "This email is already registered.";
-        else if (error.code === 'auth/weak-password') msg = "Password too weak.";
-        else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
-        else msg += error.message;
-        window.showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
-      });
+    createUserWithEmailAndPassword(auth, email, password).then(async (uc) => {
+      const user = uc.user;
+      try { await updateProfile(user, { displayName: name }); } catch(e) {}
+      localStorage.setItem('wk_logged_in', '1');
+      localStorage.setItem('wk_user_name', name);
+      localStorage.setItem('wk_user_email', user.email);
+      localStorage.setItem('wk_user_uid', user.uid);
+      localStorage.removeItem('wk_guest_mode');
+      window.showToast('Account created! Welcome, ' + name + ' 🎉');
+    }).catch((error) => {
+      let msg = "Sign up failed. ";
+      if (error.code === 'auth/email-already-in-use') msg = "This email is already registered.";
+      else if (error.code === 'auth/weak-password') msg = "Password too weak.";
+      else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
+      else msg += error.message;
+      window.showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+    });
   };
 
   window.sendPasswordReset = function() {
@@ -4697,9 +4065,7 @@ else init();
     if (!email) return window.showAuthError("Please enter your email.");
     const btn = document.getElementById('resetBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-    sendPasswordResetEmail(auth, email)
-      .then(() => { window.showAuthSuccess("Reset email sent! Check your inbox."); btn.disabled = false; btn.innerHTML = orig; })
-      .catch((error) => { window.showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
+    sendPasswordResetEmail(auth, email).then(() => { window.showAuthSuccess("Reset email sent! Check your inbox."); btn.disabled = false; btn.innerHTML = orig; }).catch((error) => { window.showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
   };
 
   window.addAnotherAccount = function() { window.closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
@@ -4719,10 +4085,10 @@ else init();
       ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_music','wk_active_chat'].forEach(k => localStorage.removeItem(k));
       try { sessionStorage.clear(); } catch(e) {}
       if (typeof window.forceShowLoginScreen === 'function') window.forceShowLoginScreen();
-    }).catch(() => {
-      if (typeof window.forceShowLoginScreen === 'function') window.forceShowLoginScreen();
-    });
+    }).catch(() => { if (typeof window.forceShowLoginScreen === 'function') window.forceShowLoginScreen(); });
   };
 </script>
 </body>
-</html>  
+</html>
+
+   
