@@ -1066,15 +1066,15 @@ window.__wkCodeBlocks = {};
         </select>
       </div>
     </div>
-
+     
     <!-- AI Model -->
     <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
       <div class="settings-card">
         <select class="input-field" id="modelSelect" style="margin-bottom:0">
-          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast ✅</option>
-          <option value="gemini-3.5-flash">Gemini 3.5 Flash — Speed & Power ⚡</option>
-          <option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-lite — Backup 🔄</option>
+          <option value="gemini-3.8-flash">Gemini 3.8 Flash — Newest & Smartest 👑</option>
+          <option value="gemini-3.5-flash">Gemini 3.5 Flash — Fast & Powerful ⚡</option>
+          <option value="gemini-3.7-flash-lite">Gemini 3.7 Flash-lite — Blazing Fast ✅</option>
         </select>
       </div>
     </div>
@@ -1145,7 +1145,7 @@ window.__wkCodeBlocks = {};
 </div>
 
 <div class="toast" id="toast"></div>
-
+    
 <!-- LOAD REQUIRED LIBRARIES -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
@@ -2284,8 +2284,12 @@ function saveSettings(){
 }
 window.saveSettings = saveSettings;
 function updateModelBadge(){
-  const m = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
-  const labels = {'gemini-3.5-flash-lite':'Gemini 3.5 Flash-lite','gemini-3.5-flash':'Gemini 3.5 Flash','gemini-3.1-flash-lite':'Gemini 3.1 Flash-lite'};
+  const m = localStorage.getItem('wk_model') || 'gemini-3.8-flash';
+  const labels = {
+    'gemini-3.8-flash': 'Gemini 3.8 Flash',
+    'gemini-3.5-flash': 'Gemini 3.5 Flash',
+    'gemini-3.7-flash-lite': 'Gemini 3.7 Flash-lite'
+  };
   $('modelBadgeText').textContent = labels[m] || m;
 }
 window.updateModelBadge = updateModelBadge;
@@ -2879,7 +2883,6 @@ function buildMemoryContext(){
   return parts.join('\n');
 }
 
-// Personas for the AI
 const PERSONAS = {
   default: "", 
   coder: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a strict, highly efficient senior software engineer. Only provide code and brief, technical explanations. No fluff, no motivational talk.]",
@@ -2894,11 +2897,11 @@ async function sendMessageWithFallback(userText, chatHistory, signal){
   chatHistory = chatHistory || [];
   const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY;
   
-  // VALID FAST MODELS
+  // REAL, FAST GOOGLE MODELS (Updated with Gemini 3.8)
   const MODELS_TO_TRY = [
-    localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite',
-    'gemini-3.5-flash',
-    'gemini-3.1-flash-lite'
+    'gemini-3.8-flash',      // Primary: Newest & Most Intelligent
+    'gemini-2.5-flash',      // Backup: Fast & Stable
+    'gemini-2.5-flash-lite'  // Final Fallback: Ultra-fast
   ];
 
   const now = new Date().toLocaleString('en-NG', {weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true});
@@ -2929,7 +2932,12 @@ async function sendMessageWithFallback(userText, chatHistory, signal){
     });
   }
   contents.push({role: 'user', parts: currentParts});
-  const body = {systemInstruction: {parts: [{text: systemText}]}, contents};
+  
+  const body = {
+    systemInstruction: {parts: [{text: systemText}]}, 
+    contents: contents,
+    generationConfig: { temperature: 0.7, maxOutputTokens: 2048 }
+  };
 
   // SMART FALLBACK LOOP
   for (let i = 0; i < MODELS_TO_TRY.length; i++) {
@@ -2946,6 +2954,292 @@ async function sendMessageWithFallback(userText, chatHistory, signal){
         let errMsg = 'HTTP '+res.status;
         try { const j = await res.json(); errMsg = j.error?.message || errMsg; } catch(e){}
         
+        // If the model is busy or rate-limited, instantly try the next one
+        if ((res.status === 503 || res.status === 429) && i < MODELS_TO_TRY.length - 1) {
+          console.warn(`[WiseKing] ${currentModel} busy. Switching to backup...`);
+          continue; 
+        }
+        return {success: false, error: errMsg};
+      }
+      
+      const data = await res.json();
+      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      if (!reply) return {success: false, error: 'Empty response'};
+      
+      return {success: true, reply};
+      
+    } catch(err) {
+      if (err.name === 'AbortError') throw err;
+      if (i === MODELS_TO_TRY.length - 1) {
+        return {success: false, error: err.message || 'Network error'};
+      }
+    }
+  }
+  return {success: false, error: 'All models are currently busy. Please try again.'};
+}
+window.sendMessageWithFallback = sendMessageWithFallback;
+
+let __sendLock = false;
+function sendMessage(){
+  if (__sendLock || isSending) return;
+  __sendLock = true;
+  try {
+    const input = $('messageInput');
+    const text = input.value.trim();
+    if (!text && !uploadedFiles.length) return;
+
+    let chat = window.chats.find(c => c.id === window.activeChatId);
+    if (!chat){
+      const id = 'chat-' + Date.now();
+      window.chats.unshift({id, title:'New chat', messages:[], createdAt:Date.now()});
+      window.activeChatId = id;
+      chat = window.chats.find(c => c.id === id);
+    }
+    if (chat.title === 'New chat' && text) chat.title = text.slice(0, 32);
+
+    const isImageReq = text.toLowerCase().includes('generate image') || text.toLowerCase().includes('create image') || text.toLowerCase().includes('draw ');
+    if (isImageReq && text.length > 15) {
+      chat.messages.push({role:'user', content: text, createdAt: Date.now()});
+      input.value = '';
+      saveChats(); renderMessages();
+      
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(text)}?width=1024&height=1024&nologo=true`;
+      const aiMsg = { role: 'ai', content: `Here is your generated image for: *"${text}"*`, imageUrl: imageUrl, createdAt: Date.now() };
+      chat.messages.push(aiMsg);
+      saveChats(); renderMessages();
+      showToast('🎨 Generating image...');
+      return;
+    }
+
+    const attachments = uploadedFiles.slice();
+    uploadedFiles = [];
+    updatePreview();
+
+    const userMsg = {role:'user', content: text || '📎 Attachment', attachments, createdAt: Date.now()};
+    chat.messages.push(userMsg);
+
+    input.value = '';
+    input.style.height = 'auto';
+    if (thinkMode){ thinkMode = false; $('chipThink').classList.remove('active'); }
+    if (searchMode){ searchMode = false; $('chipSearch').classList.remove('active'); }
+
+    saveChats();
+    renderMessages();
+    triggerResponse(chat, userMsg);
+  } finally {
+    setTimeout(() => { __sendLock = false; }, 0);
+  }
+}
+window.sendMessage = sendMessage;
+
+async function triggerResponse(chat, userMsg){
+  isSending = true;
+  const btn = $('sendBtn');
+  if (btn){ btn.classList.remove('hidden'); btn.classList.add('stop'); btn.innerHTML = '<i class="fas fa-stop"></i>'; }
+  currentAbortController = new AbortController();
+  const aiMsg = {role:'ai', content:'', createdAt: Date.now(), streaming: true};
+  chat.messages.push(aiMsg); renderMessages();
+  try {
+    const history = chat.messages.filter(m => m !== aiMsg);
+    const result = await sendMessageWithFallback(userMsg.content, history, currentAbortController.signal);
+    if (result.success) aiMsg.content = result.reply;
+    else { aiMsg.error = true; aiMsg.content = '⚠️ ' + (result.error || 'Failed to get response'); }
+  } catch(err){
+    if (err.name !== 'AbortError'){ aiMsg.error = true; aiMsg.content = '⚠️ ' + (err.message || 'Connection error'); }
+  } finally {
+    aiMsg.streaming = false; isSending = false; currentAbortController = null;
+    if (btn){ btn.classList.remove('stop'); btn.innerHTML = '<i class="fas fa-arrow-up"></i>'; }
+    handleInputChange(); saveChats(); renderMessages();
+  }
+}
+
+// Export Chat to PDF
+function downloadChatAsPDF() {
+  const chat = window.chats.find(c => c.id === window.activeChatId);
+  if (!chat || chat.messages.length === 0) return showToast('No chat to export');
+  
+  showToast('📄 Generating PDF...');
+  const element = document.createElement('div');
+  element.style.padding = '20px';
+  element.style.fontFamily = 'Arial, sans-serif';
+  element.innerHTML = `<h1 style="text-align:center; color:#6366f1;">Wise King AI Chat</h1><hr>`;
+  
+  chat.messages.forEach(msg => {
+    element.innerHTML += `
+      <div style="margin-bottom: 20px; page-break-inside: avoid;">
+        <strong style="color: ${msg.role === 'user' ? '#6366f1' : '#10b981'}">
+          ${msg.role === 'user' ? 'User' : 'Wise King AI'}:
+        </strong>
+        <p style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${msg.content}</p>
+      </div>
+    `;
+  });
+  
+  html2pdf().from(element).set({
+    margin: 1,
+    filename: 'WiseKing-Chat.pdf',
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  }).save().then(() => showToast('✅ PDF Downloaded!'));
+}
+window.downloadChatAsPDF = downloadChatAsPDF;
+
+// ---- Export / Import ----
+function exportData(){
+  const data = {chats: window.chats, vault: vaultMemories, memory: crossChatMemory, music: musicLibrary, exportedAt: new Date().toISOString()};
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'wiseking-backup-'+Date.now()+'.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast('✅ Exported');
+}
+window.exportData = exportData;
+function importData(e){
+  const file = e.target.files[0]; if (!file) return;
+  const fr = new FileReader();
+  fr.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (data.chats) { window.chats = data.chats; saveChats(); renderMessages(); }
+      if (data.vault) { vaultMemories = data.vault; saveVault(); }
+      if (data.memory) { crossChatMemory = data.memory; saveCrossChatMemory(); }
+      if (data.music) { musicLibrary = data.music; saveMusic(); }
+      showToast('✅ Imported');
+    } catch(err){ showToast('⚠️ Invalid file'); }
+  };
+  fr.readAsText(file);
+  e.target.value = '';
+}
+window.importData = importData;
+
+// ---- Install ----
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  $('installAppBtn').style.display = 'inline-flex';
+});
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  $('installAppBtn').style.display = 'none';
+  showToast('✅ Installed!');
+});
+async function promptInstallApp(){
+  if (!deferredInstallPrompt) return showToast('Menu → "Add to Home Screen"');
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+}
+window.promptInstallApp = promptInstallApp;
+
+// ---- Save on close ----
+window.addEventListener('beforeunload', () => {
+  try { localStorage.setItem('wk_chats', JSON.stringify(window.chats || [])); localStorage.setItem('wk_active_chat', window.activeChatId || ''); } catch(e){}
+});
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') {
+    try { localStorage.setItem('wk_chats', JSON.stringify(window.chats || [])); localStorage.setItem('wk_active_chat', window.activeChatId || ''); } catch(e){}
+  }
+});
+
+// ============================================================
+// WISE KING COACH
+// ============================================================
+function openCoachPanel(){
+  document.getElementById('coachPanel').classList.add('show');
+  closeSidebar();
+  generateDailyTip();
+}
+window.openCoachPanel = openCoachPanel;
+
+async function generateDailyTip(){
+  const box = document.getElementById('coachDailyTip');
+  if (!box) return;
+  box.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Crafting your tip...';
+  const pillars = ['Knowledge','Skill','Wealth','Health','Character'];
+// ---- API ----
+function parseDataUrl(dataUrl){
+  try { const m = dataUrl.match(/^data:([^;]+);base64,(.+)$/); return m ? {mime: m[1], base64: m[2]} : null; } catch(e){ return null; }
+}
+function buildMemoryContext(){
+  const parts = [];
+  if (vaultMemories.length){ parts.push('<USER_VAULT>'); vaultMemories.slice(0,15).forEach(m => parts.push('- '+String(m).slice(0,250))); parts.push('</USER_VAULT>'); }
+  if (crossChatMemory.length){ parts.push('<CROSS_CHAT_MEMORY>'); crossChatMemory.slice(0,15).forEach(m => parts.push('- '+String(m).slice(0,250))); parts.push('</CROSS_CHAT_MEMORY>'); }
+  return parts.join('\n');
+}
+
+const PERSONAS = {
+  default: "", 
+  coder: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a strict, highly efficient senior software engineer. Only provide code and brief, technical explanations. No fluff, no motivational talk.]",
+  teacher: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a patient primary school teacher. Explain things using simple analogies, step-by-step, and always encourage the user.]",
+  comedian: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a funny Nigerian stand-up comedian. Answer the user's questions with humour, pidgin slang, and jokes while still giving the correct, useful answer.]"
+};
+
+async function sendMessageWithFallback(userText, chatHistory, signal){
+  if (!__canCallApi()) {
+    return { success: false, error: 'Slow down — sending too fast. Try again in a moment.' };
+  }
+  chatHistory = chatHistory || [];
+  const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY;
+  
+  // REAL, FAST GOOGLE MODELS (Updated with Gemini 3.8)
+  const MODELS_TO_TRY = [
+    'gemini-3.8-flash',      // Primary: Newest & Most Intelligent
+    'gemini-3.5-flash',      // Backup: Fast & Stable
+    'gemini-3.7-flash-lite'  // Final Fallback: Ultra-fast
+  ];
+
+  const now = new Date().toLocaleString('en-NG', {weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true});
+  const memoryBlock = getMemoryEnabled() ? buildMemoryContext() : '';
+  const activePersona = localStorage.getItem('wk_persona') || 'default';
+  const personaBlock = PERSONAS[activePersona] || '';
+  const systemText = SYSTEM_PROMPT + personaBlock + (memoryBlock ? '\n\n' + memoryBlock : '');
+  
+  const contents = [];
+  chatHistory.slice(-MEMORY_HISTORY_LIMIT).forEach(m => {
+    const role = m.role === 'user' ? 'user' : 'model';
+    const parts = [{text: (m.content || '').slice(0, 6000)}];
+    if (m.role === 'user' && Array.isArray(m.attachments)){
+      m.attachments.forEach(att => {
+        if (att.type === 'image' && att.dataUrl){ const p = parseDataUrl(att.dataUrl); if (p) parts.push({inlineData: {mimeType: p.mime, data: p.base64}}); }
+        else if (att.text) parts.push({text: '\n[Attached: '+att.name+']\n'+att.text.slice(0, 30000)});
+      });
+    }
+    contents.push({role, parts});
+  });
+  
+  const currentParts = [{text: '[Today is '+now+']\n\nUser: '+userText}];
+  const lastMsg = chatHistory[chatHistory.length-1];
+  if (lastMsg?.role === 'user' && Array.isArray(lastMsg.attachments)){
+    lastMsg.attachments.forEach(att => {
+      if (att.type === 'image' && att.dataUrl){ const p = parseDataUrl(att.dataUrl); if (p) currentParts.push({inlineData: {mimeType: p.mime, data: p.base64}}); }
+      else if (att.text) currentParts.push({text: '\n[Attached: '+att.name+']\n'+att.text.slice(0, 30000)});
+    });
+  }
+  contents.push({role: 'user', parts: currentParts});
+  
+  const body = {
+    systemInstruction: {parts: [{text: systemText}]}, 
+    contents: contents,
+    generationConfig: { temperature: 0.7, maxOutputTokens: 2048 }
+  };
+
+  // SMART FALLBACK LOOP
+  for (let i = 0; i < MODELS_TO_TRY.length; i++) {
+    const currentModel = MODELS_TO_TRY[i];
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + currentModel + ':generateContent?key=' + apiKey;
+    
+    try {
+      const opts = {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)};
+      if (signal) opts.signal = signal;
+      
+      const res = await fetch(url, opts);
+      
+      if (!res.ok) {
+        let errMsg = 'HTTP '+res.status;
+        try { const j = await res.json(); errMsg = j.error?.message || errMsg; } catch(e){}
+        
+        // If the model is busy or rate-limited, instantly try the next one
         if ((res.status === 503 || res.status === 429) && i < MODELS_TO_TRY.length - 1) {
           console.warn(`[WiseKing] ${currentModel} busy. Switching to backup...`);
           continue; 
@@ -3236,8 +3530,96 @@ async function coachAskFree(){
     out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
   }
 }
-window.coachAskFree = coachAskFree;
+window.coachAskFree = coachAskFree;  const pillar = pillars[Math.floor(Math.random() * pillars.length)];
+  const day = new Date().toLocaleDateString('en-NG', {weekday:'long', month:'short', day:'numeric'});
+  const prompt =
+    'Give me ONE Daily Tip in this exact format:\n\n' +
+    '🌅 TIP OF THE DAY\n' +
+    'Pillar: ' + pillar + '\n' +
+    'Tip: [2–3 practical sentences for a user in Nigeria. ' + day + '.]\n' +
+    'Action: [one thing to do in the next 24 hours]\n' +
+    'Bismillah. Go and become better.';
+  const res = await sendMessageWithFallback(prompt);
+  if (res.success){
+    box.innerHTML = '<div class="md">' + renderMarkdown(res.reply) + '</div>';
+    highlightCodeBlocks();
+  } else {
+    box.innerHTML = '<span style="color:#fca5a5">⚠️ ' + esc(res.error||'Try again') + '</span>';
+  }
+}
+window.generateDailyTip = generateDailyTip;
 
+async function coachAskPillar(pillar){
+  const out = document.getElementById('coachAnswerOutput');
+  if (!out) return;
+  out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Coach is thinking about ' + pillar + '...</div>';
+  const prompt =
+    'You are Wise King Coach. Teach me one improvement in the ' + pillar + ' pillar.\n' +
+    'Format:\n' +
+    '🎯 PILLAR: ' + pillar + '\n' +
+    'INSIGHT: [2 sentences]\n' +
+    'TODAY\'S ACTION: [one concrete step]\n' +
+    'COMMON MISTAKE: [one warning]\n' +
+    'Keep it short, practical, Nigeria-aware where relevant.';
+  const res = await sendMessageWithFallback(prompt);
+  if (res.success){
+    out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>';
+    highlightCodeBlocks();
+  } else {
+    out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
+  }
+}
+window.coachAskPillar = coachAskPillar;
+
+async function generate7DayPlan(){
+  const goal = document.getElementById('coachGoalInput').value.trim();
+  if (!goal) return showToast('Type your goal first');
+  const out = document.getElementById('coachPlanOutput');
+  out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Building your 7-day plan...</div>';
+  const prompt =
+    'Create a 7-Day Improvement Plan for this goal: "' + goal + '".\n' +
+    'Format each day like this:\n\n' +
+    'DAY 1 — [Theme]\n' +
+    '  • Action: [one clear task]\n' +
+    '  • Time: [minutes needed]\n' +
+    '  • Success marker: [how I know it is done]\n\n' +
+    '...continue for Days 2–7.\n\n' +
+    'Make each action realistic for one person with limited budget and time.\n' +
+    'End with: "Bismillah. Consistency beats intensity."';
+  const res = await sendMessageWithFallback(prompt);
+  if (res.success){
+    out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>';
+    highlightCodeBlocks();
+    showToast('✅ Plan ready!');
+  } else {
+    out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
+  }
+}
+window.generate7DayPlan = generate7DayPlan;
+
+async function coachAskFree(){
+  const q = document.getElementById('coachAskInput').value.trim();
+  if (!q) return showToast('Type your question');
+  const out = document.getElementById('coachAnswerOutput');
+  out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Coach is answering...</div>';
+  const prompt =
+    'As Wise King Coach, answer this self-improvement question:\n\n' + q + '\n\n' +
+    'Format:\n' +
+    '💬 ANSWER: [clear, direct]\n' +
+    '💡 TIP: [one extra improvement insight]\n' +
+    '➡️ NEXT STEP: [one action to do today]\n' +
+    'Keep it practical and short. Nigeria/global context where helpful.';
+  const res = await sendMessageWithFallback(prompt);
+  if (res.success){
+    out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>';
+    highlightCodeBlocks();
+    document.getElementById('coachAskInput').value = '';
+  } else {
+    out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
+  }
+}
+window.coachAskFree = coachAskFree;    
+     
 // ============================================================
 // INIT
 // ============================================================
