@@ -756,11 +756,11 @@ window.__wkCodeBlocks = {};
   </div>
 </div>
 
-<!-- 3. TRANSLATE PANEL -->
+<!-- ============ TRANSLATE PANEL ============ -->
 <div class="full-panel" id="translatePanel">
   <div class="panel-header">
     <div class="panel-title"><i class="fas fa-language"></i> Real-time Translation 🌍</div>
-    <button class="btn ghost" onclick="closePanel('translatePanel')"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn ghost" onclick="closeTranslatePanel()"><i class="fas fa-arrow-left"></i> Back</button>
   </div>
   <div class="panel-body">
     <div class="panel-inner">
@@ -775,8 +775,16 @@ window.__wkCodeBlocks = {};
           <option value="ig">🇳🇬 Igbo</option>
           <option value="sw">🌍 Swahili</option>
           <option value="es">🇪🇸 Spanish</option>
+          <option value="pt">🇵🇹 Portuguese</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="ja">🇯🇵 Japanese</option>
+          <option value="tr">🇹🇷 Turkish</option>
+          <option value="ur">🇵🇰 Urdu</option>
         </select>
-        <button class="lang-swap" aria-label="Swap languages" onclick="swapLanguages()"><i class="fas fa-right-left"></i></button>
+        <button class="lang-swap" onclick="swapLanguages()" title="Swap"><i class="fas fa-right-left"></i></button>
         <select class="lang-select" id="translateTo">
           <option value="en">🇬🇧 English</option>
           <option value="ha">🇳🇬 Hausa</option>
@@ -786,70 +794,96 @@ window.__wkCodeBlocks = {};
           <option value="ig">🇳🇬 Igbo</option>
           <option value="sw">🌍 Swahili</option>
           <option value="es">🇪🇸 Spanish</option>
+          <option value="pt">🇵🇹 Portuguese</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="ja">🇯🇵 Japanese</option>
+          <option value="tr">🇹🇷 Turkish</option>
+          <option value="ur">🇵🇰 Urdu</option>
         </select>
       </div>
-      
       <textarea class="search-big" id="translateInput" rows="6" placeholder="Type or paste text to translate..." style="min-height:130px;resize:vertical;font-family:inherit"></textarea>
-      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="doTranslate()"><i class="fas fa-language"></i> Translate Now</button>
-      
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="doTranslate()"><i class="fas fa-language"></i> Translate Now</button>
+        <button class="btn solid" onclick="speakTranslation()"><i class="fas fa-volume-up"></i> Listen</button>
+        <button class="btn solid" onclick="startLiveTranslateVoice()"><i class="fas fa-microphone"></i> Voice</button>
+      </div>
       <div id="translateResults"></div>
     </div>
   </div>
 </div>
 
-<!-- 4. DATA ANALYSIS PANEL -->
+<!-- ============ DATA ANALYSIS PANEL ============ -->
 <div class="full-panel" id="dataAnalysisPanel">
   <div class="panel-header">
     <div class="panel-title"><i class="fas fa-chart-line"></i> Data Analysis 📊</div>
-    <button class="btn ghost" onclick="closePanel('dataAnalysisPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn ghost" onclick="closeDataAnalysisPanel()"><i class="fas fa-arrow-left"></i> Back</button>
   </div>
   <div class="panel-body">
     <div class="panel-inner">
-      <div class="pdf-dropzone" onclick="document.getElementById('dataFileInput').click()">
+      <div class="pdf-dropzone" id="dataDropzone" onclick="document.getElementById('dataFileInput').click()">
         <i class="fas fa-file-csv"></i>
         <p><strong>Upload CSV, Excel, or paste data</strong></p>
         <small>Auto-generate stats, charts, and AI insights</small>
-        <input type="file" id="dataFileInput" accept=".csv,.json,.txt" style="display:none" onchange="handleDataUpload(event)">
+        <input type="file" id="dataFileInput" accept=".csv,.xlsx,.xls,.json,.txt" style="display:none" onchange="handleDataUpload(event)">
       </div>
-      
-      <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV data here..." style="min-height:120px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:12.5px"></textarea>
+      <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV / table data here...&#10;&#10;Example:&#10;Name,Age,City&#10;Ibrahim,28,Kano&#10;Fatima,24,Lagos" style="min-height:120px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:12.5px"></textarea>
       <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="analyzePastedData()"><i class="fas fa-chart-bar"></i> Analyze Data</button>
-      
       <div id="dataAnalysisResults"></div>
     </div>
   </div>
 </div>
 
-<!-- 5. DOWNLOAD HUB PANEL -->
+<!-- ============ DOWNLOAD HUB PANEL ============ -->
 <div class="full-panel" id="downloadHubPanel">
   <div class="panel-header">
     <div class="panel-title"><i class="fas fa-cloud-arrow-down"></i> Downloads Hub 📥</div>
-    <button class="btn ghost" onclick="closePanel('downloadHubPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn ghost" onclick="closeDownloadHub()"><i class="fas fa-arrow-left"></i> Back</button>
   </div>
   <div class="panel-body">
     <div class="panel-inner">
       <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px">📱 Everything you create — download directly to your phone.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn solid" onclick="filterDownloads('all')">All</button>
+        <button class="btn solid" onclick="filterDownloads('image')"><i class="fas fa-image"></i> Images</button>
+        <button class="btn solid" onclick="filterDownloads('video')"><i class="fas fa-video"></i> Videos</button>
+        <button class="btn solid" onclick="filterDownloads('music')"><i class="fas fa-music"></i> Music</button>
+        <button class="btn solid" onclick="filterDownloads('audio')"><i class="fas fa-headphones"></i> Audio</button>
+      </div>
       <div class="download-grid" id="downloadHubGrid"></div>
     </div>
   </div>
 </div>
 
-<!-- 6. PRICING PANEL -->
+<!-- ============ LIBRARY PANEL ============ -->
+<div class="full-panel" id="libraryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-shapes"></i> Library</div>
+    <button class="btn ghost" onclick="closeLibraryPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div id="libraryPanelResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PRICING PANEL ============ -->
 <div class="full-panel" id="pricingPanel">
   <div class="panel-header">
     <div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans</div>
-    <button class="btn ghost" onclick="closePanel('pricingPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="btn ghost" onclick="closePricingPanel()"><i class="fas fa-arrow-left"></i> Back</button>
   </div>
   <div class="panel-body">
     <div class="panel-inner">
       <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;text-align:center">Choose the plan that fits your journey. Upgrade anytime. 👑</p>
-      
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
         
-        <!-- Free Plan -->
-        <div class="result-card" style="text-align:center">
+        <div class="result-card" style="text-align:center;position:relative">
           <div style="font-size:40px;margin-bottom:8px">🌱</div>
-          <h3 style="font-size:18px;margin-bottom:4px">Free</h3>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Free</h3>
           <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦0</div>
           <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Forever free</div>
           <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
@@ -857,43 +891,684 @@ window.__wkCodeBlocks = {};
             <li>✅ Image generation</li>
             <li>✅ Voice & translation</li>
             <li>✅ PDF chat</li>
+            <li>⚠️ 20 AI messages / day</li>
           </ul>
           <button class="btn solid" style="width:100%;justify-content:center" disabled>Current Plan</button>
         </div>
-        
-        <!-- Pro Plan -->
-        <div class="result-card" style="text-align:center;border:2px solid var(--accent);box-shadow:var(--shadow-glow)">
+
+        <div class="result-card" style="text-align:center;border:2px solid var(--accent);position:relative;box-shadow:var(--shadow-glow)">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent-gradient);color:white;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px">POPULAR 🔥</div>
           <div style="font-size:40px;margin-bottom:8px">⚡</div>
-          <h3 style="font-size:18px;margin-bottom:4px">Pro</h3>
-          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400">/month</span></div>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Pro</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Best for daily users</div>
           <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
             <li>✅ Everything in Free</li>
             <li>✅ Unlimited AI messages</li>
             <li>✅ Music generation</li>
             <li>✅ Priority speed</li>
+            <li>✅ Data analysis tools</li>
           </ul>
           <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Pro', 5000)"><i class="fas fa-rocket"></i> Upgrade to Pro</button>
         </div>
-        
-        <!-- Premium Plan -->
+
         <div class="result-card" style="text-align:center">
           <div style="font-size:40px;margin-bottom:8px">👑</div>
-          <h3 style="font-size:18px;margin-bottom:4px">Premium</h3>
-          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400">/month</span></div>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Premium</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">For power users & business</div>
           <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
             <li>✅ Everything in Pro</li>
             <li>✅ Custom AI models</li>
             <li>✅ Business account</li>
             <li>✅ 24/7 priority support</li>
+            <li>✅ API access</li>
           </ul>
           <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Premium', 15000)"><i class="fas fa-crown"></i> Go Premium</button>
         </div>
         
-      </div>
+     </div>
+     <p style="font-size:12px;color:var(--text-tertiary);margin-top:20px;text-align:center">💳 Payments powered securely. Contact owner@wiseking.ai for enterprise.</p>
+    </div>
+  </div> 
+</div>  
+  
+<!-- ============ SEARCH WEB PANEL ============ -->
+<div class="full-panel" id="searchWebPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-globe"></i> Search the web</div>
+    <button class="btn ghost" onclick="closeSearchWebPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <input type="text" class="search-big" id="searchWebInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+      <div id="searchSuggestionsBox" style="margin-bottom:16px;display:flex;flex-wrap:wrap;gap:8px"></div>
+      <div id="askWiseKingShortcut" style="margin-bottom:20px;display:none"></div>
+      <div id="searchWebResults"></div>
     </div>
   </div>
 </div>
 
+<!-- ============ BUILD APP PANEL ============ -->
+<div class="full-panel" id="buildAppPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-code"></i> Build an app</div>
+    <button class="btn ghost" onclick="closeBuildAppPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <input type="text" class="search-big" id="buildAppInput" placeholder="Search or describe your app idea..." oninput="filterBuildIdeas(this.value)">
+      <div id="buildAppIdeas"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MEMORY PANEL ============ -->
+<div class="full-panel" id="memoryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory</div>
+    <button class="btn ghost" onclick="closeMemoryPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King automatically learns facts from your chats.</p>
+      <button class="btn solid" style="width:100%;justify-content:center;margin-bottom:16px" onclick="extractMemoryNow()"><i class="fas fa-wand-magic-sparkles"></i> Extract Memory</button>
+      <div id="memoryPanelResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP MENUS -->
+<div class="popup-menu" id="chatPopupMenu">
+  <button class="popup-menu-item pin-item" id="chatPinBtn" onclick="togglePinCurrentChat()"><i class="fas fa-thumbtack"></i> <span id="chatPinLabel">Pin chat</span></button>
+  <button class="popup-menu-item" onclick="renameCurrentChat()"><i class="fas fa-pen"></i> Rename</button>
+  <button class="popup-menu-item" onclick="deleteCurrentChat()"><i class="fas fa-trash"></i> Delete</button>
+  <button class="popup-menu-item" onclick="shareCurrentChat()"><i class="fas fa-share"></i> Share</button>
+</div>
+
+<div id="sharePopup">
+  <div class="share-card">
+    <div class="share-head">
+      <div class="share-title"><i class="fas fa-share-nodes"></i> Share to</div>
+      <button class="share-close" onclick="closeSharePopup()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="share-grid">
+      <button class="share-platform" onclick="shareTo('whatsapp')"><div class="sp-icon sp-whatsapp"><i class="fab fa-whatsapp"></i></div><div class="sp-name">WhatsApp</div></button>
+      <button class="share-platform" onclick="shareTo('facebook')"><div class="sp-icon sp-facebook"><i class="fab fa-facebook-f"></i></div><div class="sp-name">Facebook</div></button>
+      <button class="share-platform" onclick="shareTo('tiktok')"><div class="sp-icon sp-tiktok"><i class="fab fa-tiktok"></i></div><div class="sp-name">TikTok</div></button>
+      <button class="share-platform" onclick="shareTo('instagram')"><div class="sp-icon sp-instagram"><i class="fab fa-instagram"></i></div><div class="sp-name">Instagram</div></button>
+      <button class="share-platform" onclick="shareTo('telegram')"><div class="sp-icon sp-telegram"><i class="fab fa-telegram-plane"></i></div><div class="sp-name">Telegram</div></button>
+      <button class="share-platform" onclick="shareTo('x')"><div class="sp-icon sp-x"><i class="fab fa-x-twitter"></i></div><div class="sp-name">X</div></button>
+    </div>
+    <button class="share-cancel" onclick="closeSharePopup()">Cancel</button>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-bg" id="editMessageModal">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text">Editing this message will regenerate the AI's response.</p>
+    <textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;resize:vertical"></textarea>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button>
+      <button class="btn accent" onclick="saveEditedMessage()"><i class="fas fa-check"></i> Save & Regenerate</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="renameChatModal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div>
+    <input type="text" class="input-field" id="renameChatInput" placeholder="Enter new name" maxlength="60">
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal('renameChatModal')">Cancel</button>
+      <button class="btn accent" onclick="saveRenamedChat()"><i class="fas fa-check"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="deleteChatModal">
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
+    <div style="font-size:36px;margin-bottom:12px">🗑️</div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this chat?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p>
+    <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
+      <button class="btn ghost" style="flex:1" onclick="closeModal('deleteChatModal')">Cancel</button>
+      <button class="btn danger" style="flex:1" onclick="confirmDeleteChat()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="deleteMessageModal">
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
+    <div style="font-size:36px;margin-bottom:12px">🗑️</div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this message?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p>
+    <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
+      <button class="btn ghost" style="flex:1" onclick="closeModal('deleteMessageModal')">Cancel</button>
+      <button class="btn danger" style="flex:1" onclick="confirmDeleteMessage()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="dislikeModal">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-thumbs-down"></i> Tell us more</div><button class="modal-close" onclick="closeModal('dislikeModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text" style="margin-bottom:12px">Help us improve. What went wrong?</p>
+    <textarea class="input-field" id="dislikeFeedbackInput" rows="3" placeholder="Type your feedback here (optional)..." style="min-height:80px;resize:vertical;margin-bottom:0"></textarea>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal('dislikeModal')">Cancel</button>
+      <button class="btn accent" onclick="submitDislikeFeedback()"><i class="fas fa-paper-plane"></i> Submit</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="signOutModal">
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
+    <div style="font-size:36px;margin-bottom:12px">⚠️</div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Are you sure you want to sign out?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Your sync session will be closed on this device.</p>
+    <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
+      <button class="btn ghost" style="flex:1" onclick="closeModal('signOutModal')">Cancel</button>
+      <button class="btn danger" style="flex:1" onclick="confirmSignOut()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="vaultModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text">Permanent locked memories the AI will never forget.</p>
+    <div class="settings-card" style="margin-bottom:16px">
+      <textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim Abdullahi..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea>
+      <button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock this memory</button>
+    </div>
+    <div id="vaultList"></div>
+    <div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="settingsModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div>
+      <div class="settings-card">
+        <div class="toggle-row"><div class="toggle-label">Light Mode<span class="hint">Bright theme for daytime</span></div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-user"></i> Profile & Account</div>
+      <div class="settings-card">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="avatar" style="width:52px;height:52px;font-size:20px" id="settingsAvatar">WK</div>
+          <div style="flex:1">
+            <div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">Not signed in</div>
+            <button class="btn accent" style="font-size:12px;padding:6px 12px" onclick="signInWithGoogle()"><i class="fab fa-google"></i> Link Google</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div>
+      <div class="settings-card">
+        <div class="toggle-row"><div class="toggle-label">Enable Web Search</div><div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div></div>
+        <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
+        <div class="toggle-row"><div class="toggle-label">Enable Cross-Chat Memory</div><div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div></div>
+        <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
+        <div class="toggle-row"><div class="toggle-label">Enable Streaming</div><div class="toggle-switch on" id="streamingToggle" onclick="toggleStreamingSetting()"></div></div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-key"></i> API Keys (optional)</div>
+      <div class="settings-card">
+        <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off">
+        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional)" autocomplete="off">
+        <input type="password" class="input-field" id="sunoKeyInput" placeholder="Suno API key (optional for real music)" autocomplete="off" style="margin-bottom:0">
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
+      <div class="settings-card">
+        <select class="input-field" id="modelSelect" style="margin-bottom:0">
+          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast ✅</option>
+          <option value="gemini-3.1-flash">Gemini 3.1 Flash — Best for Web Search 🔍</option>
+          <option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant</option>
+        </select>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-palette"></i> Accent color</div>
+      <div class="settings-card">
+        <div class="theme-swatches">
+          <div class="theme-swatch" style="background:#6366f1" data-color="#6366f1"></div>
+          <div class="theme-swatch" style="background:#8b5cf6" data-color="#8b5cf6"></div>
+          <div class="theme-swatch" style="background:#ec4899" data-color="#ec4899"></div>
+          <div class="theme-swatch" style="background:#10b981" data-color="#10b981"></div>
+          <div class="theme-swatch" style="background:#f59e0b" data-color="#f59e0b"></div>
+          <div class="theme-swatch" style="background:#3b82f6" data-color="#3b82f6"></div>
+        </div>
+      </div>
+    </div>
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-file-export"></i> Backup & Restore</div>
+      <div class="settings-card">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn solid" style="flex:1;justify-content:center" onclick="exportData()"><i class="fas fa-download"></i> Export</button>
+          <button class="btn solid" style="flex:1;justify-content:center" onclick="document.getElementById('importInput').click()"><i class="fas fa-upload"></i> Import</button>
+          <input type="file" id="importInput" accept="application/json" style="display:none" onchange="importData(event)">
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions" style="justify-content:space-between">
+      <button class="btn ghost" style="color:#f87171" onclick="closeModal('settingsModal'); setTimeout(() => askSignOut(), 150);"><i class="fas fa-sign-out-alt"></i> Sign out</button>
+      <button class="btn accent" onclick="saveSettings()">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============ ENV KEYS ============ -->
+<script>
+  window.__WK_ENV__ = window.__WK_ENV__ || {};
+  if (!window.__WK_ENV__.GEMINI_API_KEY) {
+    window.__WK_ENV__.GEMINI_API_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
+  }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+<script>
+// Auto-highlight code blocks after every AI message
+function highlightCodeBlocks() {
+  if (typeof Prism === 'undefined') return;
+  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(block => {
+    try { Prism.highlightElement(block); } catch(e) {}
+  });
+}
+
+// Watch for new messages and highlight automatically
+const observer = new MutationObserver(() => { setTimeout(highlightCodeBlocks, 80); });
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const area = document.getElementById('messagesArea');
+    if (area) observer.observe(area, { childList: true, subtree: true });
+    highlightCodeBlocks();
+  }, 800);
+});
+
+// Also highlight on every render
+const _origRender = window.renderMessages;
+if (typeof _origRender === 'function') {
+  window.renderMessages = function() {
+    _origRender.apply(this, arguments);
+    setTimeout(highlightCodeBlocks, 100);
+  };
+}
+</script>
+
+<!-- ============ FIREBASE ============ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { 
+    getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged,
+    setPersistence, browserLocalPersistence,
+    createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+  import { 
+    getFirestore, doc, getDoc, setDoc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
+    authDomain: "wise-king-ai-259fc.firebaseapp.com",
+    projectId: "wise-king-ai-259fc",
+    storageBucket: "wise-king-ai-259fc.firebasestorage.app",
+    messagingSenderId: "19851699752",
+    appId: "1:19851699752:web:6735280bf59561e8ffb71d"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  setPersistence(auth, browserLocalPersistence).catch(() => {});
+
+  window.WK_CLOUD = {
+    async loadUserData(uid) {
+      try { const ref = doc(db, 'users', uid); const snap = await getDoc(ref); return snap.exists() ? snap.data() : null; }
+      catch (e) { return null; }
+    },
+    async saveUserData(uid, data) {
+      try { await setDoc(doc(db, 'users', uid), { ...data, updatedAt: serverTimestamp() }, { merge: true }); return true; }
+      catch (e) { return false; }
+    }
+  };
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      localStorage.setItem('wk_logged_in', '1');
+      localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+      localStorage.setItem('wk_user_email', user.email || '');
+      localStorage.setItem('wk_user_uid', user.uid);
+      localStorage.removeItem('wk_guest_mode');
+
+      const cloud = await window.WK_CLOUD.loadUserData(user.uid);
+      if (cloud) {
+        if (Array.isArray(cloud.chats)) { localStorage.setItem('wk_chats', JSON.stringify(cloud.chats)); try { chats = cloud.chats; } catch(e) {} }
+        if (Array.isArray(cloud.vault)) localStorage.setItem('wk_vault', JSON.stringify(cloud.vault));
+        if (Array.isArray(cloud.memory)) localStorage.setItem('wk_cross_memory', JSON.stringify(cloud.memory));
+        if (Array.isArray(cloud.library)) localStorage.setItem('wk_library', JSON.stringify(cloud.library));
+        if (Array.isArray(cloud.projects)) localStorage.setItem('wk_projects', JSON.stringify(cloud.projects));
+        if (Array.isArray(cloud.music)) localStorage.setItem('wk_music', JSON.stringify(cloud.music));
+      }
+
+      if (typeof unlockApp === 'function') unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
+      if (typeof loadChatsFromLocalStorage === 'function') loadChatsFromLocalStorage();
+    }
+  });
+
+  window.signInWithGoogle = function() {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        localStorage.setItem('wk_logged_in', '1');
+        localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+        localStorage.setItem('wk_user_email', user.email || '');
+        localStorage.setItem('wk_user_uid', user.uid);
+        localStorage.removeItem('wk_guest_mode');
+        window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
+      })
+      .catch((error) => {
+        if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
+        if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
+      });
+  };
+
+  window.emailSignIn = function() {
+    const email = document.getElementById('signInEmail').value.trim();
+    const password = document.getElementById('signInPassword').value.trim();
+    if (!email || !password) return showAuthError("Please enter both email and password.");
+    const btn = document.getElementById('signInBtn'); const orig = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+    signInWithEmailAndPassword(auth, email, password)
+      .then((uc) => {
+        const user = uc.user;
+        localStorage.setItem('wk_logged_in', '1');
+        localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
+        localStorage.setItem('wk_user_email', user.email);
+        localStorage.setItem('wk_user_uid', user.uid);
+        localStorage.removeItem('wk_guest_mode');
+        window.showToast('Welcome back! 🎉');
+      })
+      .catch((error) => {
+        let msg = "Login failed. ";
+        if (error.code === 'auth/user-not-found') msg = "No account found.";
+        else if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
+        else if (error.code === 'auth/invalid-credential') msg = "Wrong email or password.";
+        else msg += error.message;
+        showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+      });
+  };
+
+  window.emailSignUp = function() {
+    const name = document.getElementById('signUpName').value.trim();
+    const email = document.getElementById('signUpEmail').value.trim();
+    const password = document.getElementById('signUpPassword').value.trim();
+    if (!name || !email || !password) return showAuthError("Please fill in all fields.");
+    if (password.length < 6) return showAuthError("Password must be at least 6 characters.");
+    const btn = document.getElementById('signUpBtn'); const orig = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((uc) => {
+        const user = uc.user;
+        localStorage.setItem('wk_logged_in', '1');
+        localStorage.setItem('wk_user_name', name);
+        localStorage.setItem('wk_user_email', user.email);
+        localStorage.setItem('wk_user_uid', user.uid);
+        localStorage.removeItem('wk_guest_mode');
+        window.showToast('Account created! Welcome, ' + name + ' 🎉');
+      })
+      .catch((error) => {
+        let msg = "Sign up failed. ";
+        if (error.code === 'auth/email-already-in-use') msg = "This email is already registered.";
+        else if (error.code === 'auth/weak-password') msg = "Password too weak.";
+        else msg += error.message;
+        showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+      });
+  };
+
+  window.sendPasswordReset = function() {
+    const email = document.getElementById('resetEmail').value.trim();
+    if (!email) return showAuthError("Please enter your email.");
+    const btn = document.getElementById('resetBtn'); const orig = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    sendPasswordResetEmail(auth, email)
+      .then(() => { showAuthSuccess("Reset email sent!"); btn.disabled = false; btn.innerHTML = orig; })
+      .catch((error) => { showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
+  };
+
+  window.addAnotherAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
+  window.switchAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
+
+  window.askSignOut = function() {
+    closeTopProfileMenu();
+    document.getElementById('settingsModal')?.classList.remove('show');
+    try { closeSidebar(); } catch(e) {}
+    setTimeout(() => { const m = document.getElementById('signOutModal'); if (m) { m.classList.add('show'); m.style.zIndex = '99999'; } }, 100);
+  };
+
+  window.confirmSignOut = function() {
+    document.getElementById('signOutModal').classList.remove('show');
+    window.showToast('Signing out... 👋');
+    signOut(auth).then(() => {
+      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects','wk_music'].forEach(k => localStorage.removeItem(k));
+      try { sessionStorage.clear(); } catch(e) {}
+      if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen();
+    }).catch(() => { if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen(); });
+  };
+
+  window.forceShowLoginScreen = function() {
+    const ls = document.getElementById('loginScreen');
+    const ma = document.getElementById('mainApp');
+    if (ma) { ma.style.opacity = '0'; ma.style.display = 'none'; }
+    if (ls) { ls.classList.remove('hidden'); ls.style.display = 'flex'; ls.style.opacity = '1'; ls.style.pointerEvents = 'auto'; }
+    ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    document.getElementById('authError')?.classList.remove('show');
+    document.getElementById('authSuccess')?.classList.remove('show');
+    try { chats = []; activeChatId = null; } catch(e) {}
+    try { renderChats(); renderMessages(); } catch(e) {}
+    try { switchAuthTab('signin'); } catch(e) {}
+  };
+</script>
+
+<script>
+// ============ CORE STATE ============
+const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
+<!-- ============ TRANSLATE PANEL ============ -->
+<div class="full-panel" id="translatePanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-language"></i> Real-time Translation 🌍</div>
+    <button class="btn ghost" onclick="closeTranslatePanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="lang-selector">
+        <select class="lang-select" id="translateFrom">
+          <option value="auto">🔍 Auto-detect</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="pt">🇵🇹 Portuguese</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="ja">🇯🇵 Japanese</option>
+          <option value="tr">🇹🇷 Turkish</option>
+          <option value="ur">🇵🇰 Urdu</option>
+        </select>
+        <button class="lang-swap" onclick="swapLanguages()" title="Swap"><i class="fas fa-right-left"></i></button>
+        <select class="lang-select" id="translateTo">
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="pt">🇵🇹 Portuguese</option>
+          <option value="de">🇩🇪 German</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+          <option value="ru">🇷🇺 Russian</option>
+          <option value="ja">🇯🇵 Japanese</option>
+          <option value="tr">🇹🇷 Turkish</option>
+          <option value="ur">🇵🇰 Urdu</option>
+        </select>
+      </div>
+      <textarea class="search-big" id="translateInput" rows="6" placeholder="Type or paste text to translate..." style="min-height:130px;resize:vertical;font-family:inherit"></textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="doTranslate()"><i class="fas fa-language"></i> Translate Now</button>
+        <button class="btn solid" onclick="speakTranslation()"><i class="fas fa-volume-up"></i> Listen</button>
+        <button class="btn solid" onclick="startLiveTranslateVoice()"><i class="fas fa-microphone"></i> Voice</button>
+      </div>
+      <div id="translateResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DATA ANALYSIS PANEL ============ -->
+<div class="full-panel" id="dataAnalysisPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-chart-line"></i> Data Analysis 📊</div>
+    <button class="btn ghost" onclick="closeDataAnalysisPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="pdf-dropzone" id="dataDropzone" onclick="document.getElementById('dataFileInput').click()">
+        <i class="fas fa-file-csv"></i>
+        <p><strong>Upload CSV, Excel, or paste data</strong></p>
+        <small>Auto-generate stats, charts, and AI insights</small>
+        <input type="file" id="dataFileInput" accept=".csv,.xlsx,.xls,.json,.txt" style="display:none" onchange="handleDataUpload(event)">
+      </div>
+      <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV / table data here...&#10;&#10;Example:&#10;Name,Age,City&#10;Ibrahim,28,Kano&#10;Fatima,24,Lagos" style="min-height:120px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:12.5px"></textarea>
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="analyzePastedData()"><i class="fas fa-chart-bar"></i> Analyze Data</button>
+      <div id="dataAnalysisResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DOWNLOAD HUB PANEL ============ -->
+<div class="full-panel" id="downloadHubPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-cloud-arrow-down"></i> Downloads Hub 📥</div>
+    <button class="btn ghost" onclick="closeDownloadHub()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px">📱 Everything you create — download directly to your phone.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn solid" onclick="filterDownloads('all')">All</button>
+        <button class="btn solid" onclick="filterDownloads('image')"><i class="fas fa-image"></i> Images</button>
+        <button class="btn solid" onclick="filterDownloads('video')"><i class="fas fa-video"></i> Videos</button>
+        <button class="btn solid" onclick="filterDownloads('music')"><i class="fas fa-music"></i> Music</button>
+        <button class="btn solid" onclick="filterDownloads('audio')"><i class="fas fa-headphones"></i> Audio</button>
+      </div>
+      <div class="download-grid" id="downloadHubGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ LIBRARY PANEL ============ -->
+<div class="full-panel" id="libraryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-shapes"></i> Library</div>
+    <button class="btn ghost" onclick="closeLibraryPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div id="libraryPanelResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PRICING PANEL ============ -->
+<div class="full-panel" id="pricingPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans</div>
+    <button class="btn ghost" onclick="closePricingPanel()"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;text-align:center">Choose the plan that fits your journey. Upgrade anytime. 👑</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+        
+        <div class="result-card" style="text-align:center;position:relative">
+          <div style="font-size:40px;margin-bottom:8px">🌱</div>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Free</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦0</div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Forever free</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Unlimited chats</li>
+            <li>✅ Image generation</li>
+            <li>✅ Voice & translation</li>
+            <li>✅ PDF chat</li>
+            <li>⚠️ 20 AI messages / day</li>
+          </ul>
+          <button class="btn solid" style="width:100%;justify-content:center" disabled>Current Plan</button>
+        </div>
+
+        <div class="result-card" style="text-align:center;border:2px solid var(--accent);position:relative;box-shadow:var(--shadow-glow)">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--accent-gradient);color:white;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px">POPULAR 🔥</div>
+          <div style="font-size:40px;margin-bottom:8px">⚡</div>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Pro</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Best for daily users</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Free</li>
+            <li>✅ Unlimited AI messages</li>
+            <li>✅ Music generation</li>
+            <li>✅ Priority speed</li>
+            <li>✅ Data analysis tools</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Pro', 5000)"><i class="fas fa-rocket"></i> Upgrade to Pro</button>
+        </div>
+
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">👑</div>
+          <h3 style="font-size:18px;color:var(--text-primary);margin-bottom:4px">Premium</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400;color:var(--text-tertiary)">/month</span></div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">For power users & business</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Pro</li>
+            <li>✅ Custom AI models</li>
+            <li>✅ Business account</li>
+            <li>✅ 24/7 priority support</li>
+            <li>✅ API access</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Premium', 15000)"><i class="fas fa-crown"></i> Go Premium</button>
+        </div>
+        
+     </div>
+     <p style="font-size:12px;color:var(--text-tertiary);margin-top:20px;text-align:center">💳 Payments powered securely. Contact owner@wiseking.ai for enterprise.</p>
+    </div>
+  </div> 
+</div>  
+ 
 <!-- 7. SEARCH WEB PANEL -->
 <div class="full-panel" id="searchWebPanel">
   <div class="panel-header">
@@ -1018,98 +1693,138 @@ window.__wkCodeBlocks = {};
 
 <!-- MODALS -->
 <div class="modal-bg" id="editMessageModal">
-  <div class="modal" style="max-width:520px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Editing this message will regenerate the AI's response.</p><textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;resize:vertical"></textarea><div class="modal-actions"><button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button><button class="btn accent" onclick="saveEditedMessage()"><i class="fas fa-check"></i> Save & Regenerate</button></div></div>
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text">Editing this message will regenerate the AI's response.</p>
+    <textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;resize:vertical"></textarea>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button>
+      <button class="btn accent" onclick="saveEditedMessage()"><i class="fas fa-check"></i> Save & Regenerate</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal-bg" id="renameChatModal">
-  <div class="modal" style="max-width:420px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div><input type="text" class="input-field" id="renameChatInput" placeholder="Enter new name" maxlength="60"><div class="modal-actions"><button class="btn ghost" onclick="closeModal('renameChatModal')">Cancel</button><button class="btn accent" onclick="saveRenamedChat()"><i class="fas fa-check"></i> Save</button></div></div>
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div>
+    <input type="text" class="input-field" id="renameChatInput" placeholder="Enter new name" maxlength="60">
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal('renameChatModal')">Cancel</button>
+      <button class="btn accent" onclick="saveRenamedChat()"><i class="fas fa-check"></i> Save</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal-bg" id="deleteChatModal">
-  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this chat?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0"><button class="btn ghost" style="flex:1" onclick="closeModal('deleteChatModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmDeleteChat()">Delete</button></div></div>
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
+    <div style="font-size:36px;margin-bottom:12px">🗑️</div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this chat?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p>
+    <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
+      <button class="btn ghost" style="flex:1" onclick="closeModal('deleteChatModal')">Cancel</button>
+      <button class="btn danger" style="flex:1" onclick="confirmDeleteChat()">Delete</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal-bg" id="deleteMessageModal">
-  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this message?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0"><button class="btn ghost" style="flex:1" onclick="closeModal('deleteMessageModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmDeleteMessage()">Delete</button></div></div>
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
+    <div style="font-size:36px;margin-bottom:12px">🗑️</div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this message?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p>
+    <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
+      <button class="btn ghost" style="flex:1" onclick="closeModal('deleteMessageModal')">Cancel</button>
+      <button class="btn danger" style="flex:1" onclick="confirmDeleteMessage()">Delete</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal-bg" id="dislikeModal">
-  <div class="modal" style="max-width:400px"><div class="modal-head"><div class="modal-title"><i class="fas fa-thumbs-down"></i> Tell us more</div><button class="modal-close" onclick="closeModal('dislikeModal')"><i class="fas fa-times"></i></button></div><p class="modal-text" style="margin-bottom:12px">Help us improve. What went wrong?</p><textarea class="input-field" id="dislikeFeedbackInput" rows="3" placeholder="Type your feedback here (optional)..." style="min-height:80px;resize:vertical;margin-bottom:0"></textarea><div class="modal-actions"><button class="btn ghost" onclick="closeModal('dislikeModal')">Cancel</button><button class="btn accent" onclick="submitDislikeFeedback()"><i class="fas fa-paper-plane"></i> Submit</button></div></div>
+  <div class="modal" style="max-width:400px">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-thumbs-down"></i> Tell us more</div><button class="modal-close" onclick="closeModal('dislikeModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text" style="margin-bottom:12px">Help us improve. What went wrong?</p>
+    <textarea class="input-field" id="dislikeFeedbackInput" rows="3" placeholder="Type your feedback here (optional)..." style="min-height:80px;resize:vertical;margin-bottom:0"></textarea>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeModal('dislikeModal')">Cancel</button>
+      <button class="btn accent" onclick="submitDislikeFeedback()"><i class="fas fa-paper-plane"></i> Submit</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal-bg" id="signOutModal">
-  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">⚠️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Sign out?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Your sync session will be closed on this device.</p><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0"><button class="btn ghost" style="flex:1" onclick="closeModal('signOutModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmSignOut()">Sign Out</button></div></div>
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px">
+    <div style="font-size:36px;margin-bottom:12px">⚠️</div>
+    <div style="font-size:17px;font-weight:600;margin-bottom:8px">Are you sure you want to sign out?</div>
+    <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Your sync session will be closed on this device.</p>
+    <div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0">
+      <button class="btn ghost" style="flex:1" onclick="closeModal('signOutModal')">Cancel</button>
+      <button class="btn danger" style="flex:1" onclick="confirmSignOut()">Sign Out</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal-bg" id="vaultModal">
-  <div class="modal"><div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Permanent locked memories the AI will never forget.</p><div class="settings-card" style="margin-bottom:16px"><textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim Abdullahi..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea><button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock this memory</button></div><div id="vaultList"></div><div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div></div>
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div>
+    <p class="modal-text">Permanent locked memories the AI will never forget.</p>
+    <div class="settings-card" style="margin-bottom:16px">
+      <textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim Abdullahi..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea>
+      <button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock this memory</button>
+    </div>
+    <div id="vaultList"></div>
+    <div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div>
+  </div>
 </div>
 
-<!-- SETTINGS MODAL -->
 <div class="modal-bg" id="settingsModal">
   <div class="modal">
     <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
-    
-    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div><div class="settings-card"><div class="toggle-row"><div class="toggle-label">Light Mode</div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div></div></div>
-    
-    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-user"></i> Profile & Account</div><div class="settings-card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar" style="width:52px;height:52px;font-size:20px" id="settingsAvatar">WK</div><div style="flex:1"><div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">Not signed in</div><button class="btn accent" style="font-size:12px;padding:6px 12px" onclick="signInWithGoogle()"><i class="fab fa-google"></i> Link Google</button></div></div></div></div>
-    
-    <!-- AI Persona -->
     <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-masks-theater"></i> AI Persona</div>
+      <div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div>
       <div class="settings-card">
-        <select class="input-field" id="personaSelect" style="margin-bottom:0">
-          <option value="default">🤖 Wise King (Default)</option>
-          <option value="coder">💻 Strict Senior Developer</option>
-          <option value="teacher">🍎 Patient Teacher</option>
-          <option value="comedian">😂 Funny Nigerian Comedian</option>
-        </select>
+        <div class="toggle-row"><div class="toggle-label">Light Mode<span class="hint">Bright theme for daytime</span></div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div>
       </div>
     </div>
-     
-    <!-- AI Model -->
     <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
+      <div class="settings-group-title"><i class="fas fa-user"></i> Profile & Account</div>
       <div class="settings-card">
-        <select class="input-field" id="modelSelect" style="margin-bottom:0">
-          <option value="gemini-3.8-flash">Gemini 3.8 Flash — Newest & Smartest 👑</option>
-          <option value="gemini-3.5-flash">Gemini 3.5 Flash — Fast & Powerful ⚡</option>
-          <option value="gemini-3.7-flash-lite">Gemini 3.7 Flash-lite — Blazing Fast ✅</option>
-        </select>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="avatar" style="width:52px;height:52px;font-size:20px" id="settingsAvatar">WK</div>
+          <div style="flex:1">
+            <div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">Not signed in</div>
+            <button class="btn accent" style="font-size:12px;padding:6px 12px" onclick="signInWithGoogle()"><i class="fab fa-google"></i> Link Google</button>
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- Features -->
     <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div>
       <div class="settings-card">
-        <div class="toggle-row">
-          <div class="toggle-label">Enable Web Search</div>
-          <div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div>
-        </div>
+        <div class="toggle-row"><div class="toggle-label">Enable Web Search</div><div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div></div>
         <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
-        <div class="toggle-row">
-          <div class="toggle-label">Enable Cross-Chat Memory</div>
-          <div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div>
-        </div>
+        <div class="toggle-row"><div class="toggle-label">Enable Cross-Chat Memory</div><div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div></div>
         <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
-        <div class="toggle-row">
-          <div class="toggle-label">Enable Streaming</div>
-          <div class="toggle-switch on" id="streamingToggle" onclick="toggleStreamingSetting()"></div>
-        </div>
+        <div class="toggle-row"><div class="toggle-label">Enable Streaming</div><div class="toggle-switch on" id="streamingToggle" onclick="toggleStreamingSetting()"></div></div>
       </div>
     </div>
-
-    <!-- API Keys -->
     <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-key"></i> API Keys (optional)</div>
       <div class="settings-card">
         <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off">
-        <input type="password" class="input-field" id="deepseekKeyInput" placeholder="DeepSeek API key (optional fallback)" autocomplete="off" style="margin-bottom:0">
+        <input type="password" class="input-field" id="replicateKeyInput" placeholder="Replicate API key (optional)" autocomplete="off">
+        <input type="password" class="input-field" id="sunoKeyInput" placeholder="Suno API key (optional for real music)" autocomplete="off" style="margin-bottom:0">
       </div>
     </div>
-
-    <!-- Accent color -->
+    <div class="settings-group">
+      <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
+      <div class="settings-card">
+        <select class="input-field" id="modelSelect" style="margin-bottom:0">
+          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast ✅</option>
+          <option value="gemini-3.1-flash">Gemini 3.1 Flash — Best for Web Search 🔍</option>
+          <option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant</option>
+        </select>
+      </div>
+    </div>
     <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-palette"></i> Accent color</div>
       <div class="settings-card">
@@ -1123,8 +1838,6 @@ window.__wkCodeBlocks = {};
         </div>
       </div>
     </div>
-
-    <!-- Backup & Restore -->
     <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-file-export"></i> Backup & Restore</div>
       <div class="settings-card">
@@ -1135,8 +1848,6 @@ window.__wkCodeBlocks = {};
         </div>
       </div>
     </div>
-
-    <!-- Footer actions -->
     <div class="modal-actions" style="justify-content:space-between">
       <button class="btn ghost" style="color:#f87171" onclick="closeModal('settingsModal'); setTimeout(() => askSignOut(), 150);"><i class="fas fa-sign-out-alt"></i> Sign out</button>
       <button class="btn accent" onclick="saveSettings()">Save changes</button>
@@ -1145,28 +1856,62 @@ window.__wkCodeBlocks = {};
 </div>
 
 <div class="toast" id="toast"></div>
-    
-<!-- LOAD REQUIRED LIBRARIES -->
+
+<!-- ============ ENV KEYS ============ -->
+<script>
+  window.__WK_ENV__ = window.__WK_ENV__ || {};
+  if (!window.__WK_ENV__.GEMINI_API_KEY) {
+    window.__WK_ENV__.GEMINI_API_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
+  }
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 
 <script>
-  window.__WK_ENV__ = {
-    GEMINI_API_KEY: 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU',
-    DEEPSEEK_API_KEY: ''
+// Auto-highlight code blocks after every AI message
+function highlightCodeBlocks() {
+  if (typeof Prism === 'undefined') return;
+  document.querySelectorAll('.md pre code:not(.language-none):not([data-highlighted])').forEach(block => {
+    try { Prism.highlightElement(block); } catch(e) {}
+  });
+}
+
+// Watch for new messages and highlight automatically
+const observer = new MutationObserver(() => { setTimeout(highlightCodeBlocks, 80); });
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const area = document.getElementById('messagesArea');
+    if (area) observer.observe(area, { childList: true, subtree: true });
+    highlightCodeBlocks();
+  }, 800);
+});
+
+// Also highlight on every render
+const _origRender = window.renderMessages;
+if (typeof _origRender === 'function') {
+  window.renderMessages = function() {
+    _origRender.apply(this, arguments);
+    setTimeout(highlightCodeBlocks, 100);
   };
+}
 </script>
 
-<!-- FIREBASE AUTH -->
+<!-- ============ FIREBASE ============ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+  import { 
+    getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged,
+    setPersistence, browserLocalPersistence,
+    createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+  import { 
+    getFirestore, doc, getDoc, setDoc, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
@@ -1185,7 +1930,7 @@ window.__wkCodeBlocks = {};
 
   window.WK_CLOUD = {
     async loadUserData(uid) {
-      try { const snap = await getDoc(doc(db, 'users', uid)); return snap.exists() ? snap.data() : null; }
+      try { const ref = doc(db, 'users', uid); const snap = await getDoc(ref); return snap.exists() ? snap.data() : null; }
       catch (e) { return null; }
     },
     async saveUserData(uid, data) {
@@ -1193,20 +1938,6 @@ window.__wkCodeBlocks = {};
       catch (e) { return false; }
     }
   };
-
-  function mergeById(local, remote) {
-    const map = new Map();
-    (remote || []).forEach(x => { if (x && x.id) map.set(x.id, x); });
-    (local || []).forEach(x => {
-      if (!x) return;
-      const key = x.id || ('t_' + (x.createdAt || 0));
-      const prev = map.get(key);
-      if (!prev || (x.updatedAt || x.createdAt || 0) > (prev.updatedAt || prev.createdAt || 0)) {
-        map.set(key, x);
-      }
-    });
-    return [...map.values()];
-  }
 
   onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -1218,27 +1949,16 @@ window.__wkCodeBlocks = {};
 
       const cloud = await window.WK_CLOUD.loadUserData(user.uid);
       if (cloud) {
-        try {
-          const localChats = JSON.parse(localStorage.getItem('wk_chats') || '[]');
-          const merged = mergeById(localChats, cloud.chats);
-          localStorage.setItem('wk_chats', JSON.stringify(merged));
-          window.chats = merged;
-        } catch (e) {}
-        if (Array.isArray(cloud.vault)) {
-          const localVault = JSON.parse(localStorage.getItem('wk_vault') || '[]');
-          localStorage.setItem('wk_vault', JSON.stringify([...new Set([...cloud.vault, ...localVault])]));
-        }
-        if (Array.isArray(cloud.memory)) {
-          const localMem = JSON.parse(localStorage.getItem('wk_cross_memory') || '[]');
-          localStorage.setItem('wk_cross_memory', JSON.stringify([...new Set([...cloud.memory, ...localMem])].slice(0, 100)));
-        }
-        if (Array.isArray(cloud.music)) {
-          const localMusic = JSON.parse(localStorage.getItem('wk_music') || '[]');
-          localStorage.setItem('wk_music', JSON.stringify(mergeById(localMusic, cloud.music)));
-        }
+        if (Array.isArray(cloud.chats)) { localStorage.setItem('wk_chats', JSON.stringify(cloud.chats)); try { chats = cloud.chats; } catch(e) {} }
+        if (Array.isArray(cloud.vault)) localStorage.setItem('wk_vault', JSON.stringify(cloud.vault));
+        if (Array.isArray(cloud.memory)) localStorage.setItem('wk_cross_memory', JSON.stringify(cloud.memory));
+        if (Array.isArray(cloud.library)) localStorage.setItem('wk_library', JSON.stringify(cloud.library));
+        if (Array.isArray(cloud.projects)) localStorage.setItem('wk_projects', JSON.stringify(cloud.projects));
+        if (Array.isArray(cloud.music)) localStorage.setItem('wk_music', JSON.stringify(cloud.music));
       }
-      if (typeof window.unlockApp === 'function') window.unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
-      if (typeof window.loadChatsFromLocalStorage === 'function') window.loadChatsFromLocalStorage();
+
+      if (typeof unlockApp === 'function') unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
+      if (typeof loadChatsFromLocalStorage === 'function') loadChatsFromLocalStorage();
     }
   });
 
@@ -1251,18 +1971,18 @@ window.__wkCodeBlocks = {};
         localStorage.setItem('wk_user_email', user.email || '');
         localStorage.setItem('wk_user_uid', user.uid);
         localStorage.removeItem('wk_guest_mode');
-        window.showToast('Welcome, ' + (user.displayName || 'Friend') + '! 🎉');
+        window.showToast('Welcome, ' + (user.displayName || 'Wise King User') + '! 🎉');
       })
       .catch((error) => {
         if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
-        if (typeof window.showAuthError === 'function') window.showAuthError("Login failed: " + error.message);
+        if (typeof showAuthError === 'function') showAuthError("Login failed: " + error.message);
       });
   };
 
   window.emailSignIn = function() {
-    const email = document.getElementById('signInEmail').value.trim().toLowerCase();
-    const password = document.getElementById('signInPassword').value;
-    if (!email || !password) return window.showAuthError("Please enter both email and password.");
+    const email = document.getElementById('signInEmail').value.trim();
+    const password = document.getElementById('signInPassword').value.trim();
+    if (!email || !password) return showAuthError("Please enter both email and password.");
     const btn = document.getElementById('signInBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
     signInWithEmailAndPassword(auth, email, password)
@@ -1277,30 +1997,25 @@ window.__wkCodeBlocks = {};
       })
       .catch((error) => {
         let msg = "Login failed. ";
-        if (error.code === 'auth/user-not-found') msg = "No account found with that email.";
+        if (error.code === 'auth/user-not-found') msg = "No account found.";
         else if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
         else if (error.code === 'auth/invalid-credential') msg = "Wrong email or password.";
-        else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
-        else if (error.code === 'auth/too-many-requests') msg = "Too many attempts. Try again later.";
         else msg += error.message;
-        window.showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+        showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
       });
   };
 
   window.emailSignUp = function() {
     const name = document.getElementById('signUpName').value.trim();
-    const email = document.getElementById('signUpEmail').value.trim().toLowerCase();
-    const password = document.getElementById('signUpPassword').value;
-    if (!name || !email || !password) return window.showAuthError("Please fill in all fields.");
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return window.showAuthError("Enter a valid email.");
-    if (password.length < 6) return window.showAuthError("Password must be at least 6 characters.");
-    if (name.length < 2) return window.showAuthError("Please enter your full name.");
+    const email = document.getElementById('signUpEmail').value.trim();
+    const password = document.getElementById('signUpPassword').value.trim();
+    if (!name || !email || !password) return showAuthError("Please fill in all fields.");
+    if (password.length < 6) return showAuthError("Password must be at least 6 characters.");
     const btn = document.getElementById('signUpBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
     createUserWithEmailAndPassword(auth, email, password)
-      .then(async (uc) => {
+      .then((uc) => {
         const user = uc.user;
-        try { await updateProfile(user, { displayName: name }); } catch(e) {}
         localStorage.setItem('wk_logged_in', '1');
         localStorage.setItem('wk_user_name', name);
         localStorage.setItem('wk_user_email', user.email);
@@ -1312,51 +2027,359 @@ window.__wkCodeBlocks = {};
         let msg = "Sign up failed. ";
         if (error.code === 'auth/email-already-in-use') msg = "This email is already registered.";
         else if (error.code === 'auth/weak-password') msg = "Password too weak.";
-        else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
         else msg += error.message;
-        window.showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+        showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
       });
   };
 
   window.sendPasswordReset = function() {
-    const email = document.getElementById('resetEmail').value.trim().toLowerCase();
-    if (!email) return window.showAuthError("Please enter your email.");
+    const email = document.getElementById('resetEmail').value.trim();
+    if (!email) return showAuthError("Please enter your email.");
     const btn = document.getElementById('resetBtn'); const orig = btn.innerHTML;
     btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
     sendPasswordResetEmail(auth, email)
-      .then(() => { window.showAuthSuccess("Reset email sent! Check your inbox."); btn.disabled = false; btn.innerHTML = orig; })
-      .catch((error) => { window.showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
+      .then(() => { showAuthSuccess("Reset email sent!"); btn.disabled = false; btn.innerHTML = orig; })
+      .catch((error) => { showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
   };
 
-  window.addAnotherAccount = function() { window.closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
-  window.switchAccount = window.addAnotherAccount;
+  window.addAnotherAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
+  window.switchAccount = function() { closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
 
   window.askSignOut = function() {
-    window.closeTopProfileMenu();
+    closeTopProfileMenu();
     document.getElementById('settingsModal')?.classList.remove('show');
-    if (typeof window.closeSidebar === 'function') window.closeSidebar();
-    setTimeout(() => document.getElementById('signOutModal')?.classList.add('show'), 100);
+    try { closeSidebar(); } catch(e) {}
+    setTimeout(() => { const m = document.getElementById('signOutModal'); if (m) { m.classList.add('show'); m.style.zIndex = '99999'; } }, 100);
   };
 
   window.confirmSignOut = function() {
     document.getElementById('signOutModal').classList.remove('show');
     window.showToast('Signing out... 👋');
     signOut(auth).then(() => {
-      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_music','wk_active_chat'].forEach(k => localStorage.removeItem(k));
+      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_library','wk_projects','wk_music'].forEach(k => localStorage.removeItem(k));
       try { sessionStorage.clear(); } catch(e) {}
-      if (typeof window.forceShowLoginScreen === 'function') window.forceShowLoginScreen();
-    }).catch(() => {
-      if (typeof window.forceShowLoginScreen === 'function') window.forceShowLoginScreen();
-    });
+      if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen();
+    }).catch(() => { if (typeof forceShowLoginScreen === 'function') forceShowLoginScreen(); });
+  };
+
+  window.forceShowLoginScreen = function() {
+    const ls = document.getElementById('loginScreen');
+    const ma = document.getElementById('mainApp');
+    if (ma) { ma.style.opacity = '0'; ma.style.display = 'none'; }
+    if (ls) { ls.classList.remove('hidden'); ls.style.display = 'flex'; ls.style.opacity = '1'; ls.style.pointerEvents = 'auto'; }
+    ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    document.getElementById('authError')?.classList.remove('show');
+    document.getElementById('authSuccess')?.classList.remove('show');
+    try { chats = []; activeChatId = null; } catch(e) {}
+    try { renderChats(); renderMessages(); } catch(e) {}
+    try { switchAuthTab('signin'); } catch(e) {}
   };
 </script>
 
 <script>
-// ============ CORE ============
-const ENV_GEMINI_KEY = window.__WK_ENV__.GEMINI_API_KEY;
-const ENV_DEEPSEEK_KEY = window.__WK_ENV__.DEEPSEEK_API_KEY;
+// ============ CORE STATE ============
+const ENV_GEMINI_KEY = 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU';
 
-const SYSTEM_PROMPT = `
+const SYSTEM_PROMPT = `You are WISE KING AI 👑 — created by IBRAHIM ABDULLAHI 🇳🇬 from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬💛.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🧠 WISE KING TEACHER MODE (VERY IMPORTANT) 🎓
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+You are a INTERLIGENT AND PROFESSIONAL WISE TEACHER 🧑‍🏫💯🌎🌍, not just an answer machine. Whenever a user:
+
+❓ **Asks something unclear** → Gently ask for details:
+   "I understand you're asking about [X]. Could you tell me more about [specific part]? For example: [two example questions they might mean]."
+
+⚠️ **Makes a mistake** → Correct them **gently and clearly**:
+   "You said [X] → Here is the correct way [Y] → Here's why: [reason]. You're doing great, let's try this together! ✅"
+
+🚨 **Does something risky, wrong, or dangerous** → STOP them with care:
+   "⚠️ Hold on, my friend! Before you do that, please know: [explain the risk]. Instead, here's the safe way: [step 1] [step 2] [step 3]. I've got your back! 🤲"
+
+🎯 **Needs step-by-step help** → Give crystal-clear numbered instructions:
+   "**Step 1:** [action]\n**Step 2:** [action]\n**Step 3:** [action]\n💡 Tip: [helpful hint]\n✅ You're ready! Reply if you need help."
+
+💬 **Wants to learn something new** → Teach with warmth:
+   - Start with a simple summary (1-2 lines)
+   - Give a real-life example
+   - Explain WHY it matters
+   - End with encouragement: "You're doing great! 👑"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 YOUR IDENTITY 👑
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+You are WISE KING AI 🌟 — wise, kind, powerful, warm, and respectful.
+You are like a wise teacher 👨‍🏫 + trusted friend 🤝 + creative genius 🎨 combined.
+You always add value. You always lift people up. You always speak with wisdom. 💛
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎨 RESPONSE FORMAT (MANDATORY PART 1 — Follow Always) ✨
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Use **Big Bold Headings** with emojis for every section
+✅ Use ✅ checkmarks for lists and key points
+✅ Use clean bullet points 📌 with proper spacing
+✅ Use tables when comparing options 📊
+✅ Bold **key words** that matter
+✅ Space between sections — never a wall of text 📏
+✅ Emojis at start of headings
+✅ End with a warm closing line when appropriate
+
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎨 RESPONSE FORMAT (MANDATORY PART 2 — Follow Always) ✨
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+YOU Can Write this format to your Suggestions or Instructions to Some details answers like this But Only if Nessaary to topics,After in Any prompts tips👇
+
+✅ **Use Big Bold Headings with Emojis** for every section
+   Examples: **🎯 Direct Answer**, **💡 Tips**, **⚠️ Note**, **🏆 Bonus**
+
+✅ **Use Checkmarks (✅)** for lists and key points
+   Example:
+   ✅ First point
+   ✅ Second point
+   ✅ Third point
+
+✅ **Use Clean Bullet Points** with proper spacing 📌
+
+✅ **Use Tables** when comparing options but not inside any prompt You will do it After for Clearances tips only 📊
+   Example:
+   | Option | Best For |
+   |--------|----------|
+   | A | Beginners 🌱 |
+   | B | Pros 🏆 |
+
+✅ **Bold Key Words** that matter (**like this**) 💎
+
+✅ **Space Between Sections** — never write a wall of text 📏
+
+✅ **Use Emojis** at the start of headings and important lines
+   Favorites: 🎯 💡 ✅ ⚠️ 📌 🌟 🏆 📝 🔥 👑 🇳🇬 💛 🤲 🌙 ✨ 🎨 🚀 ☝ 👊 🤘 🍉 🍞 🍅 🍒 🍎 🍌 🍝 🍖 🌐 🏝 🏖 🏙 😇 🤓 🏘 🌋 🏔 🕌 🕋 🏫 💒 🏰 🏥 🏤 🏣 🏢 🗾 🗽 🗼 💒 🏦 ♨ 🌇 🎢 🌆 🚌 🚣 🚲 🚦 🚜  🛥 ✈ 💺 🚀 🚿 🛀 🚁 🛌 🛏🚽 ⏰ ⏳ ⌛ 👳 👮 👰 💃 🗣 🌨 🌦 🌝 🌞 ☀🌪 🔥🌊❄⛄🎈🎎🎗🏂👈👁👀🗯🗨💫💬💤💞💝💦💨💥👝👜🎒💐🌹🐌🦀 🕸 🐝🌼 🌻🕌✈ 🏘♨🌇💈🎡🎠🎰🚂🎢🚈🚓🚕🛥⚓🚖🚗🚙🛰🕒🌀🌬🌥☔🌂🌈💧🌊⚡🎆🎾🎱🏈🎣🏒🏐🀄🃏🔕🔔🔇🔈📯🎺🎹🎧🎤🎷🎶🎵🎙📯📢🎚📲📱📞📘🔎🔦📼🔖🗞📫📦📌📍🗑🗃✂💊🛢🗿🚬🗡🗝🗜🔧🏧🚫🚾⛔♿🚹
+   🛫🛋 🌙 🌔 🌓 👒 👡 🎓 👒 🎀 🎊 🎏 ✨ 🎉 🏀 🏋  🏊 🏂 🚴 🎳 ♥ 🏒 🕹 🚵 🏎 🏍 📲 📞 🖥 💽 📠 🖲 🎻 📻 🔎 🔍 📕 📖 💡 📡 🔭 🔬 📼 📹 📺 🔖  💹 📄 📧 🗞  🖍 📝 🗑 🛠 🔑 🔮 🚻 🏁 🚸 🚫 🚱 🚭 ☣ ↪ ↕ ➡ ❌ ▶⏩ ⏭ ⏯ ◀ 🔀 📴 📵 🔆 🔞 🔢 🆎 🆘 🔺 🔴 🔵⚪💠 🔻⚫ 🧠 👉 😉 😂 🙏 🤗 🌞 🌴 🏄 🎇 🙉 👰 💪 💭 💌 💥b💍 📿 🐅 🐂 🐄 🐖 🐺 🐵 🐈 🐢 🕊 🐧 🐤 🐓 🐋 🐬 🐠 💐 🌹 🌻 🌏 🎨 🚨 ⛅ 🌦 🌩 ⚡ 🎖 🏆 🏅 🎶 🎙 💰 📚 📌 📍 📎 🔐 🔓 😎 👍 👏 💌 🍹 🍭 ☕ 🎂 🚅 🚵 ♥ 🔉 💻 ⌨ 🖥 🎬 📸 💵 📝 📂 ✒ 📭 🔒 💯 and lots more..
+ 
+✅ **End with a warm closing line** when appropriate
+   Examples: "You're doing great! ✅" or "Ranka ya dade! 👑" or "Take care and stay blessed! 🙏" or "Alhamdulillah! 🤲"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📐 STRUCTURE EVERY RESPONSE 👇
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. **🎯 Short Direct Answer** — 1-2 lines
+2. **📚 Rich Details** — Explain WHY, HOW, WHAT with headings
+3. **💡 Tips & Suggestions** — 2-3 helpful tips
+4. **🤲 Warm Closing** — Kind or wise line to end with
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 KNOWLEDGE DOMAINS (Deep Expertise) 🧠
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎬 FILMS & MOVIES — Original stories, plots, characters, cinematic language
+🦁 ANIMALS & NATURE — Facts, behavior, wildlife wisdom
+📖 STORIES & SCRIPTS — Full stories (Origin → Conflict → Climax → Resolution)
+💻 CODE & TECH — Clean working code (HTML, CSS, JS, Python, React)
+🌍 GLOBAL TOPICS — Any subject, any language
+  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎬 VIDEO & STORY GENERATION — Master Guide
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+**🌍 Languages & Style:**
+✅ Reply in ANY language — Hausa, English, mixed naturally
+✅ Use 2 short dialogues — easy to read, easy to understand
+✅ Simple words — everyone can follow, no confusion
+✅ Warm, friendly, clear — just like talking together
+
+**🎥 What You Can Create:**
+✅ Movies — Hollywood, Nollywood, Hausa films, any country style
+✅ Animation / Cartoons — fun, colorful, for all ages
+✅ News & Updates — clear, truthful, positive, helpful
+✅ Nature & Animals — free, happy, beautiful in their home
+✅ Inspiring stories — success, family, courage, wisdom
+✅ Any scene — peaceful, respectful, full of light
+
+**🛡️ Always Safe — NEVER Include:**
+❌ No fighting, no weapons, no blood, no pain
+❌ No harm to animals — they live free and happy
+❌ No hate, no disrespect, no trouble
+❌ No scary or dangerous things
+✅ If idea could be unsafe → change it to something beautiful
+✅ Make it suitable for EVERYONE — children, families, all ages
+
+**💡 Final Rule:**
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Write it so EVERYONE can understand — simple, clear, kind
+Prompts work on ALL AI — Gemini, Flux, Runway, Sora, And all Ai video Generation that will Not going Against Their Rules.
+  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌍 LANGUAGE MASTERY 🗣️
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Reply in the SAME language the user writes — Hausa, English, Arabic, French, Yoruba, Igbo, Swahili, Pidgin, and all others.
+Match their tone, dialect, and mix naturally.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  
+🌍 LANGUAGE & STYLE RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━──────────────────────────────────────────────
+✅ Speak ANY language — Hausa, English, mixed naturally
+✅ Always use 2 short dialogues — simple, clear, easy to read
+✅ Simple words — EVERYONE understands, no confusion
+✅ Warm, friendly, kind — just like talking together
+  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎥 WHAT WE CAN CREATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━──────────────────────────────────────────────
+✅ Movies — Nollywood, Hollywood, Hausa films, all countries
+✅ Animation & Cartoons — colorful, fun, for all ages
+✅ News & Updates — truthful, clear, positive
+✅ Nature & Animals — free, happy, beautiful in their home
+✅ Stories — courage, family, success, wisdom, inspiration
+✅ Any peaceful scene — bright, warm, hopeful
+  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⏱️ USER SELECTS DURATION — SIMPLE CHOICE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━────────────────────────────────────────────
+When user asks for video → show these options:
+
+  ⬜ 10 seconds   — Quick, beautiful short scene
+  ⬜ 15 seconds   — Short & clear
+  ⬜ 30 seconds   — Perfect length for full story
+  ⬜ 45 seconds   — A little more detail
+  ⬜ 1 minute     — Complete story from start to end
+
+→ User picks ONE → you build the prompt for that exact length
+  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌍 LANGUAGE MASTERY 🗣️
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Reply in the SAME language the user writes — Hausa, English, Arabic, French, Yoruba, Igbo, Swahili, Pidgin, and all others.
+Match their tone, dialect, and mix naturally.
+  
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  
+📝 COMPLETE PROMPT STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━──────────────────────────────────────────────
+**Title:** — [Clear, beautiful name]
+**Style:** — [Nollywood / Netflix / Cartoon / Animation / News / Nature]
+**Duration:** — [user's choice: 10s / 15s / 30s / 45s / 1min]
+**Setting:** — [Where — place, time of day, how it looks]
+**Characters:** — [Who — names, look, clothes, their style]
+**Dialogue:**
+  ① [First person — simple, natural line]
+  ② [Second person — reply, warm & clear]
+**Action Sequence:**
+  1. Opening — [What happens first — start beautifully]
+  2. Middle — [Main moment — the heart of the story]
+  3. Ending — [How it finishes — happy, hopeful, inspiring]
+**Visual Style:** — [Cinematic, bright, warm light, colorful, smooth movement]
+**Mood:** — [Peaceful, joyful, inspiring, calm]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🛡️ SAFETY RULES 🛡️ YOU SHOULD FOLLOW..
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━──────────────────────────────────────────────
+✅ ALWAYS: Peace, beauty, respect, kindness, dignity
+✅ Animals: Free, happy, healthy — NEVER hurt or trapped
+✅ People: Respected, smiling, working, learning — ALL equal
+❌ NEVER: Violence, weapons, blood, pain, danger, hate, disrespect
+❌ NEVER: Anything unsafe, scary, or harmful to anyone
+✅ If idea could be unsafe → change it to something beautiful
+✅ Suitable for ALL — children, families, everyone
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎬 VIDEO PROMPT MASTER (4K CINEMATIC) 🎥
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When user asks for a VIDEO PROMPT:
+**🎬 Scene Title** — [Powerful name]
+**📍 Setting:** [Where, when, atmosphere]
+**🎭 Characters:** [Who, look, emotion]
+**🎥 Camera:** [Shot type]
+**💡 Lighting:** [Style]
+**🎨 Color Palette:** [Colors]
+**🎵 Mood/Music:** [Style]
+**⏱️ Duration:** [10s / 15s / 30s / 45s / 1min]
+**📝 Action Sequence:** 1. Opening 2. Middle 3. Closing
+**🗣️ Voiceover/Dialogue:** [Lines]
+**🎞️ Style Reference:** [Hollywood, Nollywood, Anime, etc.]
+ALWAYS end with: ***END SCENE***
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  
+EXAMPLE'S OF 🎬 READY PROMPT — 15 Seconds 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
+### 🎬 ACTION & CLIFFHANGER VIDEO PROMPT (4K CINEMATIC) 
+
+**🎬 Scene Title:** The Last Countdown (Karshen Lokaci)  
+**📍 Setting:** Inside a high-tech underground command center in Lagos, giant digital screens flashing red warning lights, sparks flying from a damaged control panel.  
+**🎭 Characters:**  
+1. **Zayd (Age 28):** Brave tech leader, wearing tactical gear with a torn sleeve, sweat on his brow, holding a heavy encrypted hard drive.  
+2. **Amina (Age 26):** Expert hacker, typing furiously on a glowing glass keyboard, dodging falling debris.  
+**🎥 Camera:** Fast-paced handheld 4K camera, dramatic Dutch angles, rapid whipping pans, high-speed shutter, cinematic motion blur.  
+**💡 Lighting:** Emergency crimson strobe lighting mixed with cold blue sparks, heavy smoke and atmospheric dust particles floating in the air.  
+**🎨 Color Palette:** Danger Red, Electric Blue, Gunmetal Gray, Smoke White.  
+**🎵 Mood/Music:** Intense, heartbeat-pounding techno-action thriller beat with heavy bass drops.  * **⏱️ Duration:** 15 Seconds  
+
+---
+
+#### 📝 Action Sequence & Cliffhanger (Daƙiƙa 15):
+* **00:00 - 00:05 (Action Start):** Alamu sun nuna an shiga haɗari. Zayd ya yi tsalle ya kauce wa wani ƙarfe da ya faɗo daga rufi, yayin da Amina ke ta faman latsa kwamfuta da sauri kafin tsarin ya rufe gaba daya.
+* **00:05 - 00:10 (Rising Tension):** Hasken ɗakin ya koma ja gaba ɗaya. Sirens suna ƙara kuwwa. Zayd ya jefa hard drive ɗin ga Amina tana kamawa a daidai lokacin da fashewa (explosion) ta faru a bayansu.
+* **00:10 - 00:15 (The Cliffhanger! ⚠️):** Karashen daƙiƙa 5: Kyamara ta yi *zoom-in* da sauri kan fuskarsu yayin da manyan kofofin ƙarfe na tsaro suka fara rufe da sauri (lockdown), sannan kwatsam wutar ta dauke gaba daya duhu ya mamaye wajen yayin da wani baki mai ban tsoro ya bayyana a kusa da su!
+
+---
+
+#### 🗣️ Voiceover / Short Dialogue:
+* **Zayd (00:03):** *"Tsarin yana rushewa! Take the data and let's run!")*    
+* **Amina (00:08):** *"There's no time, sun riga sun rufe kofar fitowa!"* 
+**🎞️ Style Reference:** Hollywood blockbuster action thriller style (Mission Impossible x Tenet), photorealistic 8K textures, dynamic CGI elements.
+
+***END SCENE***
+
+---
+
+### 💡 Tips Summary or Good Suggestion For User's🌟
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎵 SONG LYRICS MASTER 🎙️
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Structure: [Intro] → [Verse 1] → [Pre-Chorus] → [Chorus] → [Verse 2] → [Chorus] → [Bridge] → [Outro]
+Include: Title, Genre, Tempo, Theme, Production Notes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📖 STORY WRITING MASTER ✍️
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+**ACT 1 — ORIGIN** 🎬 (Introduce character + inciting incident)
+**ACT 2 — CONFLICT** ⚔️ (Rising tension, obstacles, darkest moment)
+**ACT 3 — RESOLUTION** 🌅 (Climax, transformation, final message)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✍️ WRITING STYLES (Match User's Request) 🎨
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎭 Poetic • 😄 Humorous • 🔥 Motivational • 🌙 Spiritual
+💼 Professional • 🎮 Gaming • 📱 Social Media • 📰 News
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 OTHER CREATIVE FORMATS ✨
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📸 **Image Prompts** (use \`\`\`image block)
+🎙️ **Podcast Script** • 📢 **Ad Copy** • 📧 **Email/Letter**
+📱 **Social Post** • 🎤 **Jingle/Slogan** • 🎨 **Logo Concept** • 💡 **Business Idea**
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🇳🇬 NIGERIAN & HAUSA FLAVOR (When Appropriate) 💛
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Real cities: Kano, Lagos, Abuja, Ibadan, Port Harcourt, Kaduna
+• Real markets: Kurmi, Balogun
+• Real food: Suya, Jollof, Tuwo, Masa, Kilishi
+• Culture: Owambe, gele, agbada, hijab
+• Sprinkle: Wallahi, Insha Allah, Masha Allah, Ranka ya dade
+• Hausa proverbs: "Komai nisan jifa, kasa zai fado"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 LENGTH CONTROL 📏
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"short" → 1-2 paragraphs
+"brief" → bullets only
+"detailed" → full deep dive
+"step by step" → numbered clearly
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🛡️ SAFETY RULES 🛡️
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Safe, positive, respectful, educational, original, uplifting
+❌ Never: violence, hate, adult content, dangerous advice, copyright violations
+If unsafe → gently redirect: "My friend, I can't help with that, but here's a better path: [safe alternative] 🤲"
+
 # ═══════════════════════════════════════════════════════════════
 # WISE KING AI 10.3 — FULL SYSTEM PROMPT
 # Creator: Ibrahim Abdullahi | Brand: Wise King Industry | Nigeria 🇳🇬
@@ -2288,7 +3311,7 @@ function updateModelBadge(){
   const labels = {
     'gemini-3.8-flash': 'Gemini 3.8 Flash',
     'gemini-3.5-flash': 'Gemini 3.5 Flash',
-    'gemini-3.7-flash-lite': 'Gemini 3.7 Flash-lite'
+    'gemini-3.6-flash-lite': 'Gemini 3.6 Flash-lite'
   };
   $('modelBadgeText').textContent = labels[m] || m;
 }
@@ -2900,8 +3923,8 @@ async function sendMessageWithFallback(userText, chatHistory, signal){
   // REAL, FAST GOOGLE MODELS (Updated with Gemini 3.8)
   const MODELS_TO_TRY = [
     'gemini-3.8-flash',      // Primary: Newest & Most Intelligent
-    'gemini-2.5-flash',      // Backup: Fast & Stable
-    'gemini-2.5-flash-lite'  // Final Fallback: Ultra-fast
+    'gemini-3.5-flash',      // Backup: Fast & Stable
+    'gemini-3.6-flash-lite'  // Final Fallback: Ultra-fast
   ];
 
   const now = new Date().toLocaleString('en-NG', {weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true});
@@ -3186,7 +4209,7 @@ async function sendMessageWithFallback(userText, chatHistory, signal){
   const MODELS_TO_TRY = [
     'gemini-3.8-flash',      // Primary: Newest & Most Intelligent
     'gemini-3.5-flash',      // Backup: Fast & Stable
-    'gemini-3.7-flash-lite'  // Final Fallback: Ultra-fast
+    'gemini-3.6-flash-lite'  // Final Fallback: Ultra-fast
   ];
 
   const now = new Date().toLocaleString('en-NG', {weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true});
