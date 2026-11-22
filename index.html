@@ -375,13 +375,11 @@ window.__wkCodeBlocks = {};
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-logo" id="loginLogo"></div>
-    <h1 class="login-title">Welcome to Wise King AI 2027</h1>
-    <p class="login-subtitle">Your conversations, memories, and creations — synced forever. Truth. Cloud. Hope. ✨</p>
+    <h1 class="login-title">Welcome to Wise King AI</h1>
+    <p class="login-subtitle">Your conversations, memories, and creations — synced forever. Truth. Cloud. Hope.</p>
     <div class="auth-error" id="authError"></div>
     <div class="auth-success" id="authSuccess"></div>
-    
-    <!-- FIXED BUTTONS -->
-    <button class="social-btn" onclick="alert('Google Sign-In will be connected soon. Please click Continue Instantly!')"><i class="fab fa-google" style="color:#ea4335"></i> Continue with Google</button>
+    <button class="social-btn" onclick="signInWithGoogle()"><i class="fab fa-google" style="color:#ea4335"></i> Continue with Google</button>
     <div class="auth-divider">OR</div>
     <div class="auth-tabs">
       <button class="auth-tab active" id="tabSignIn" onclick="switchAuthTab('signin')">Sign In</button>
@@ -391,31 +389,38 @@ window.__wkCodeBlocks = {};
       <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="signInEmail" placeholder="Email address" autocomplete="email"></div>
       <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="auth-input" id="signInPassword" placeholder="Password" autocomplete="current-password"></div>
       <button class="auth-link" style="align-self:flex-end;margin-bottom:4px" onclick="showResetPasswordForm()">Forgot password?</button>
-      <button class="auth-submit" id="signInBtn" onclick="alert('Email Sign-In will be connected soon. Please click Continue Instantly below!')"><i class="fas fa-right-to-bracket"></i> Sign In</button>
+      <button class="auth-submit" id="signInBtn" onclick="emailSignIn()"><i class="fas fa-right-to-bracket"></i> Sign In</button>
     </div>
     <div class="auth-panel" id="panelSignUp">
       <div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="auth-input" id="signUpName" placeholder="Full name" autocomplete="name"></div>
       <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="signUpEmail" placeholder="Email address" autocomplete="email"></div>
       <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="auth-input" id="signUpPassword" placeholder="Password (min 6 chars)" autocomplete="new-password"></div>
-      <button class="auth-submit" id="signUpBtn" onclick="alert('Sign Up will be connected soon. Please click Continue Instantly!')"><i class="fas fa-user-plus"></i> Create Account</button>
+      <button class="auth-submit" id="signUpBtn" onclick="emailSignUp()"><i class="fas fa-user-plus"></i> Create Account</button>
     </div>
     <div class="auth-panel" id="panelReset">
       <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="auth-input" id="resetEmail" placeholder="Your email address" autocomplete="email"></div>
-      <button class="auth-submit" id="resetBtn" onclick="alert('Password reset will be connected soon.')"><i class="fas fa-paper-plane"></i> Send Reset Link</button>
+      <button class="auth-submit" id="resetBtn" onclick="sendPasswordReset()"><i class="fas fa-paper-plane"></i> Send Reset Link</button>
       <button class="auth-link" onclick="switchAuthTab('signin')">Back to sign in</button>
     </div>
     <button class="skip-auth" onclick="skipLoginAsGuest()">⚡ Continue Instantly (Local Mode)</button>
   </div>
 </div>
 
-<!-- WELCOME POPUP REMOVED COMPLETELY -->
+<div id="welcomePopup" style="position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:99998;padding:20px">
+  <div style="background:#fff;color:#0d0d0d;border-radius:24px;max-width:420px;width:100%;padding:40px 32px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,0.6)">
+    <div style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:white;font-size:40px;font-weight:700" id="wpAvatar"></div>
+    <h2 style="font-size:24px;font-weight:700;margin-bottom:12px">Welcome, <span id="wpName">Friend</span>! 🎉</h2>
+    <p style="font-size:14.5px;color:#4b5563;margin-bottom:26px">You are now signed in to <strong style="color:#6366f1">Wise King AI</strong>.<br>Your chats and memories will sync across devices.</p>
+    <button style="width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#a855f7);border:none;border-radius:14px;color:white;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit" onclick="closeWelcomePopup()"><i class="fas fa-comments"></i> Start Chatting</button>
+  </div>
+</div>
 
 <div class="app" id="mainApp" style="opacity:0;transition:opacity .4s;display:none">
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="brand">
         <div class="brand-logo" id="brandLogo"></div>
-        <div class="brand-name">Wise King Ai 2027 👑</div>
+        <div class="brand-name">Wise King Ai 👑</div>
       </div>
       <button class="sidebar-close-btn" aria-label="Close sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
     </div>
@@ -425,7 +430,7 @@ window.__wkCodeBlocks = {};
     </div>
     <div class="sidebar-scrollable">
       <button class="nav-btn" onclick="openCoachPanel()">
-        <span class="nav-icon" style="color:#FCD34D"><i class="fas fa-lightbulb"></i></span>
+        <span class="nav-icon" style="color:#fbbf24"><i class="fas fa-lightbulb"></i></span>
         Coach 💡
       </button>      
       <button class="nav-btn" onclick="openMusicPanel()"><span class="nav-icon gradient-8"><i class="fas fa-music"></i></span>Music<span class="nav-badge" id="musicCountBadge">0</span></button>
@@ -434,7 +439,7 @@ window.__wkCodeBlocks = {};
       <button class="nav-btn" onclick="openDataAnalysisPanel()"><span class="nav-icon gradient-4"><i class="fas fa-chart-line"></i></span>Data Analysis</button>
       <button class="nav-btn" onclick="openSearchWebPanel()"><span class="nav-icon gradient-3"><i class="fas fa-globe"></i></span>Search Web</button>
       <button class="nav-btn" onclick="openBuildAppPanel()"><span class="nav-icon gradient-6"><i class="fas fa-code"></i></span>Build App</button>
-      <button class="nav-btn" onclick="openPricingPanel()"><span class="nav-icon" style="color:#FCD34D"><i class="fas fa-crown"></i></span>Upgrade Plan</button>
+      <button class="nav-btn" onclick="openPricingPanel()"><span class="nav-icon" style="color:#fbbf24"><i class="fas fa-crown"></i></span>Upgrade Plan</button>
       <button class="nav-btn" onclick="openDownloadHub()"><span class="nav-icon gradient-6"><i class="fas fa-download"></i></span>Downloads</button>
       <button class="nav-btn" onclick="openVault()"><span class="nav-icon gradient-4"><i class="fas fa-shield-halved"></i></span>Vault<span class="nav-badge" id="vaultCountBadge">0</span></button>
       <button class="nav-btn" onclick="openMemoryPanel()"><span class="nav-icon gradient-4"><i class="fas fa-brain"></i></span>Memory<span class="nav-badge" id="memoryCountBadge">0</span></button>
@@ -458,7 +463,7 @@ window.__wkCodeBlocks = {};
       <button class="menu-btn" aria-label="Open menu" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
       <div class="chat-title-wrap">
         <span class="chat-title" id="chatTitle">New chat</span>
-        <span class="chat-model-badge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 3.5 Flash-lite · 2027</span></span>
+        <span class="chat-model-badge"><i class="fas fa-circle"></i> <span id="modelBadgeText">Gemini 3.5 Flash-lite</span></span>
       </div>
       <div class="chat-actions">
         <button class="top-btn install-btn" id="installAppBtn" onclick="promptInstallApp()" style="display:none"><i class="fas fa-download"></i><span class="label"> Install</span></button>
@@ -480,7 +485,7 @@ window.__wkCodeBlocks = {};
             <button class="pm-close" aria-label="Close profile menu" onclick="closeTopProfileMenu()"><i class="fas fa-times"></i></button>
           </div>
           <div class="pm-body">
-            <button class="pm-item" onclick="openPricingPanel(); closeTopProfileMenu();"><i class="fas fa-crown" style="color:#FCD34D"></i> Upgrade Plan 👑</button>
+            <button class="pm-item" onclick="openPricingPanel(); closeTopProfileMenu();"><i class="fas fa-crown" style="color:#fbbf24"></i> Upgrade Plan 👑</button>
             <button class="pm-item" onclick="document.getElementById('profilePhotoInput').click(); closeTopProfileMenu();"><i class="fas fa-camera"></i> Upload Photo</button>
             <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" onchange="handleProfilePhotoUpload(event)">
             <button class="pm-item" onclick="openSettings(); closeTopProfileMenu();"><i class="fas fa-gear"></i> Settings</button>
@@ -505,10 +510,10 @@ window.__wkCodeBlocks = {};
     <div class="welcome" id="welcomeScreen">
       <div class="welcome-logo" id="welcomeLogo"></div>
       <h1>How can I help you today?</h1>
-      <p>I'm <strong>Wise King AI 2027</strong>. I can see photos, remember conversations, generate music, read PDFs, translate languages, and analyze data.</p>
+      <p>I'm <strong>Wise King AI</strong>. I can see photos, remember conversations, generate music, read PDFs, translate languages, and analyze data.</p>
       <div class="suggestions" style="grid-template-columns:1fr;max-width:640px;gap:12px">
-        <div class="suggestion-card" style="grid-column:1/-1;cursor:default;border-color:var(--gold);background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(251,191,36,0.08))">
-          <i class="fas fa-lightbulb" style="color:#FCD34D"></i>
+        <div class="suggestion-card" style="grid-column:1/-1;cursor:default;border-color:var(--accent);background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(168,85,247,0.08))">
+          <i class="fas fa-lightbulb" style="color:#fbbf24"></i>
           <div class="sc-title">💡 Today's Tip</div>
           <div class="sc-desc" id="welcomeTipText">Tap "Coach 💡" in the sidebar for your daily improvement tip.</div>
         </div>
@@ -543,14 +548,9 @@ window.__wkCodeBlocks = {};
 <div class="input-dock">
   <div class="input-inner-wrap">
     <div class="preview-area" id="previewArea"></div>
-    
-    <button class="link-story-btn" id="linkToStoryBtn" onclick="convertLinkToStory()">
-      <i class="fas fa-wand-magic-sparkles"></i> Convert Link to Movie Script
-    </button>
-
     <div class="gk-input-box" id="gkInputBox">
       <div class="gk-text-row">
-        <textarea class="gk-textarea" id="messageInput" rows="1" placeholder="Ask Wise King AI 2027..." onkeydown="handleKeyDown(event)" oninput="handleInputChange()"></textarea>
+        <textarea class="gk-textarea" id="messageInput" rows="1" placeholder="Ask Wise King AI..." onkeydown="handleKeyDown(event)" oninput="handleInputChange()"></textarea>
         <button class="gk-send-btn hidden" id="sendBtn" aria-label="Send message" onclick="handleSendOrCancel()"><i class="fas fa-arrow-up"></i></button>
       </div>
       <div class="gk-options-row">
@@ -563,26 +563,26 @@ window.__wkCodeBlocks = {};
       </div>
     </div>
     <input type="file" id="fileInput" accept="image/*,.pdf,.txt,.doc,.docx" style="display:none" multiple onchange="handleFiles(event)">
-    <div class="input-hint">Wise King Is An Ai 2027 · Check info wisely</div>
+    <div class="input-hint">Wise King Is An Ai, Check info wisely</div>
   </div>
 </div>
 
 </main>
 </div>
 
-<!-- PANELS SECTION — 2027 REFRESH -->
-<!-- (Music, PDF, Translate, Data, Downloads, Pricing, Search, Build, Memory, Coach Panels) -->
-<!-- I've kept all your panels exactly as they were, they are perfectly styled now -->
+<!-- ========================================== -->
+<!-- PANELS SECTION                             -->
+<!-- ========================================== -->
 
 <!-- 1. MUSIC PANEL -->
 <div class="full-panel" id="musicPanel">
   <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-music"></i> AI Music Studio 2027 🎵</div>
+    <div class="panel-title"><i class="fas fa-music"></i> AI Music Studio 🎵</div>
     <button class="btn ghost" onclick="closePanel('musicPanel')"><i class="fas fa-arrow-left"></i> Back</button>
   </div>
   <div class="panel-body">
     <div class="panel-inner">
-      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎼 Paste lyrics OR describe a style — AI will build your song prompt. Optimized for 2027.</p>
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎼 Paste lyrics OR describe a style — AI will build your song prompt.</p>
       
       <textarea class="search-big" id="musicInput" rows="6" placeholder="Describe the music style..." style="min-height:140px;resize:vertical;font-family:inherit"></textarea>
       
@@ -627,7 +627,7 @@ window.__wkCodeBlocks = {};
 <!-- 2. PDF CHAT PANEL -->
 <div class="full-panel" id="pdfChatPanel">
   <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-file-pdf"></i> PDF Chat 2027 📄</div>
+    <div class="panel-title"><i class="fas fa-file-pdf"></i> PDF Chat 📄</div>
     <button class="btn ghost" onclick="closePanel('pdfChatPanel')"><i class="fas fa-arrow-left"></i> Back</button>
   </div>
   <div class="panel-body">
@@ -635,7 +635,7 @@ window.__wkCodeBlocks = {};
       <div class="pdf-dropzone" onclick="document.getElementById('pdfFileInput').click()">
         <i class="fas fa-cloud-upload-alt"></i>
         <p><strong>Click to upload PDF</strong> or drag & drop</p>
-        <small>Read, summarize, and ask questions about any PDF — now with 2027 smart summaries</small>
+        <small>Read, summarize, and ask questions about any PDF</small>
         <input type="file" id="pdfFileInput" accept=".pdf" style="display:none" onchange="handlePdfUpload(event)">
       </div>
       
@@ -863,19 +863,140 @@ window.__wkCodeBlocks = {};
   </div>
 </div>
   
+<!-- 6. PRICING PANEL -->
+<div class="full-panel" id="pricingPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans</div>
+    <button class="btn ghost" onclick="closePanel('pricingPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;text-align:center">Choose the plan that fits your journey. Upgrade anytime. 👑</p>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+        
+        <!-- Free Plan -->
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">🌱</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Free</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦0</div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Forever free</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Unlimited chats</li>
+            <li>✅ Image generation</li>
+            <li>✅ Voice & translation</li>
+            <li>✅ PDF chat</li>
+          </ul>
+          <button class="btn solid" style="width:100%;justify-content:center" disabled>Current Plan</button>
+        </div>
+        
+        <!-- Pro Plan -->
+        <div class="result-card" style="text-align:center;border:2px solid var(--accent);box-shadow:var(--shadow-glow)">
+          <div style="font-size:40px;margin-bottom:8px">⚡</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Pro</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400">/month</span></div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Free</li>
+            <li>✅ Unlimited AI messages</li>
+            <li>✅ Music generation</li>
+            <li>✅ Priority speed</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Pro', 5000)"><i class="fas fa-rocket"></i> Upgrade to Pro</button>
+        </div>
+        
+        <!-- Premium Plan -->
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">👑</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Premium</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400">/month</span></div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Pro</li>
+            <li>✅ Custom AI models</li>
+            <li>✅ Business account</li>
+            <li>✅ 24/7 priority support</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Premium', 15000)"><i class="fas fa-crown"></i> Go Premium</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. SEARCH WEB PANEL -->
+<div class="full-panel" id="searchWebPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-globe"></i> Search the web</div>
+    <button class="btn ghost" onclick="closePanel('searchWebPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      
+      <div style="display:flex; gap:10px; margin-bottom:12px;">
+        <select id="searchEngineSelect" class="input-field" style="margin-bottom:0; flex:1; padding:12px;">
+          <option value="google">🔍 Google</option>
+          <option value="bing">🦆 Bing</option>
+          <option value="duckduckgo">🦆 DuckDuckGo</option>
+        </select>
+      </div>
+
+      <input type="text" class="search-big" id="searchWebInput" placeholder="What do you want to search for?" onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+      
+      <div style="display:flex; gap:10px; margin-bottom:16px;">
+        <button class="btn accent" style="flex:1; justify-content:center;" onclick="openSearchEngine()">
+          <i class="fas fa-external-link-alt"></i> Open in Browser
+        </button>
+        <button class="btn solid" style="flex:1; justify-content:center;" onclick="askAiToSearch(document.getElementById('searchWebInput').value)">
+          <i class="fas fa-robot"></i> Ask AI
+        </button>
+      </div>
+
+      <div id="searchWebResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 8. BUILD APP PANEL -->
+<div class="full-panel" id="buildAppPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-code"></i> Build an app</div>
+    <button class="btn ghost" onclick="closePanel('buildAppPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <input type="text" class="search-big" id="buildAppInput" placeholder="Search or describe your app idea..." oninput="filterBuildIdeas(this.value)">
+      <div id="buildAppIdeas"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 9. MEMORY PANEL -->
+<div class="full-panel" id="memoryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory</div>
+    <button class="btn ghost" onclick="closePanel('memoryPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King remembers facts from your vault and chats.</p>
+      <div id="memoryPanelResults"></div>
+    </div>
+  </div>
+</div>
+  
 <!-- COACH PANEL -->
 <div class="full-panel" id="coachPanel">
   <div class="panel-header">
-    <div class="panel-title"><i class="fas fa-lightbulb"></i> Wise King Coach 2027 💡</div>
+    <div class="panel-title"><i class="fas fa-lightbulb"></i> Wise King Coach 💡</div>
     <button class="btn ghost" onclick="closePanel('coachPanel')"><i class="fas fa-arrow-left"></i> Back</button>
   </div>
   <div class="panel-body"><div class="panel-inner">
-    <div class="result-card" style="background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(251,191,36,0.12));border:1px solid var(--gold)">
-      <h4 style="color:var(--gold);margin-bottom:8px">🌅 TIP OF THE DAY — 2027</h4>
+    <div class="result-card" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(168,85,247,0.12));border:1px solid var(--accent)">
+      <h4 style="color:var(--accent-hover);margin-bottom:8px">🌅 TIP OF THE DAY</h4>
       <div id="coachDailyTip" style="font-size:14px;line-height:1.7;color:var(--text-primary)">Loading your daily tip...</div>
       <button class="btn accent" style="margin-top:12px" onclick="generateDailyTip()"><i class="fas fa-sync-alt"></i> New Tip</button>
     </div>
-    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--gold)">🎯 5 Pillars of Growth</h3>
+    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--accent-hover)">🎯 5 Pillars of Growth</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
       <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Knowledge')"><div style="font-size:28px">📚</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Knowledge</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Learn a new thing</div></div>
       <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Skill')"><div style="font-size:28px">🛠️</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Skill</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Practice a craft</div></div>
@@ -883,14 +1004,14 @@ window.__wkCodeBlocks = {};
       <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Health')"><div style="font-size:28px">💪</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Health</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Strengthen body</div></div>
       <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Character')"><div style="font-size:28px">🤲</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Character</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Build integrity</div></div>
     </div>
-    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--gold)">📅 7-Day Improvement Plan — 2027 Edition</h3>
+    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--accent-hover)">📅 7-Day Improvement Plan</h3>
     <div class="settings-card">
-      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Tell Wise King your goal — health, business, study, faith, or skill — and get a day-by-day 7-day plan you can actually follow in 2027.</p>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Tell Wise King your goal — health, business, study, faith, or skill — and get a day-by-day 7-day plan you can actually follow.</p>
       <input type="text" class="input-field" id="coachGoalInput" placeholder="e.g. Start a small business in Kano" style="margin-bottom:10px">
       <button class="btn accent" style="width:100%;justify-content:center" onclick="generate7DayPlan()"><i class="fas fa-calendar-check"></i> Generate My 7-Day Plan</button>
     </div>
     <div id="coachPlanOutput" style="margin-top:14px"></div>
-    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--gold)">💬 Ask Your Coach</h3>
+    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--accent-hover)">💬 Ask Your Coach</h3>
     <input type="text" class="search-big" id="coachAskInput" placeholder="What do you want to improve today?" onkeydown="if(event.key==='Enter'){coachAskFree()}" style="margin-bottom:10px">
     <button class="btn accent" style="width:100%;justify-content:center" onclick="coachAskFree()"><i class="fas fa-paper-plane"></i> Ask Coach</button>
     <div id="coachAnswerOutput" style="margin-top:14px"></div>
@@ -944,20 +1065,21 @@ window.__wkCodeBlocks = {};
 </div>
 
 <div class="modal-bg" id="vaultModal">
-  <div class="modal"><div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault 2027</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Permanent locked memories the AI will never forget. 2027-secure.</p><div class="settings-card" style="margin-bottom:16px"><textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim Abdullahi..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea><button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock this memory</button></div><div id="vaultList"></div><div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div></div>
+  <div class="modal"><div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Permanent locked memories the AI will never forget.</p><div class="settings-card" style="margin-bottom:16px"><textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim Abdullahi..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea><button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock this memory</button></div><div id="vaultList"></div><div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div></div>
 </div>
 
 <div class="modal-bg" id="settingsModal">
   <div class="modal">
-    <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings 2027</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
     <div class="settings-group"><div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div><div class="settings-card"><div class="toggle-row"><div class="toggle-label">Light Mode</div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div></div></div>
-    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-user"></i> Profile & Account</div><div class="settings-card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar" style="width:52px;height:52px;font-size:20px" id="settingsAvatar">WK</div><div style="flex:1"><div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">Not signed in</div><button class="btn accent" style="font-size:12px;padding:6px 12px" onclick="alert('Google Sign-In will be connected soon.')"><i class="fab fa-google"></i> Link Google</button></div></div></div></div>
+    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-user"></i> Profile & Account</div><div class="settings-card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar" style="width:52px;height:52px;font-size:20px" id="settingsAvatar">WK</div><div style="flex:1"><div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">Not signed in</div><button class="btn accent" style="font-size:12px;padding:6px 12px" onclick="signInWithGoogle()"><i class="fab fa-google"></i> Link Google</button></div></div></div></div>
     
+    <!-- AI Persona -->
     <div class="settings-group">
       <div class="settings-group-title"><i class="fas fa-masks-theater"></i> AI Persona</div>
       <div class="settings-card">
         <select class="input-field" id="personaSelect" style="margin-bottom:0">
-          <option value="default">🤖 Wise King 2027 (Default)</option>
+          <option value="default">🤖 Wise King (Default)</option>
           <option value="coder">💻 Strict Senior Developer</option>
           <option value="teacher">🍎 Patient Teacher</option>
           <option value="comedian">😂 Funny Nigerian Comedian</option>
@@ -967,8 +1089,8 @@ window.__wkCodeBlocks = {};
 
     <div class="settings-group"><div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div><div class="settings-card"><div class="toggle-row"><div class="toggle-label">Enable Web Search</div><div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div></div><div style="height:1px;background:var(--border-subtle);margin:10px 0"></div><div class="toggle-row"><div class="toggle-label">Enable Cross-Chat Memory</div><div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div></div><div style="height:1px;background:var(--border-subtle);margin:10px 0"></div><div class="toggle-row"><div class="toggle-label">Enable Streaming</div><div class="toggle-switch on" id="streamingToggle" onclick="toggleStreamingSetting()"></div></div></div></div>
     <div class="settings-group"><div class="settings-group-title"><i class="fas fa-key"></i> API Keys (optional)</div><div class="settings-card"><input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off"><input type="password" class="input-field" id="deepseekKeyInput" placeholder="DeepSeek API key (optional fallback)" autocomplete="off" style="margin-bottom:0"></div></div>
-    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-robot"></i> AI Model — 2027 lineup</div><div class="settings-card"><select class="input-field" id="modelSelect" style="margin-bottom:0"><option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast ✅</option><option value="gemini-3.1-flash">Gemini 3.1 Flash — Best for Web Search 🔍</option><option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant</option></select></div></div>
-    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-palette"></i> Accent color</div><div class="settings-card"><div class="theme-swatches"><div class="theme-swatch" style="background:#10B981" data-color="#10B981"></div><div class="theme-swatch" style="background:#FBBF24" data-color="#FBBF24"></div><div class="theme-swatch" style="background:#ef4444" data-color="#ef4444"></div><div class="theme-swatch" style="background:#3b82f6" data-color="#3b82f6"></div><div class="theme-swatch" style="background:#8b5cf6" data-color="#8b5cf6"></div></div></div></div>
+    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div><div class="settings-card"><select class="input-field" id="modelSelect" style="margin-bottom:0"><option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast ✅</option><option value="gemini-3.1-flash">Gemini 3.1 Flash — Best for Web Search 🔍</option><option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant</option></select></div></div>
+    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-palette"></i> Accent color</div><div class="settings-card"><div class="theme-swatches"><div class="theme-swatch" style="background:#6366f1" data-color="#6366f1"></div><div class="theme-swatch" style="background:#8b5cf6" data-color="#8b5cf6"></div><div class="theme-swatch" style="background:#ec4899" data-color="#ec4899"></div><div class="theme-swatch" style="background:#10b981" data-color="#10b981"></div><div class="theme-swatch" style="background:#f59e0b" data-color="#f59e0b"></div><div class="theme-swatch" style="background:#3b82f6" data-color="#3b82f6"></div></div></div></div>
     <div class="settings-group"><div class="settings-group-title"><i class="fas fa-file-export"></i> Backup & Restore</div><div class="settings-card"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn solid" style="flex:1;justify-content:center" onclick="exportData()"><i class="fas fa-download"></i> Export</button><button class="btn solid" style="flex:1;justify-content:center" onclick="document.getElementById('importInput').click()"><i class="fas fa-upload"></i> Import</button><input type="file" id="importInput" accept="application/json" style="display:none" onchange="importData(event)"></div></div></div>
     <div class="modal-actions" style="justify-content:space-between"><button class="btn ghost" style="color:#f87171" onclick="closeModal('settingsModal'); setTimeout(() => askSignOut(), 150);"><i class="fas fa-sign-out-alt"></i> Sign out</button><button class="btn accent" onclick="saveSettings()">Save changes</button></div>
   </div>
@@ -990,8 +1112,8 @@ window.__wkCodeBlocks = {};
     GEMINI_API_KEY: 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU',
     DEEPSEEK_API_KEY: ''
   };
-  const ENV_GEMINI_KEY = window.__WK_ENV__.GEMINI_API_KEY;
 </script>
+
 <!-- FIREBASE AUTH -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
@@ -1664,48 +1786,6 @@ END — MASTER SYSTEM
 ==================================================
 `;
   
-<!-- LINK TO STORY ENGINE -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const msgInput = document.getElementById('messageInput');
-  const linkBtn = document.getElementById('linkToStoryBtn');
-  if (msgInput && linkBtn) {
-    msgInput.addEventListener('input', function() {
-      const text = this.value;
-      const urlPattern = /(https?:\/\/[^\s]+)/g;
-      if (urlPattern.test(text)) { linkBtn.classList.add('show'); } 
-      else { linkBtn.classList.remove('show'); }
-    });
-  }
-});
-
-function convertLinkToStory() {
-  const input = document.getElementById('messageInput');
-  const rawText = input.value.trim();
-  if (!rawText) return;
-  const urlPattern = /(https?:\/\/[^\s]+)/g;
-  const links = rawText.match(urlPattern) || [];
-  let platform = "Social Media";
-  if (links.length > 0) {
-    const url = links[0].toLowerCase();
-    if (url.includes('tiktok')) platform = "TikTok";
-    else if (url.includes('youtube') || url.includes('youtu.be')) platform = "YouTube";
-    else if (url.includes('instagram')) platform = "Instagram";
-  }
-  const magicPrompt = `I am sharing a ${platform} link. Because you cannot watch it directly, I am giving you the context. \n\nLink: ${rawText}\n\nPlease generate a complete, copy-ready ZAM-ZAM Nollywood Movie Script/Prompt based on this link. Use the exact format from your System Prompt:\n- Scene Title\n- Setting\n- Characters\n- Camera Movement\n- Lighting\n- Action Sequence (Beginning, Middle, End)\n- Dialogue (2 short lines)\n- Style Reference\n\nMake it deeply emotional, educational, and culturally Nigerian. Teach a powerful moral lesson.`;
-  input.value = '';
-  document.getElementById('linkToStoryBtn').classList.remove('show');
-  input.value = magicPrompt;
-  const sendBtn = document.getElementById('sendBtn');
-  if (sendBtn) { sendBtn.click(); } else {
-    const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13 });
-    input.dispatchEvent(enterEvent);
-  }
-}
-</script>
-
-<!-- MAIN APP SCRIPT -->
-<script>
 window.chats = [];
 window.activeChatId = null;
 let uploadedFiles = [];
@@ -1719,6 +1799,7 @@ let currentShareTarget = null;
 let thinkMode = false, searchMode = false;
 const MEMORY_HISTORY_LIMIT = 60;
 
+// Rate limiter
 const __rateLimit = { timestamps: [], maxPerMinute: 20 };
 function __canCallApi() {
   const now = Date.now();
@@ -1731,7 +1812,7 @@ function __canCallApi() {
 const $ = id => document.getElementById(id);
 const esc = t => { const d = document.createElement('div'); d.textContent = String(t==null?'':t); return d.innerHTML; };
 
-function showToast(msg){ const t = $('toast'); if (!t) return; t.textContent = msg; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), 2500); }
+function showToast(msg){ const t = $('toast'); if (!t) return; t.textContent = msg; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), 2000); }
 window.showToast = showToast;
 
 function showAuthError(msg){ const el = $('authError'); if (!el) return; el.textContent = msg; el.classList.add('show'); $('authSuccess')?.classList.remove('show'); clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove('show'), 6000); }
@@ -1763,9 +1844,11 @@ function forceShowLoginScreen(){
   if (ma){ ma.style.opacity = '0'; ma.style.display = 'none'; }
   if (ls){ ls.classList.remove('hidden'); ls.style.opacity = '1'; ls.style.pointerEvents = 'auto'; }
   ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => { const el = $(id); if (el) el.value = ''; });
-  $('authError')?.classList.remove('show'); $('authSuccess')?.classList.remove('show');
+  $('authError')?.classList.remove('show');
+  $('authSuccess')?.classList.remove('show');
   window.chats = []; window.activeChatId = null;
-  renderChats(); renderMessages(); switchAuthTab('signin');
+  renderChats(); renderMessages();
+  switchAuthTab('signin');
 }
 window.forceShowLoginScreen = forceShowLoginScreen;
 
@@ -1775,21 +1858,21 @@ function skipLoginAsGuest(){
   localStorage.setItem('wk_user_email', 'guest@local.mode');
   localStorage.setItem('wk_user_name', 'Guest');
   if (!localStorage.getItem('wk_joined')) localStorage.setItem('wk_joined', new Date().toLocaleDateString());
-  
-  // Bypass the popup and go straight in
   unlockApp('Guest', 'Local Mode', null);
   loadChatsFromLocalStorage();
   showToast('👤 Welcome, Guest — Local Mode');
 }
 window.skipLoginAsGuest = skipLoginAsGuest;
 
+// Fixed avatar rendering with initials
 function applyAvatar(data){
   if (!data || typeof data !== 'string') data = 'WK';
   let html;
   if (data.startsWith('http') || data.startsWith('data:image')) {
     html = '<img src="' + data + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="avatar">';
-  } else if (data === 'WK') { html = window.WK_LOGO_INLINE(36); } 
-  else {
+  } else if (data === 'WK') {
+    html = window.WK_LOGO_INLINE(36);
+  } else {
     const parts = data.trim().split(/\s+/).filter(Boolean);
     const initials = (parts[0]?.[0] || '') + (parts.length > 1 ? parts[parts.length-1][0] : '');
     html = esc((initials.toUpperCase() || 'U'));
@@ -1806,10 +1889,12 @@ function handleProfilePhotoUpload(e){
   if (f.size > 5*1024*1024) return showToast('⚠️ Max 5MB');
   const fr = new FileReader();
   fr.onload = ev => { try { localStorage.setItem('wk_user_avatar', ev.target.result); applyAvatar(ev.target.result); showToast('✅ Photo updated!'); } catch(err) { showToast('⚠️ Storage full'); } };
-  fr.readAsDataURL(f); e.target.value = '';
+  fr.readAsDataURL(f);
+  e.target.value = '';
 }
 window.handleProfilePhotoUpload = handleProfilePhotoUpload;
 
+// ---- Markdown ----
 function renderMarkdown(src){
   let s = esc(src || '');
   const SENTINEL = '\u0001WKCB' + Math.random().toString(36).slice(2,6) + '\u0001';
@@ -1863,16 +1948,19 @@ window.wkDownloadCode = function(blockId, filename){
     const blob = new Blob([window.__wkCodeBlocks[blockId] || ''], {type:'text/plain'});
     const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename || 'wiseking.txt';
     document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url), 1000); showToast('✅ Downloaded');
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+    showToast('✅ Downloaded');
   } catch(e){ showToast('⚠️ Download failed'); }
 };
 window.wkRunCode = function(blockId){
   const code = window.__wkCodeBlocks[blockId] || '';
   if (!code) return;
-  const w = window.open('', '_blank'); if (!w) return showToast('⚠️ Allow popups');
+  const w = window.open('', '_blank');
+  if (!w) return showToast('⚠️ Allow popups');
   w.document.open(); w.document.write(code); w.document.close();
 };
 
+// ---- Code highlighting ----
 let _hlTimer = null;
 function highlightCodeBlocks(){
   if (typeof Prism === 'undefined') return;
@@ -1883,6 +1971,7 @@ function highlightCodeBlocks(){
 }
 window.highlightCodeBlocks = highlightCodeBlocks;
 
+// ---- Chat storage ----
 let _saveTimer = null;
 function loadChatsFromLocalStorage(){
   try { const s = localStorage.getItem('wk_chats'); if (s) window.chats = JSON.parse(s); } catch(e){ window.chats = []; }
@@ -1898,6 +1987,12 @@ function saveChats(){
   localStorage.setItem('wk_chats', JSON.stringify(window.chats));
   localStorage.setItem('wk_active_chat', window.activeChatId || '');
   renderChats();
+  if (window.WK_CLOUD && localStorage.getItem('wk_user_uid') && !localStorage.getItem('wk_guest_mode')){
+    clearTimeout(_saveTimer);
+    _saveTimer = setTimeout(() => {
+      window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { chats: window.chats, vault: vaultMemories, memory: crossChatMemory, music: musicLibrary });
+    }, 900);
+  }
 }
 window.saveChats = saveChats;
 
@@ -1920,7 +2015,8 @@ function createNewChat(){
   const id = 'chat-' + Date.now();
   window.chats.unshift({ id, title:'New chat', messages:[], createdAt:Date.now() });
   window.activeChatId = id;
-  saveChats(); renderMessages(); closeSidebar(); $('messageInput')?.focus();
+  saveChats(); renderMessages(); closeSidebar();
+  $('messageInput')?.focus();
 }
 window.createNewChat = createNewChat;
 
@@ -2000,12 +2096,18 @@ document.addEventListener('click', e => {
   closeChatMenu();
 }, true);
 
+// ---- Profile ----
 function setupProfileButton(){
   const avatar = $('topProfileAvatar'), menu = $('topProfileMenu');
   if (!avatar || !menu) return;
   if (avatar._bound) return; avatar._bound = true;
   avatar.addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('show'); });
-  avatar.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); menu.classList.toggle('show'); } });
+  avatar.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      menu.classList.toggle('show');
+    }
+  });
   document.addEventListener('click', e => {
     if (!menu.classList.contains('show')) return;
     if (e.target.closest('#topProfileMenu') || e.target === avatar || avatar.contains(e.target)) return;
@@ -2016,12 +2118,14 @@ window.setupProfileButton = setupProfileButton;
 function closeTopProfileMenu(){ $('topProfileMenu')?.classList.remove('show'); }
 window.closeTopProfileMenu = closeTopProfileMenu;
 
+// ---- Settings ----
 function openSettings(){
   $('settingsModal').classList.add('show'); closeSidebar();
   const k1 = localStorage.getItem('wk_api_key'); if (k1) $('apiKeyInput').value = k1;
   const dk = localStorage.getItem('wk_deepseek_key'); if (dk) $('deepseekKeyInput').value = dk;
   const m = localStorage.getItem('wk_model'); if (m) $('modelSelect').value = m;
-  const p = localStorage.getItem('wk_persona') || 'default'; if($('personaSelect')) $('personaSelect').value = p;
+  const p = localStorage.getItem('wk_persona') || 'default'; 
+  if($('personaSelect')) $('personaSelect').value = p;
 }
 window.openSettings = openSettings;
 function saveSettings(){
@@ -2058,6 +2162,7 @@ window.toggleWebSearchSetting = toggleWebSearchSetting;
 window.toggleMemorySetting = toggleMemorySetting;
 window.toggleStreamingSetting = toggleStreamingSetting;
 
+// ---- Vault ----
 function loadVault(){ try { vaultMemories = JSON.parse(localStorage.getItem('wk_vault') || '[]'); } catch(e){ vaultMemories = []; } updateVaultBadge(); }
 function saveVault(){ localStorage.setItem('wk_vault', JSON.stringify(vaultMemories)); updateVaultBadge(); }
 function updateVaultBadge(){ const b = $('vaultCountBadge'); if (b) b.textContent = vaultMemories.length; }
@@ -2073,6 +2178,7 @@ window.openVault = openVault;
 window.addVaultMemory = addVaultMemory;
 window.deleteVaultMemory = deleteVaultMemory;
 
+// ---- Memory ----
 function loadCrossChatMemory(){ try { crossChatMemory = JSON.parse(localStorage.getItem('wk_cross_memory') || '[]'); } catch(e){ crossChatMemory = []; } updateMemoryBadge(); }
 function saveCrossChatMemory(){ localStorage.setItem('wk_cross_memory', JSON.stringify(crossChatMemory.slice(0,100))); updateMemoryBadge(); }
 function updateMemoryBadge(){ const b = $('memoryCountBadge'); if (b) b.textContent = crossChatMemory.length; }
@@ -2086,6 +2192,7 @@ function deleteMemoryItem(i){ crossChatMemory.splice(i,1); saveCrossChatMemory()
 window.openMemoryPanel = openMemoryPanel;
 window.deleteMemoryItem = deleteMemoryItem;
 
+// ---- Music ----
 function loadMusic(){ try { musicLibrary = JSON.parse(localStorage.getItem('wk_music') || '[]'); } catch(e){ musicLibrary = []; } updateMusicBadge(); }
 function saveMusic(){ localStorage.setItem('wk_music', JSON.stringify(musicLibrary.slice(0,200))); updateMusicBadge(); }
 function updateMusicBadge(){ const b = $('musicCountBadge'); if (b) b.textContent = musicLibrary.length; }
@@ -2120,6 +2227,7 @@ async function generateLyricsFromPanel(){
 window.generateMusicFromPanel = generateMusicFromPanel;
 window.generateLyricsFromPanel = generateLyricsFromPanel;
 
+// ---- PDF ----
 function openPdfChatPanel(){ $('pdfChatPanel').classList.add('show'); closeSidebar(); }
 window.openPdfChatPanel = openPdfChatPanel;
 let currentPdfText = '', currentPdfName = '';
@@ -2148,6 +2256,7 @@ async function askPdfQuestion(){
 }
 window.askPdfQuestion = askPdfQuestion;
 
+// ---- Translate ----
 function openTranslatePanel(){ $('translatePanel').classList.add('show'); closeSidebar(); }
 function swapLanguages(){
   const from = $('translateFrom'), to = $('translateTo');
@@ -2157,7 +2266,7 @@ function swapLanguages(){
 }
 window.openTranslatePanel = openTranslatePanel;
 window.swapLanguages = swapLanguages;
-const LANG_NAMES = {auto:'auto-detect',en:'English',ha:'Hausa',ar:'Arabic',fr:'French',yo:'Yoruba',ig:'Igbo',sw:'Swahili',es:'Spanish',pcm:'Nigerian Pidgin',kr:'Kanuri',tiv:'Tiv',ibb:'Ibibio',efi:'Efik',zh:'Chinese',hi:'Hindi'};
+const LANG_NAMES = {auto:'auto-detect',en:'English',ha:'Hausa',ar:'Arabic',fr:'French',yo:'Yoruba',ig:'Igbo',sw:'Swahili',es:'Spanish'};
 async function doTranslate(){
   const text = $('translateInput').value.trim(); if (!text) return showToast('Enter text');
   const from = $('translateFrom').value, to = $('translateTo').value;
@@ -2169,6 +2278,7 @@ async function doTranslate(){
 }
 window.doTranslate = doTranslate;
 
+// ---- Data ----
 function openDataAnalysisPanel(){ $('dataAnalysisPanel').classList.add('show'); closeSidebar(); }
 window.openDataAnalysisPanel = openDataAnalysisPanel;
 async function handleDataUpload(e){
@@ -2216,6 +2326,7 @@ async function aiDataInsight(headers, data){
   else box.innerHTML = '<div class="result-card"><p>⚠️ Failed</p></div>';
 }
 
+// ---- Downloads ----
 function openDownloadHub(){ $('downloadHubPanel').classList.add('show'); closeSidebar(); renderDownloadHub(); }
 window.openDownloadHub = openDownloadHub;
 function renderDownloadHub(){
@@ -2234,6 +2345,7 @@ function downloadText(encoded, filename){
 }
 window.downloadText = downloadText;
 
+/* ---- Search Web ---- */
 function openSearchWebPanel(){ $('searchWebPanel').classList.add('show'); closeSidebar(); }
 window.openSearchWebPanel = openSearchWebPanel;
 
@@ -2266,6 +2378,7 @@ async function askAiToSearch(query) {
 }
 window.askAiToSearch = askAiToSearch;
 
+// ---- Build App ----
 const BUILD_IDEAS = [
   {t:'Todo List App',d:'Track daily tasks',icon:'✅'},
   {t:'Calculator',d:'Full working calculator',icon:'🧮'},
@@ -2293,21 +2406,27 @@ function buildApp(name){
 }
 window.buildApp = buildApp;
 
+// ---- Pricing & Paystack ----
 function openPricingPanel(){ $('pricingPanel').classList.add('show'); closeSidebar(); }
 window.openPricingPanel = openPricingPanel;
 
 function upgradeToPlan(plan, amount){
+  // IMPORTANT: Replace this with your actual Paystack public key
   const PAYSTACK_PUBLIC_KEY = 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE'; 
+  
   if (PAYSTACK_PUBLIC_KEY === 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE') {
-    return showToast('💳 Please add your Paystack Public Key to enable payments.');
+    return showToast('💳 Please add your Paystack Public Key in the code to enable payments.');
   }
+
   let handler = PaystackPop.setup({
     key: PAYSTACK_PUBLIC_KEY,
     email: localStorage.getItem('wk_user_email') || 'guest@wiseking.com',
-    amount: amount * 100,
+    amount: amount * 100, // Paystack uses Kobo (₦5,000 = 500000)
     currency: 'NGN',
     ref: 'WK_' + Math.floor((Math.random() * 1000000000) + 1),
-    onClose: function(){ showToast('⚠️ Payment closed.'); },
+    onClose: function(){
+      showToast('⚠️ Payment window closed.');
+    },
     callback: function(response){
       showToast('✅ Payment successful! Ref: ' + response.reference);
       localStorage.setItem('wk_plan', plan);
@@ -2318,6 +2437,7 @@ function upgradeToPlan(plan, amount){
 }
 window.upgradeToPlan = upgradeToPlan;
 
+// ---- Chat search ----
 function toggleChatSearch(){
   const bar = $('chatSearchBar'); if (!bar) return;
   const showing = bar.classList.toggle('show');
@@ -2333,6 +2453,7 @@ document.addEventListener('input', e => {
   });
 });
 
+// ---- Modes & Voice ----
 function toggleThinkMode(){ thinkMode = !thinkMode; $('chipThink').classList.toggle('active', thinkMode); showToast(thinkMode ? '🧠 ON' : '🧠 OFF'); }
 function toggleSearchMode(){ searchMode = !searchMode; $('chipSearch').classList.toggle('active', searchMode); showToast(searchMode ? '🌐 ON' : '🌐 OFF'); }
 
@@ -2345,32 +2466,50 @@ function startVoiceInput(){
   rec.start(); showToast('🎙️ Listening...');
 }
 
+// NEW: Voice Chat Mode (Speaks back)
 function startVoiceChat() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return showToast('⚠️ Voice not supported');
+  
   const rec = new SR(); 
   rec.lang = 'en-NG';
+  
   rec.onresult = async (ev) => { 
     const t = ev.results[0][0].transcript; 
     const input = document.getElementById('messageInput');
-    input.value = t; handleInputChange(); sendMessage(); 
+    input.value = t;
+    handleInputChange();
+    
+    // Send the message
+    sendMessage(); 
+    
+    // Wait a moment for AI to reply, then read it aloud
     setTimeout(() => {
       const chat = window.chats.find(c => c.id === window.activeChatId);
       const lastMsg = chat.messages[chat.messages.length - 1];
-      if (lastMsg && lastMsg.role === 'ai') { speakText(lastMsg.content); }
+      if (lastMsg && lastMsg.role === 'ai') {
+        speakText(lastMsg.content);
+      }
     }, 4000); 
   };
+  
   rec.start(); 
   showToast('🎙️ Listening (Voice Mode)...');
 }
 
+// NEW: Text-to-Speech (Read Aloud)
 function speakText(text) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel(); 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-NG'; utterance.rate = 1.0; utterance.pitch = 1.0;
-    window.speechSynthesis.speak(utterance); showToast('🔊 Reading aloud...');
-  } else { showToast('⚠️ Text-to-Speech not supported'); }
+    utterance.lang = 'en-NG'; 
+    utterance.rate = 1.0; 
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+    showToast('🔊 Reading aloud...');
+  } else {
+    showToast('⚠️ Text-to-Speech not supported');
+  }
 }
 
 window.toggleThinkMode = toggleThinkMode;
@@ -2379,12 +2518,16 @@ window.startVoiceInput = startVoiceInput;
 window.startVoiceChat = startVoiceChat;
 window.speakText = speakText;
 
+// ---- Input handling ----
 function handleInputChange(){
   const input = $('messageInput'), btn = $('sendBtn');
   if (!input || !btn) return;
   const has = input.value.trim().length > 0 || uploadedFiles.length > 0;
-  if (isSending) { btn.classList.remove('hidden'); } 
-  else { btn.classList.toggle('hidden', !has); }
+  if (isSending) {
+    btn.classList.remove('hidden');
+  } else {
+    btn.classList.toggle('hidden', !has);
+  }
   input.style.height = 'auto';
   const max = window.innerHeight * 0.7;
   input.style.height = Math.min(input.scrollHeight, max) + 'px';
@@ -2419,7 +2562,8 @@ async function handleFiles(e){
             img.onerror = () => resolve(ev.target.result);
             img.src = ev.target.result;
           };
-          fr.onerror = reject; fr.readAsDataURL(file);
+          fr.onerror = reject;
+          fr.readAsDataURL(file);
         });
         uploadedFiles.push({type:'image', dataUrl, mime:'image/jpeg', name:file.name});
       } else if (fname.endsWith('.pdf')){
@@ -2466,6 +2610,7 @@ window.toggleSection = toggleSection;
 window.toggleSidebar = toggleSidebar;
 window.closeSidebar = closeSidebar;
 
+// ---- Message rendering ----
 function renderMessages(){
   const area = $('messagesArea'); if (!area) return;
   area.innerHTML = '';
@@ -2495,10 +2640,13 @@ function buildMessageEl(msg, idx, chatId){
     content.classList.add('thinking');
     content.innerHTML = '<span class="thinking-crown">'+window.WK_LOGO_INLINE(26)+'</span><span class="thinking-text">Wise King is thinking</span><span class="thinking-dots"><span></span><span></span><span></span></span>';
   } else {
-    let htmlContent = '<div class="md" id="msg-text-'+idx+'">' + renderMarkdown(msg.content || '') + '</div>';
+    let htmlContent = '<div class="md">' + renderMarkdown(msg.content || '') + '</div>';
+    
+    // AI Image Generation Display
     if (msg.imageUrl) {
       htmlContent += `<div style="margin-top:12px;"><img src="${msg.imageUrl}" alt="AI Generated" style="max-width:100%;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);"><br><a href="${msg.imageUrl}" target="_blank" download class="btn solid" style="margin-top:8px;font-size:12px;padding:6px 12px;"><i class="fas fa-download"></i> Download Image</a></div>`;
     }
+
     if (msg.attachments && msg.attachments.length){
       const aHtml = msg.attachments.map(att => {
         if (att.type === 'image') return '<img src="'+att.dataUrl+'" style="max-width:220px;border-radius:10px;margin-top:8px;display:block" alt="attachment">';
@@ -2528,6 +2676,11 @@ function buildMessageEl(msg, idx, chatId){
     body.appendChild(bar);
   }
   el.appendChild(body);
+  
+  // Add ID to md div for TTS reading
+  const mdDiv = el.querySelector('.md');
+  if (mdDiv) mdDiv.id = 'msg-text-' + idx;
+
   return el;
 }
 
@@ -2577,6 +2730,7 @@ window.handleDeleteMessage = handleDeleteMessage;
 window.saveEditedMessage = saveEditedMessage;
 window.confirmDeleteMessage = confirmDeleteMessage;
 
+// ---- API ----
 function parseDataUrl(dataUrl){
   try { const m = dataUrl.match(/^data:([^;]+);base64,(.+)$/); return m ? {mime: m[1], base64: m[2]} : null; } catch(e){ return null; }
 }
@@ -2587,6 +2741,7 @@ function buildMemoryContext(){
   return parts.join('\n');
 }
 
+// Personas for the AI
 const PERSONAS = {
   default: "", 
   coder: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a strict, highly efficient senior software engineer. Only provide code and brief, technical explanations. No fluff, no motivational talk.]",
@@ -2594,15 +2749,15 @@ const PERSONAS = {
   comedian: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a funny Nigerian stand-up comedian. Answer the user's questions with humour, pidgin slang, and jokes while still giving the correct, useful answer.]"
 };
 
-async function sendMessageWithFallback(userText, chatHistory, signal) {
+async function sendMessageWithFallback(userText, chatHistory, signal){
   if (!__canCallApi()) {
     return { success: false, error: 'Slow down — sending too fast. Try again in a moment.' };
   }
   chatHistory = chatHistory || [];
   const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY;
   const model = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + apiKey;
-  const now = new Date().toLocaleString('en-NG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
+  const url = 'https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent?key='+apiKey;
+  const now = new Date().toLocaleString('en-NG', {weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true});
   const memoryBlock = getMemoryEnabled() ? buildMemoryContext() : '';
   
   const activePersona = localStorage.getItem('wk_persona') || 'default';
@@ -2612,72 +2767,42 @@ async function sendMessageWithFallback(userText, chatHistory, signal) {
   const contents = [];
   chatHistory.slice(-MEMORY_HISTORY_LIMIT).forEach(m => {
     const role = m.role === 'user' ? 'user' : 'model';
-    const parts = [{ text: (m.content || '').slice(0, 6000) }];
-    if (m.role === 'user' && Array.isArray(m.attachments)) {
+    const parts = [{text: (m.content || '').slice(0, 6000)}];
+    if (m.role === 'user' && Array.isArray(m.attachments)){
       m.attachments.forEach(att => {
-        if (att.type === 'image' && att.dataUrl) { const p = parseDataUrl(att.dataUrl); if (p) parts.push({ inlineData: { mimeType: p.mime, data: p.base64 } }); }
-        else if (att.text) parts.push({ text: '\n[Attached: ' + att.name + ']\n' + att.text.slice(0, 30000) });
+        if (att.type === 'image' && att.dataUrl){ const p = parseDataUrl(att.dataUrl); if (p) parts.push({inlineData: {mimeType: p.mime, data: p.base64}}); }
+        else if (att.text) parts.push({text: '\n[Attached: '+att.name+']\n'+att.text.slice(0, 30000)});
       });
     }
-    contents.push({ role, parts });
+    contents.push({role, parts});
   });
-  const currentParts = [{ text: '[Today is ' + now + ']\n\nUser: ' + userText }];
-  const lastMsg = chatHistory[chatHistory.length - 1];
-  if (lastMsg?.role === 'user' && Array.isArray(lastMsg.attachments)) {
+  const currentParts = [{text: '[Today is '+now+']\n\nUser: '+userText}];
+  const lastMsg = chatHistory[chatHistory.length-1];
+  if (lastMsg?.role === 'user' && Array.isArray(lastMsg.attachments)){
     lastMsg.attachments.forEach(att => {
-      if (att.type === 'image' && att.dataUrl) { const p = parseDataUrl(att.dataUrl); if (p) currentParts.push({ inlineData: { mimeType: p.mime, data: p.base64 } }); }
-      else if (att.text) currentParts.push({ text: '\n[Attached: ' + att.name + ']\n' + att.text.slice(0, 30000) });
+      if (att.type === 'image' && att.dataUrl){ const p = parseDataUrl(att.dataUrl); if (p) currentParts.push({inlineData: {mimeType: p.mime, data: p.base64}}); }
+      else if (att.text) currentParts.push({text: '\n[Attached: '+att.name+']\n'+att.text.slice(0, 30000)});
     });
   }
-  contents.push({ role: 'user', parts: currentParts });
-  
-  const body = { 
-    systemInstruction: { parts: [{ text: systemText }] }, 
-    contents,
-    generationConfig: { maxOutputTokens: 8192, temperature: 0.7 }
-  };
-
-  let attempts = 0;
-  const maxAttempts = 3;
-
-  while (attempts < maxAttempts) {
-    try {
-      const opts = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
-      if (signal) opts.signal = signal;
-      
-      const res = await fetch(url, opts);
-      
-      if (!res.ok) {
-        let errMsg = 'HTTP ' + res.status;
-        try { const j = await res.json(); errMsg = j.error?.message || errMsg; } catch (e) {}
-        
-        if (res.status === 503 || res.status === 429) {
-          attempts++;
-          if (attempts >= maxAttempts) return { success: false, error: 'Google servers are very busy right now. Please try again in a few moments.' };
-          await new Promise(r => setTimeout(r, 2000)); 
-          continue;
-        }
-        return { success: false, error: errMsg };
-      }
-
-      const data = await res.json();
-      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      
-      if (!reply) {
-        attempts++;
-        await new Promise(r => setTimeout(r, 1500));
-        continue;
-      }
-      return { success: true, reply };
-
-    } catch (err) {
-      if (err.name === 'AbortError') throw err;
-      attempts++;
-      if (attempts >= maxAttempts) return { success: false, error: err.message || 'Network error' };
-      await new Promise(r => setTimeout(r, 2000)); 
+  contents.push({role: 'user', parts: currentParts});
+  const body = {systemInstruction: {parts: [{text: systemText}]}, contents};
+  try {
+    const opts = {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)};
+    if (signal) opts.signal = signal;
+    const res = await fetch(url, opts);
+    if (!res.ok){
+      let errMsg = 'HTTP '+res.status;
+      try { const j = await res.json(); errMsg = j.error?.message || errMsg; } catch(e){}
+      return {success: false, error: errMsg};
     }
+    const data = await res.json();
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    if (!reply) return {success: false, error: 'Empty response'};
+    return {success: true, reply};
+  } catch(err){
+    if (err.name === 'AbortError') throw err;
+    return {success: false, error: err.message || 'Network error'};
   }
-  return { success: false, error: 'Failed after multiple attempts.' };
 }
 window.sendMessageWithFallback = sendMessageWithFallback;
 
@@ -2699,6 +2824,7 @@ function sendMessage(){
     }
     if (chat.title === 'New chat' && text) chat.title = text.slice(0, 32);
 
+    // Intercept Image Requests
     const isImageReq = text.toLowerCase().includes('generate image') || text.toLowerCase().includes('create image') || text.toLowerCase().includes('draw ');
     if (isImageReq && text.length > 15) {
       chat.messages.push({role:'user', content: text, createdAt: Date.now()});
@@ -2755,19 +2881,21 @@ async function triggerResponse(chat, userMsg){
   }
 }
 
+// Export Chat to PDF
 function downloadChatAsPDF() {
   const chat = window.chats.find(c => c.id === window.activeChatId);
   if (!chat || chat.messages.length === 0) return showToast('No chat to export');
   
   showToast('📄 Generating PDF...');
   const element = document.createElement('div');
-  element.style.padding = '20px'; element.style.fontFamily = 'Arial, sans-serif';
-  element.innerHTML = `<h1 style="text-align:center; color:#10B981;">Wise King AI Chat</h1><hr>`;
+  element.style.padding = '20px';
+  element.style.fontFamily = 'Arial, sans-serif';
+  element.innerHTML = `<h1 style="text-align:center; color:#6366f1;">Wise King AI Chat</h1><hr>`;
   
   chat.messages.forEach(msg => {
     element.innerHTML += `
       <div style="margin-bottom: 20px; page-break-inside: avoid;">
-        <strong style="color: ${msg.role === 'user' ? '#10B981' : '#FBBF24'}">
+        <strong style="color: ${msg.role === 'user' ? '#6366f1' : '#10b981'}">
           ${msg.role === 'user' ? 'User' : 'Wise King AI'}:
         </strong>
         <p style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${msg.content}</p>
@@ -2776,18 +2904,23 @@ function downloadChatAsPDF() {
   });
   
   html2pdf().from(element).set({
-    margin: 1, filename: 'WiseKing-Chat.pdf',
-    html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    margin: 1,
+    filename: 'WiseKing-Chat.pdf',
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
   }).save().then(() => showToast('✅ PDF Downloaded!'));
 }
 window.downloadChatAsPDF = downloadChatAsPDF;
 
+// ---- Export / Import ----
 function exportData(){
   const data = {chats: window.chats, vault: vaultMemories, memory: crossChatMemory, music: musicLibrary, exportedAt: new Date().toISOString()};
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'wiseking-backup-'+Date.now()+'.json';
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'wiseking-backup-'+Date.now()+'.json';
   document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000); showToast('✅ Exported');
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast('✅ Exported');
 }
 window.exportData = exportData;
 function importData(e){
@@ -2803,22 +2936,31 @@ function importData(e){
       showToast('✅ Imported');
     } catch(err){ showToast('⚠️ Invalid file'); }
   };
-  fr.readAsText(file); e.target.value = '';
+  fr.readAsText(file);
+  e.target.value = '';
 }
 window.importData = importData;
 
+// ---- Install ----
 window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); deferredInstallPrompt = e; $('installAppBtn').style.display = 'inline-flex';
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  $('installAppBtn').style.display = 'inline-flex';
 });
 window.addEventListener('appinstalled', () => {
-  deferredInstallPrompt = null; $('installAppBtn').style.display = 'none'; showToast('✅ Installed!');
+  deferredInstallPrompt = null;
+  $('installAppBtn').style.display = 'none';
+  showToast('✅ Installed!');
 });
 async function promptInstallApp(){
   if (!deferredInstallPrompt) return showToast('Menu → "Add to Home Screen"');
-  deferredInstallPrompt.prompt(); await deferredInstallPrompt.userChoice; deferredInstallPrompt = null;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
 }
 window.promptInstallApp = promptInstallApp;
 
+// ---- Save on close ----
 window.addEventListener('beforeunload', () => {
   try { localStorage.setItem('wk_chats', JSON.stringify(window.chats || [])); localStorage.setItem('wk_active_chat', window.activeChatId || ''); } catch(e){}
 });
@@ -2828,31 +2970,59 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
+// ============================================================
+// WISE KING COACH
+// ============================================================
 function openCoachPanel(){
-  document.getElementById('coachPanel').classList.add('show'); closeSidebar(); generateDailyTip();
+  document.getElementById('coachPanel').classList.add('show');
+  closeSidebar();
+  generateDailyTip();
 }
 window.openCoachPanel = openCoachPanel;
 
 async function generateDailyTip(){
-  const box = document.getElementById('coachDailyTip'); if (!box) return;
+  const box = document.getElementById('coachDailyTip');
+  if (!box) return;
   box.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Crafting your tip...';
   const pillars = ['Knowledge','Skill','Wealth','Health','Character'];
   const pillar = pillars[Math.floor(Math.random() * pillars.length)];
   const day = new Date().toLocaleDateString('en-NG', {weekday:'long', month:'short', day:'numeric'});
-  const prompt = 'Give me ONE Daily Tip in this exact format:\n\n🌅 TIP OF THE DAY\nPillar: ' + pillar + '\nTip: [2–3 practical sentences for a user in Nigeria. ' + day + '.]\nAction: [one thing to do in the next 24 hours]\nBismillah. Go and become better.';
+  const prompt =
+    'Give me ONE Daily Tip in this exact format:\n\n' +
+    '🌅 TIP OF THE DAY\n' +
+    'Pillar: ' + pillar + '\n' +
+    'Tip: [2–3 practical sentences for a user in Nigeria. ' + day + '.]\n' +
+    'Action: [one thing to do in the next 24 hours]\n' +
+    'Bismillah. Go and become better.';
   const res = await sendMessageWithFallback(prompt);
-  if (res.success){ box.innerHTML = '<div class="md">' + renderMarkdown(res.reply) + '</div>'; highlightCodeBlocks(); } 
-  else { box.innerHTML = '<span style="color:#fca5a5">⚠️ ' + esc(res.error||'Try again') + '</span>'; }
+  if (res.success){
+    box.innerHTML = '<div class="md">' + renderMarkdown(res.reply) + '</div>';
+    highlightCodeBlocks();
+  } else {
+    box.innerHTML = '<span style="color:#fca5a5">⚠️ ' + esc(res.error||'Try again') + '</span>';
+  }
 }
 window.generateDailyTip = generateDailyTip;
 
 async function coachAskPillar(pillar){
-  const out = document.getElementById('coachAnswerOutput'); if (!out) return;
+  const out = document.getElementById('coachAnswerOutput');
+  if (!out) return;
   out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Coach is thinking about ' + pillar + '...</div>';
-  const prompt = 'You are Wise King Coach. Teach me one improvement in the ' + pillar + ' pillar.\nFormat:\n🎯 PILLAR: ' + pillar + '\nINSIGHT: [2 sentences]\nTODAY\'S ACTION: [one concrete step]\nCOMMON MISTAKE: [one warning]\nKeep it short, practical, Nigeria-aware where relevant.';
+  const prompt =
+    'You are Wise King Coach. Teach me one improvement in the ' + pillar + ' pillar.\n' +
+    'Format:\n' +
+    '🎯 PILLAR: ' + pillar + '\n' +
+    'INSIGHT: [2 sentences]\n' +
+    'TODAY\'S ACTION: [one concrete step]\n' +
+    'COMMON MISTAKE: [one warning]\n' +
+    'Keep it short, practical, Nigeria-aware where relevant.';
   const res = await sendMessageWithFallback(prompt);
-  if (res.success){ out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>'; highlightCodeBlocks(); } 
-  else { out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>'; }
+  if (res.success){
+    out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>';
+    highlightCodeBlocks();
+  } else {
+    out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
+  }
 }
 window.coachAskPillar = coachAskPillar;
 
@@ -2861,10 +3031,24 @@ async function generate7DayPlan(){
   if (!goal) return showToast('Type your goal first');
   const out = document.getElementById('coachPlanOutput');
   out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Building your 7-day plan...</div>';
-  const prompt = 'Create a 7-Day Improvement Plan for this goal: "' + goal + '".\nFormat each day like this:\n\nDAY 1 — [Theme]\n  • Action: [one clear task]\n  • Time: [minutes needed]\n  • Success marker: [how I know it is done]\n\n...continue for Days 2–7.\n\nMake each action realistic for one person with limited budget and time.\nEnd with: "Bismillah. Consistency beats intensity."';
+  const prompt =
+    'Create a 7-Day Improvement Plan for this goal: "' + goal + '".\n' +
+    'Format each day like this:\n\n' +
+    'DAY 1 — [Theme]\n' +
+    '  • Action: [one clear task]\n' +
+    '  • Time: [minutes needed]\n' +
+    '  • Success marker: [how I know it is done]\n\n' +
+    '...continue for Days 2–7.\n\n' +
+    'Make each action realistic for one person with limited budget and time.\n' +
+    'End with: "Bismillah. Consistency beats intensity."';
   const res = await sendMessageWithFallback(prompt);
-  if (res.success){ out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>'; highlightCodeBlocks(); showToast('✅ Plan ready!'); } 
-  else { out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>'; }
+  if (res.success){
+    out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>';
+    highlightCodeBlocks();
+    showToast('✅ Plan ready!');
+  } else {
+    out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
+  }
 }
 window.generate7DayPlan = generate7DayPlan;
 
@@ -2873,15 +3057,30 @@ async function coachAskFree(){
   if (!q) return showToast('Type your question');
   const out = document.getElementById('coachAnswerOutput');
   out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Coach is answering...</div>';
-  const prompt = 'As Wise King Coach, answer this self-improvement question:\n\n' + q + '\n\nFormat:\n💬 ANSWER: [clear, direct]\n💡 TIP: [one extra improvement insight]\n➡️ NEXT STEP: [one action to do today]\nKeep it practical and short. Nigeria/global context where helpful.';
+  const prompt =
+    'As Wise King Coach, answer this self-improvement question:\n\n' + q + '\n\n' +
+    'Format:\n' +
+    '💬 ANSWER: [clear, direct]\n' +
+    '💡 TIP: [one extra improvement insight]\n' +
+    '➡️ NEXT STEP: [one action to do today]\n' +
+    'Keep it practical and short. Nigeria/global context where helpful.';
   const res = await sendMessageWithFallback(prompt);
-  if (res.success){ out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>'; highlightCodeBlocks(); document.getElementById('coachAskInput').value = ''; } 
-  else { out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>'; }
+  if (res.success){
+    out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>';
+    highlightCodeBlocks();
+    document.getElementById('coachAskInput').value = '';
+  } else {
+    out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
+  }
 }
 window.coachAskFree = coachAskFree;
 
+// ============================================================
+// INIT
+// ============================================================
 function init(){
   try {
+    // ---- Logos ----
     $('loginLogo').innerHTML = window.WK_LOGO_INLINE(72);
     $('brandLogo').innerHTML = window.WK_LOGO_INLINE(32);
     $('welcomeLogo').innerHTML = window.WK_LOGO_INLINE(80);
@@ -2889,30 +3088,40 @@ function init(){
     $('pmAvatar').innerHTML = window.WK_LOGO_INLINE(48);
     $('sidebarAvatar').innerHTML = window.WK_LOGO_INLINE(36);
 
-    loadVault(); loadCrossChatMemory(); loadMusic(); loadTheme();
+    // ---- Load persisted state ----
+    loadVault();
+    loadCrossChatMemory();
+    loadMusic();
+    loadTheme();
 
     const savedName = localStorage.getItem('wk_user_name');
     if (savedName) $('sidebarName').textContent = savedName;
     const av = localStorage.getItem('wk_user_avatar');
     if (av) applyAvatar(av);
 
+    // ---- Settings toggles ----
     $('webSearchToggle')?.classList.toggle('on', getWebSearchEnabled());
     $('memoryToggle')?.classList.toggle('on', getMemoryEnabled());
     $('streamingToggle')?.classList.toggle('on', getStreamingEnabled());
-    updateModelBadge(); handleInputChange();
+    updateModelBadge();
+    handleInputChange();
 
+    // ---- Theme swatches ----
     document.querySelectorAll('.theme-swatch').forEach(sw => {
       sw.addEventListener('click', () => {
         const c = sw.dataset.color;
         document.documentElement.style.setProperty('--accent', c);
-        localStorage.setItem('wk_accent', c); showToast('🎨 Accent changed');
+        localStorage.setItem('wk_accent', c);
+        showToast('🎨 Accent changed');
       });
     });
     const savedAccent = localStorage.getItem('wk_accent');
     if (savedAccent) document.documentElement.style.setProperty('--accent', savedAccent);
 
+    // ---- Profile popup ----
     setupProfileButton();
 
+    // ---- Modals close on backdrop ----
     document.querySelectorAll('.modal-bg').forEach(m =>
       m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); })
     );
@@ -2920,42 +3129,69 @@ function init(){
       if (e.target.id === 'sharePopup') closeSharePopup();
     });
 
+    // ---- Escape key closes modals ----
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape'){ document.querySelectorAll('.modal-bg.show').forEach(m => m.classList.remove('show')); closeTopProfileMenu(); }
+      if (e.key === 'Escape'){
+        document.querySelectorAll('.modal-bg.show').forEach(m => m.classList.remove('show'));
+        closeTopProfileMenu();
+      }
     });
 
+    // ---- PDF.js worker ----
     if (typeof pdfjsLib !== 'undefined'){
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
+    // ---- Auto highlight code blocks ----
     const area = $('messagesArea');
-    if (area){ new MutationObserver(() => highlightCodeBlocks()).observe(area, {childList: true, subtree: true}); }
+    if (area){
+      new MutationObserver(() => highlightCodeBlocks())
+        .observe(area, {childList: true, subtree: true});
+    }
 
-    if (localStorage.getItem('wk_logged_in') === '1' && localStorage.getItem('wk_guest_mode') === '1'){
-      unlockApp('Guest', 'Local Mode', null); loadChatsFromLocalStorage();
+    // ---- Auth unlock ----
+    if (localStorage.getItem('wk_logged_in') === '1' &&
+        localStorage.getItem('wk_guest_mode') === '1'){
+      unlockApp('Guest', 'Local Mode', null);
+      loadChatsFromLocalStorage();
     } else if (localStorage.getItem('wk_logged_in') === '1'){
       loadChatsFromLocalStorage();
     }
 
+    // ---- Cached daily tip (once per day) ----
     setTimeout(() => {
-      const tipEl = document.getElementById('welcomeTipText'); if (!tipEl) return;
+      const tipEl = document.getElementById('welcomeTipText');
+      if (!tipEl) return;
       const todayKey = 'wk_tip_' + new Date().toDateString();
       const cached = localStorage.getItem(todayKey);
       if (cached) { tipEl.textContent = cached; return; }
-      sendMessageWithFallback('Give me ONE short Daily Tip in this format: 🌅 TIP: [1 sentence] — ACTION: [1 short step]. Be practical and Nigeria-aware.').then(r => {
+
+      sendMessageWithFallback(
+        'Give me ONE short Daily Tip in this format: 🌅 TIP: [1 sentence] — ACTION: [1 short step]. Be practical and Nigeria-aware.'
+      ).then(r => {
         if (r && r.success){
           const clean = String(r.reply).replace(/\n+/g, ' ').slice(0, 220);
-          tipEl.textContent = clean; localStorage.setItem(todayKey, clean);
-          Object.keys(localStorage).filter(k => k.startsWith('wk_tip_') && k !== todayKey).forEach(k => localStorage.removeItem(k));
+          tipEl.textContent = clean;
+          localStorage.setItem(todayKey, clean);
+          Object.keys(localStorage)
+            .filter(k => k.startsWith('wk_tip_') && k !== todayKey)
+            .forEach(k => localStorage.removeItem(k));
         }
       }).catch(() => {});
     }, 2000);
 
-  } catch(e){ console.warn('Init error:', e); }
+  } catch(e){
+    console.warn('Init error:', e);
+  }
 }
 
-if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init); } 
-else { init(); }
+if (document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 </script>
 </body>
-  </html>
+</html>
+  
