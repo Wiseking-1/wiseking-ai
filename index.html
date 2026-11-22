@@ -992,47 +992,6 @@ window.__wkCodeBlocks = {};
   };
   const ENV_GEMINI_KEY = window.__WK_ENV__.GEMINI_API_KEY;
 </script>
-
-<!-- LINK TO STORY ENGINE -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const msgInput = document.getElementById('messageInput');
-  const linkBtn = document.getElementById('linkToStoryBtn');
-  if (msgInput && linkBtn) {
-    msgInput.addEventListener('input', function() {
-      const text = this.value;
-      const urlPattern = /(https?:\/\/[^\s]+)/g;
-      if (urlPattern.test(text)) { linkBtn.classList.add('show'); } 
-      else { linkBtn.classList.remove('show'); }
-    });
-  }
-});
-
-function convertLinkToStory() {
-  const input = document.getElementById('messageInput');
-  const rawText = input.value.trim();
-  if (!rawText) return;
-  const urlPattern = /(https?:\/\/[^\s]+)/g;
-  const links = rawText.match(urlPattern) || [];
-  let platform = "Social Media";
-  if (links.length > 0) {
-    const url = links[0].toLowerCase();
-    if (url.includes('tiktok')) platform = "TikTok";
-    else if (url.includes('youtube') || url.includes('youtu.be')) platform = "YouTube";
-    else if (url.includes('instagram')) platform = "Instagram";
-  }
-  const magicPrompt = `I am sharing a ${platform} link. Because you cannot watch it directly, I am giving you the context. \n\nLink: ${rawText}\n\nPlease generate a complete, copy-ready ZAM-ZAM Nollywood Movie Script/Prompt based on this link. Use the exact format from your System Prompt:\n- Scene Title\n- Setting\n- Characters\n- Camera Movement\n- Lighting\n- Action Sequence (Beginning, Middle, End)\n- Dialogue (2 short lines)\n- Style Reference\n\nMake it deeply emotional, educational, and culturally Nigerian. Teach a powerful moral lesson.`;
-  input.value = '';
-  document.getElementById('linkToStoryBtn').classList.remove('show');
-  input.value = magicPrompt;
-  const sendBtn = document.getElementById('sendBtn');
-  if (sendBtn) { sendBtn.click(); } else {
-    const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13 });
-    input.dispatchEvent(enterEvent);
-  }
-}
-</script>
-
 <!-- FIREBASE AUTH -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
@@ -1705,6 +1664,46 @@ END — MASTER SYSTEM
 ==================================================
 `;
   
+<!-- LINK TO STORY ENGINE -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const msgInput = document.getElementById('messageInput');
+  const linkBtn = document.getElementById('linkToStoryBtn');
+  if (msgInput && linkBtn) {
+    msgInput.addEventListener('input', function() {
+      const text = this.value;
+      const urlPattern = /(https?:\/\/[^\s]+)/g;
+      if (urlPattern.test(text)) { linkBtn.classList.add('show'); } 
+      else { linkBtn.classList.remove('show'); }
+    });
+  }
+});
+
+function convertLinkToStory() {
+  const input = document.getElementById('messageInput');
+  const rawText = input.value.trim();
+  if (!rawText) return;
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
+  const links = rawText.match(urlPattern) || [];
+  let platform = "Social Media";
+  if (links.length > 0) {
+    const url = links[0].toLowerCase();
+    if (url.includes('tiktok')) platform = "TikTok";
+    else if (url.includes('youtube') || url.includes('youtu.be')) platform = "YouTube";
+    else if (url.includes('instagram')) platform = "Instagram";
+  }
+  const magicPrompt = `I am sharing a ${platform} link. Because you cannot watch it directly, I am giving you the context. \n\nLink: ${rawText}\n\nPlease generate a complete, copy-ready ZAM-ZAM Nollywood Movie Script/Prompt based on this link. Use the exact format from your System Prompt:\n- Scene Title\n- Setting\n- Characters\n- Camera Movement\n- Lighting\n- Action Sequence (Beginning, Middle, End)\n- Dialogue (2 short lines)\n- Style Reference\n\nMake it deeply emotional, educational, and culturally Nigerian. Teach a powerful moral lesson.`;
+  input.value = '';
+  document.getElementById('linkToStoryBtn').classList.remove('show');
+  input.value = magicPrompt;
+  const sendBtn = document.getElementById('sendBtn');
+  if (sendBtn) { sendBtn.click(); } else {
+    const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13 });
+    input.dispatchEvent(enterEvent);
+  }
+}
+</script>
+
 <!-- MAIN APP SCRIPT -->
 <script>
 window.chats = [];
@@ -2959,5 +2958,4 @@ if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoa
 else { init(); }
 </script>
 </body>
-</html>
-  
+  </html>
