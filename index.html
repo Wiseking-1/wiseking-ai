@@ -3284,123 +3284,202 @@ async function sendMessageWithFallback(userText, chatHistory, signal) {
     return { success: false, error: 'Slow down — sending too fast. Try again in a moment.' };
   }
   chatHistory = chatHistory || [];
-  
-  const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY;
-  let model = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
-  
-  // 2027 UPDATE: If Search Mode is ON, or user asks for current news, use the Web-Grounded model
-  const needsWeb = searchMode || /(latest|news|current|today|who is|what is happening|weather|price of|search|google)/i.test(userText);
-  if (needsWeb) {
-    model = 'gemini-3.1-flash'; // This model has built-in Google Search Grounding
-  }
 
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + apiKey;
-  const now = new Date().toLocaleString('en-NG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
-  
+  const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY;
+  const defaultModel = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
+
+  // Use a valid search-capable model when search is needed
+  const needsWeb = Boolean(
+    window.searchMode ||
+    /(latest|news|current|today|who is|what is happening|weather|price of|search|google)/i.test(userText)
+  );
+  const model = needsWeb ? 'gemini-3.8-flash' : defaultModel;
+
+  const url =
+    'https://generativelanguage.googleapis.com/v1beta/models/' +
+    encodeURIComponent(model) +
+    ':generateContent?key=' +
+    encodeURIComponent(apiKey);
+
+  const now = new Date().toLocaleString('en-NG', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  });
+
   const memoryBlock = getMemoryEnabled() ? buildMemoryContext() : '';
   const activePersona = localStorage.getItem('wk_persona') || 'default';
   const personaBlock = PERSONAS[activePersona] || '';
 
   const systemText = SYSTEM_PROMPT + personaBlock + (memoryBlock ? '\n\n' + memoryBlock : '');
   const contents = [];
-  
+
   chatHistory.slice(-MEMORY_HISTORY_LIMIT).forEach(m => {
     const role = m.role === 'user' ? 'user' : 'model';
     const parts = [{ text: (m.content || '').slice(0, 6000) }];
     if (m.role === 'user' && Array.isArray(m.attachments)) {
       m.attachments.forEach(att => {
-        if (att.type === 'image' && att.dataUrl) { const p = parseDataUrl(att.dataUrl); if (p) parts.push({ inlineData: { mimeType: p.mime, data: p.base64 } }); }
-        else if (att.text) parts.push({ text: '\n[Attached: ' + att.name + ']\n' + att.text.slice(0, 30000) });
+        if (att.type === 'image' && att.dataUrl) {
+          const p = parseDataUrl(att.dataUrl);
+          if (p) parts.push({ inlineData: { mimeType: p.mime, data: p.base64 } });
+        } else if (att.text) {
+          parts.push({ text: '\n[Attached: ' + att.name + ']\n' + att.text.slice(0, 30000) });
+        }
       });
     }
     contents.push({ role, parts });
   });
-  
+
   const currentParts = [{ text: '[Today is ' + now + ']\n\nUser: ' + userText }];
   const lastMsg = chatHistory[chatHistory.length - 1];
   if (lastMsg?.role === 'user' && Array.isArray(lastMsg.attachments)) {
     lastMsg.attachments.forEach(att => {
-      if (att.type === 'image' && att.dataUrl) { const p = parseDataUrl(att.dataUrl); if (p) currentParts.push({ inlineData: { mimeType: p.mime, data: p.base64 } }); }
-      else if (att.text) currentParts.push({ text: '\n[Attached: ' + att.name + ']\n' + att.text.slice(0, 30000) });
+      if (att.type === 'image' && att.dataUrl) {
+        const p = parseDataUrl(att.dataUrl);
+        if (p) currentParts.push({ inlineData: { mimeType: p.mime, data: p.base64 } });
+      } else if (att.text) {
+        currentParts.push({ text: '\n[Attached: ' + att.name + ']\n' + att.text.slice(0, 30000) });
+      }
     });
   }
   contents.push({ role: 'user', parts: currentParts });
-  
-  // 2027 UPDATE: The Body payload with Web Grounding + No Cut-offs
-  const body = { 
-    systemInstruction: { parts: [{ text: systemText }] }, 
-    contents,
-    generationConfig: { 
-      maxOutputTokens: 8192, // Forces the AI to write the full message
-      temperature: 0.7,
-      topP: 0.95
-    }
+
+  const generationConfig = {
+    maxOutputTokens: 16384,
+    temperature: 0.7,
+    topP: 0.95
   };
 
-  // If the model supports Web Search, we tell Gemini to ground its answer in real Google results
-  if (model === 'gemini-3.1-flash' || searchMode) {
-    body.tools = [{ googleSearch: {} }];
-  }
+  const tools = needsWeb ? [{ googleSearch: {} }] : undefined;
+
+  const buildBody = (targetContents) => {
+    const payload = {
+      systemInstruction: { parts: [{ text: systemText }] },
+      contents: targetContents,
+      generationConfig
+    };
+    if (tools) payload.tools = tools;
+    return payload;
+  };
+
+  const extractText = (data) => {
+    const parts = data?.candidates?.[0]?.content?.parts || [];
+    return parts.map(p => p.text || '').join('');
+  };
 
   let attempts = 0;
   const maxAttempts = 3;
 
   while (attempts < maxAttempts) {
     try {
-      const opts = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+      const opts = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildBody(contents))
+      };
       if (signal) opts.signal = signal;
-      
+
       const res = await fetch(url, opts);
-      
+
       if (!res.ok) {
         let errMsg = 'HTTP ' + res.status;
-        try { const j = await res.json(); errMsg = j.error?.message || errMsg; } catch (e) {}
-        
+        try {
+          const j = await res.json();
+          errMsg = j.error?.message || errMsg;
+        } catch (e) {}
+
         if (res.status === 503 || res.status === 429) {
           attempts++;
-          if (attempts >= maxAttempts) return { success: false, error: 'Google servers are very busy right now. Please try again in a few moments.' };
-          await new Promise(r => setTimeout(r, 2000)); 
+          if (attempts >= maxAttempts) {
+            return { success: false, error: 'Google servers are very busy right now. Please try again in a few moments.' };
+          }
+          await new Promise(r => setTimeout(r, 2000 * attempts));
           continue;
         }
         return { success: false, error: errMsg };
       }
 
       const data = await res.json();
-      let reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-      
+      let candidate = data?.candidates?.[0];
+      let reply = extractText(data);
+
       if (!reply) {
         attempts++;
         await new Promise(r => setTimeout(r, 1500));
         continue;
       }
 
-      // 2027 UPDATE: If the AI cut off mid-sentence, we automatically ask it to finish
-      if (!reply.trim().match(/[.!?\"']$/) && reply.length > 50) {
-        const finishPrompt = "Continue exactly from where you stopped. Do not repeat yourself, just finish the last sentence and complete the thought.";
-        const finishContents = [...contents, { role: 'user', parts: [{ text: finishPrompt }] }];
-        const finishBody = { systemInstruction: body.systemInstruction, contents: finishContents, generationConfig: body.generationConfig };
-        
-        try {
-          const finishRes = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(finishBody) });
-          if (finishRes.ok) {
-            const finishData = await finishRes.json();
-            const finishText = finishData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            if (finishText) reply = reply + ' ' + finishText;
-          }
-        } catch(e) { /* Ignore finish error, just show what we have */ }
-      }
-      
-      return { success: true, reply };
+      // Auto-continue if truncated by token limit or abruptly mid-sentence (up to 3 continuation passes)
+      let continuations = 0;
+      const maxContinuations = 3;
+      let workingContents = [...contents, { role: 'model', parts: [{ text: reply }] }];
 
+      while (continuations < maxContinuations) {
+        const hitTokenLimit = candidate?.finishReason === 'MAX_TOKENS';
+        const looksCutOff =
+          reply.length > 80 &&
+          !reply.trim().endsWith('```') &&
+          !reply.trim().match(/[.!?"')\]]$/);
+
+        if (!hitTokenLimit && !looksCutOff) break;
+
+        continuations++;
+        const finishPrompt =
+          'Continue immediately from the exact character where you stopped. Do not repeat earlier text or add introductory filler; complete the response cleanly.';
+        workingContents = [
+          ...workingContents,
+          { role: 'user', parts: [{ text: finishPrompt }] }
+        ];
+
+        try {
+          const finishOpts = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(buildBody(workingContents))
+          };
+          if (signal) finishOpts.signal = signal;
+
+          const finishRes = await fetch(url, finishOpts);
+          if (!finishRes.ok) break;
+
+          const finishData = await finishRes.json();
+          candidate = finishData?.candidates?.[0];
+          const finishText = extractText(finishData);
+          if (!finishText) break;
+
+          const needsSpace =
+            !reply.endsWith('\n') &&
+            !reply.endsWith(' ') &&
+            !finishText.startsWith('\n') &&
+            !finishText.startsWith(' ');
+
+          reply = reply + (needsSpace ? ' ' : '') + finishText;
+          workingContents = [
+            ...workingContents,
+            { role: 'model', parts: [{ text: finishText }] }
+          ];
+        } catch (e) {
+          if (e.name === 'AbortError') throw e;
+          break;
+        }
+      }
+
+      return { success: true, reply };
     } catch (err) {
       if (err.name === 'AbortError') throw err;
       attempts++;
       if (attempts >= maxAttempts) return { success: false, error: err.message || 'Network error' };
-      await new Promise(r => setTimeout(r, 2000)); 
+      await new Promise(r => setTimeout(r, 2000 * attempts));
     }
   }
+
   return { success: false, error: 'Failed after multiple attempts.' };
 }
+
 window.sendMessageWithFallback = sendMessageWithFallback;
 
 let __sendLock = false;
