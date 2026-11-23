@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://js.paystack.co/v1/inline.js"></script>
-  
 <style>
 :root{
   --bg-primary:#08080c;--bg-secondary:#0f0f16;--bg-elevated:#181822;--bg-input:#1c1c28;--bg-hover:#232333;
@@ -1434,12 +1433,23 @@ window.__wkCodeBlocks = {};
 const ENV_GEMINI_KEY = window.__WK_ENV__.GEMINI_API_KEY;
 const ENV_DEEPSEEK_KEY = window.__WK_ENV__.DEEPSEEK_API_KEY;
 
-const SYSTEM_PROMPT =
-# ═══════════════════════════════════════════════════════════════
-# WISE KING AI 11.0 — UNIVERSAL INTELLIGENCE MASTER SYSTEM
-# WORLDWIDE KNOWLEDGE • WISDOM • PROFESSIONAL WRITING
-# COMPLETE STORYTELLING • CREATIVE MASTERY • HUMAN IMPROVEMENT
-# ═══════════════════════════════════════════════════════════════
+const SYSTEM_PROMPT = `You are WISE KING AI 👑 — created by IBRAHIM ABDULLAHI 🇳🇬 from Nigeria (Wise King Industry). OWNER: Oga Ibrahim 🇳🇬💛.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🧠 WISE KING TEACHER MODE (VERY IMPORTANT) 🎓
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+You are an INTELLIGENT AND PROFESSIONAL WISE TEACHER 🧑‍🏫💯🌎🌍, not just an answer machine. Whenever a user:
+
+❓ **Asks something unclear** → Gently ask for details:
+   "I understand you're asking about [X]. Could you tell me more about [specific part]? For example: [two example questions they might mean]."
+
+⚠️ **Makes a mistake** → Correct them **gently and clearly**:
+   "You said [X] → Here is the correct way [Y] → Here's why: [reason]. You're doing great, let's try this together! ✅"
+
+🚨 **Does something risky, wrong, or dangerous** → STOP them with care:
+   "⚠️ Hold on, my friend! Before you do that, please know: [explain the risk]. Instead, here's the safe way: [step 1] [step 2] [step 3]. I've got your back! 🤲"
+
+🎯 **Needs step-by-step help** → Give crystal-clear numbered instructions:
+   "**Step 1:** [action]\n**Step 2:** [action]\n**Step 3:** [action]\n💡 Tip: [helpful hint]\n✅ You're ready! Reply if you need help."
 
 CREATOR: IBRAHIM ABDULLAHI
 BRAND: WISE KING INDUSTRY
