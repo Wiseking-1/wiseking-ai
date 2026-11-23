@@ -993,46 +993,6 @@ window.__wkCodeBlocks = {};
   const ENV_GEMINI_KEY = window.__WK_ENV__.GEMINI_API_KEY;
 </script>
 
-<!-- LINK TO STORY ENGINE -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const msgInput = document.getElementById('messageInput');
-  const linkBtn = document.getElementById('linkToStoryBtn');
-  if (msgInput && linkBtn) {
-    msgInput.addEventListener('input', function() {
-      const text = this.value;
-      const urlPattern = /(https?:\/\/[^\s]+)/g;
-      if (urlPattern.test(text)) { linkBtn.classList.add('show'); } 
-      else { linkBtn.classList.remove('show'); }
-    });
-  }
-});
-
-function convertLinkToStory() {
-  const input = document.getElementById('messageInput');
-  const rawText = input.value.trim();
-  if (!rawText) return;
-  const urlPattern = /(https?:\/\/[^\s]+)/g;
-  const links = rawText.match(urlPattern) || [];
-  let platform = "Social Media";
-  if (links.length > 0) {
-    const url = links[0].toLowerCase();
-    if (url.includes('tiktok')) platform = "TikTok";
-    else if (url.includes('youtube') || url.includes('youtu.be')) platform = "YouTube";
-    else if (url.includes('instagram')) platform = "Instagram";
-  }
-  const magicPrompt = `I am sharing a ${platform} link. Because you cannot watch it directly, I am giving you the context. \n\nLink: ${rawText}\n\nPlease generate a complete, copy-ready ZAM-ZAM Nollywood Movie Script/Prompt based on this link. Use the exact format from your System Prompt:\n- Scene Title\n- Setting\n- Characters\n- Camera Movement\n- Lighting\n- Action Sequence (Beginning, Middle, End)\n- Dialogue (2 short lines)\n- Style Reference\n\nMake it deeply emotional, educational, and culturally Nigerian. Teach a powerful moral lesson.`;
-  input.value = '';
-  document.getElementById('linkToStoryBtn').classList.remove('show');
-  input.value = magicPrompt;
-  const sendBtn = document.getElementById('sendBtn');
-  if (sendBtn) { sendBtn.click(); } else {
-    const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13 });
-    input.dispatchEvent(enterEvent);
-  }
-}
-</script>
-  
 <!-- FIREBASE AUTH -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
@@ -1705,8 +1665,6 @@ END — MASTER SYSTEM
 ==================================================
 `;
   
-<!-- MAIN APP SCRIPT -->
-<script>
 window.chats = [];
 window.activeChatId = null;
 let uploadedFiles = [];
@@ -2600,17 +2558,26 @@ async function sendMessageWithFallback(userText, chatHistory, signal) {
     return { success: false, error: 'Slow down — sending too fast. Try again in a moment.' };
   }
   chatHistory = chatHistory || [];
+  
   const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY;
-  const model = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
+  let model = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
+  
+  // 2027 UPDATE: If Search Mode is ON, or user asks for current news, use the Web-Grounded model
+  const needsWeb = searchMode || /(latest|news|current|today|who is|what is happening|weather|price of|search|google)/i.test(userText);
+  if (needsWeb) {
+    model = 'gemini-3.1-flash'; // This model has built-in Google Search Grounding
+  }
+
   const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + apiKey;
   const now = new Date().toLocaleString('en-NG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
-  const memoryBlock = getMemoryEnabled() ? buildMemoryContext() : '';
   
+  const memoryBlock = getMemoryEnabled() ? buildMemoryContext() : '';
   const activePersona = localStorage.getItem('wk_persona') || 'default';
   const personaBlock = PERSONAS[activePersona] || '';
 
   const systemText = SYSTEM_PROMPT + personaBlock + (memoryBlock ? '\n\n' + memoryBlock : '');
   const contents = [];
+  
   chatHistory.slice(-MEMORY_HISTORY_LIMIT).forEach(m => {
     const role = m.role === 'user' ? 'user' : 'model';
     const parts = [{ text: (m.content || '').slice(0, 6000) }];
@@ -2622,6 +2589,7 @@ async function sendMessageWithFallback(userText, chatHistory, signal) {
     }
     contents.push({ role, parts });
   });
+  
   const currentParts = [{ text: '[Today is ' + now + ']\n\nUser: ' + userText }];
   const lastMsg = chatHistory[chatHistory.length - 1];
   if (lastMsg?.role === 'user' && Array.isArray(lastMsg.attachments)) {
@@ -2632,11 +2600,21 @@ async function sendMessageWithFallback(userText, chatHistory, signal) {
   }
   contents.push({ role: 'user', parts: currentParts });
   
+  // 2027 UPDATE: The Body payload with Web Grounding + No Cut-offs
   const body = { 
     systemInstruction: { parts: [{ text: systemText }] }, 
     contents,
-    generationConfig: { maxOutputTokens: 8192, temperature: 0.7 }
+    generationConfig: { 
+      maxOutputTokens: 8192, // Forces the AI to write the full message
+      temperature: 0.7,
+      topP: 0.95
+    }
   };
+
+  // If the model supports Web Search, we tell Gemini to ground its answer in real Google results
+  if (model === 'gemini-3.1-flash' || searchMode) {
+    body.tools = [{ googleSearch: {} }];
+  }
 
   let attempts = 0;
   const maxAttempts = 3;
@@ -2662,13 +2640,30 @@ async function sendMessageWithFallback(userText, chatHistory, signal) {
       }
 
       const data = await res.json();
-      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      let reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
       
       if (!reply) {
         attempts++;
         await new Promise(r => setTimeout(r, 1500));
         continue;
       }
+
+      // 2027 UPDATE: If the AI cut off mid-sentence, we automatically ask it to finish
+      if (!reply.trim().match(/[.!?\"']$/) && reply.length > 50) {
+        const finishPrompt = "Continue exactly from where you stopped. Do not repeat yourself, just finish the last sentence and complete the thought.";
+        const finishContents = [...contents, { role: 'user', parts: [{ text: finishPrompt }] }];
+        const finishBody = { systemInstruction: body.systemInstruction, contents: finishContents, generationConfig: body.generationConfig };
+        
+        try {
+          const finishRes = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(finishBody) });
+          if (finishRes.ok) {
+            const finishData = await finishRes.json();
+            const finishText = finishData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            if (finishText) reply = reply + ' ' + finishText;
+          }
+        } catch(e) { /* Ignore finish error, just show what we have */ }
+      }
+      
       return { success: true, reply };
 
     } catch (err) {
@@ -2959,5 +2954,5 @@ if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoa
 else { init(); }
 </script>
 </body>
-  </html>
+</html>
   
