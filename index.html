@@ -1678,6 +1678,7 @@ let currentShareTarget = null;
 let thinkMode = false, searchMode = false;
 const MEMORY_HISTORY_LIMIT = 60;
 
+// Rate limiter
 const __rateLimit = { timestamps: [], maxPerMinute: 20 };
 function __canCallApi() {
   const now = Date.now();
@@ -1690,7 +1691,7 @@ function __canCallApi() {
 const $ = id => document.getElementById(id);
 const esc = t => { const d = document.createElement('div'); d.textContent = String(t==null?'':t); return d.innerHTML; };
 
-function showToast(msg){ const t = $('toast'); if (!t) return; t.textContent = msg; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), 2500); }
+function showToast(msg){ const t = $('toast'); if (!t) return; t.textContent = msg; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove('show'), 2000); }
 window.showToast = showToast;
 
 function showAuthError(msg){ const el = $('authError'); if (!el) return; el.textContent = msg; el.classList.add('show'); $('authSuccess')?.classList.remove('show'); clearTimeout(el._t); el._t = setTimeout(()=>el.classList.remove('show'), 6000); }
@@ -1722,9 +1723,11 @@ function forceShowLoginScreen(){
   if (ma){ ma.style.opacity = '0'; ma.style.display = 'none'; }
   if (ls){ ls.classList.remove('hidden'); ls.style.opacity = '1'; ls.style.pointerEvents = 'auto'; }
   ['signInEmail','signInPassword','signUpName','signUpEmail','signUpPassword','resetEmail'].forEach(id => { const el = $(id); if (el) el.value = ''; });
-  $('authError')?.classList.remove('show'); $('authSuccess')?.classList.remove('show');
+  $('authError')?.classList.remove('show');
+  $('authSuccess')?.classList.remove('show');
   window.chats = []; window.activeChatId = null;
-  renderChats(); renderMessages(); switchAuthTab('signin');
+  renderChats(); renderMessages();
+  switchAuthTab('signin');
 }
 window.forceShowLoginScreen = forceShowLoginScreen;
 
@@ -1734,21 +1737,21 @@ function skipLoginAsGuest(){
   localStorage.setItem('wk_user_email', 'guest@local.mode');
   localStorage.setItem('wk_user_name', 'Guest');
   if (!localStorage.getItem('wk_joined')) localStorage.setItem('wk_joined', new Date().toLocaleDateString());
-  
-  // Bypass the popup and go straight in
   unlockApp('Guest', 'Local Mode', null);
   loadChatsFromLocalStorage();
   showToast('👤 Welcome, Guest — Local Mode');
 }
 window.skipLoginAsGuest = skipLoginAsGuest;
 
+// Fixed avatar rendering with initials
 function applyAvatar(data){
   if (!data || typeof data !== 'string') data = 'WK';
   let html;
   if (data.startsWith('http') || data.startsWith('data:image')) {
     html = '<img src="' + data + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%" alt="avatar">';
-  } else if (data === 'WK') { html = window.WK_LOGO_INLINE(36); } 
-  else {
+  } else if (data === 'WK') {
+    html = window.WK_LOGO_INLINE(36);
+  } else {
     const parts = data.trim().split(/\s+/).filter(Boolean);
     const initials = (parts[0]?.[0] || '') + (parts.length > 1 ? parts[parts.length-1][0] : '');
     html = esc((initials.toUpperCase() || 'U'));
@@ -1765,10 +1768,12 @@ function handleProfilePhotoUpload(e){
   if (f.size > 5*1024*1024) return showToast('⚠️ Max 5MB');
   const fr = new FileReader();
   fr.onload = ev => { try { localStorage.setItem('wk_user_avatar', ev.target.result); applyAvatar(ev.target.result); showToast('✅ Photo updated!'); } catch(err) { showToast('⚠️ Storage full'); } };
-  fr.readAsDataURL(f); e.target.value = '';
+  fr.readAsDataURL(f);
+  e.target.value = '';
 }
 window.handleProfilePhotoUpload = handleProfilePhotoUpload;
 
+// ---- Markdown ----
 function renderMarkdown(src){
   let s = esc(src || '');
   const SENTINEL = '\u0001WKCB' + Math.random().toString(36).slice(2,6) + '\u0001';
@@ -1822,16 +1827,19 @@ window.wkDownloadCode = function(blockId, filename){
     const blob = new Blob([window.__wkCodeBlocks[blockId] || ''], {type:'text/plain'});
     const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = filename || 'wiseking.txt';
     document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url), 1000); showToast('✅ Downloaded');
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+    showToast('✅ Downloaded');
   } catch(e){ showToast('⚠️ Download failed'); }
 };
 window.wkRunCode = function(blockId){
   const code = window.__wkCodeBlocks[blockId] || '';
   if (!code) return;
-  const w = window.open('', '_blank'); if (!w) return showToast('⚠️ Allow popups');
+  const w = window.open('', '_blank');
+  if (!w) return showToast('⚠️ Allow popups');
   w.document.open(); w.document.write(code); w.document.close();
 };
 
+// ---- Code highlighting ----
 let _hlTimer = null;
 function highlightCodeBlocks(){
   if (typeof Prism === 'undefined') return;
@@ -1842,6 +1850,7 @@ function highlightCodeBlocks(){
 }
 window.highlightCodeBlocks = highlightCodeBlocks;
 
+// ---- Chat storage ----
 let _saveTimer = null;
 function loadChatsFromLocalStorage(){
   try { const s = localStorage.getItem('wk_chats'); if (s) window.chats = JSON.parse(s); } catch(e){ window.chats = []; }
@@ -1857,6 +1866,12 @@ function saveChats(){
   localStorage.setItem('wk_chats', JSON.stringify(window.chats));
   localStorage.setItem('wk_active_chat', window.activeChatId || '');
   renderChats();
+  if (window.WK_CLOUD && localStorage.getItem('wk_user_uid') && !localStorage.getItem('wk_guest_mode')){
+    clearTimeout(_saveTimer);
+    _saveTimer = setTimeout(() => {
+      window.WK_CLOUD.saveUserData(localStorage.getItem('wk_user_uid'), { chats: window.chats, vault: vaultMemories, memory: crossChatMemory, music: musicLibrary });
+    }, 900);
+  }
 }
 window.saveChats = saveChats;
 
@@ -1879,7 +1894,8 @@ function createNewChat(){
   const id = 'chat-' + Date.now();
   window.chats.unshift({ id, title:'New chat', messages:[], createdAt:Date.now() });
   window.activeChatId = id;
-  saveChats(); renderMessages(); closeSidebar(); $('messageInput')?.focus();
+  saveChats(); renderMessages(); closeSidebar();
+  $('messageInput')?.focus();
 }
 window.createNewChat = createNewChat;
 
@@ -1959,12 +1975,18 @@ document.addEventListener('click', e => {
   closeChatMenu();
 }, true);
 
+// ---- Profile ----
 function setupProfileButton(){
   const avatar = $('topProfileAvatar'), menu = $('topProfileMenu');
   if (!avatar || !menu) return;
   if (avatar._bound) return; avatar._bound = true;
   avatar.addEventListener('click', e => { e.stopPropagation(); menu.classList.toggle('show'); });
-  avatar.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); menu.classList.toggle('show'); } });
+  avatar.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      menu.classList.toggle('show');
+    }
+  });
   document.addEventListener('click', e => {
     if (!menu.classList.contains('show')) return;
     if (e.target.closest('#topProfileMenu') || e.target === avatar || avatar.contains(e.target)) return;
@@ -1975,12 +1997,14 @@ window.setupProfileButton = setupProfileButton;
 function closeTopProfileMenu(){ $('topProfileMenu')?.classList.remove('show'); }
 window.closeTopProfileMenu = closeTopProfileMenu;
 
+// ---- Settings ----
 function openSettings(){
   $('settingsModal').classList.add('show'); closeSidebar();
   const k1 = localStorage.getItem('wk_api_key'); if (k1) $('apiKeyInput').value = k1;
   const dk = localStorage.getItem('wk_deepseek_key'); if (dk) $('deepseekKeyInput').value = dk;
   const m = localStorage.getItem('wk_model'); if (m) $('modelSelect').value = m;
-  const p = localStorage.getItem('wk_persona') || 'default'; if($('personaSelect')) $('personaSelect').value = p;
+  const p = localStorage.getItem('wk_persona') || 'default'; 
+  if($('personaSelect')) $('personaSelect').value = p;
 }
 window.openSettings = openSettings;
 function saveSettings(){
@@ -2017,6 +2041,7 @@ window.toggleWebSearchSetting = toggleWebSearchSetting;
 window.toggleMemorySetting = toggleMemorySetting;
 window.toggleStreamingSetting = toggleStreamingSetting;
 
+// ---- Vault ----
 function loadVault(){ try { vaultMemories = JSON.parse(localStorage.getItem('wk_vault') || '[]'); } catch(e){ vaultMemories = []; } updateVaultBadge(); }
 function saveVault(){ localStorage.setItem('wk_vault', JSON.stringify(vaultMemories)); updateVaultBadge(); }
 function updateVaultBadge(){ const b = $('vaultCountBadge'); if (b) b.textContent = vaultMemories.length; }
@@ -2032,6 +2057,7 @@ window.openVault = openVault;
 window.addVaultMemory = addVaultMemory;
 window.deleteVaultMemory = deleteVaultMemory;
 
+// ---- Memory ----
 function loadCrossChatMemory(){ try { crossChatMemory = JSON.parse(localStorage.getItem('wk_cross_memory') || '[]'); } catch(e){ crossChatMemory = []; } updateMemoryBadge(); }
 function saveCrossChatMemory(){ localStorage.setItem('wk_cross_memory', JSON.stringify(crossChatMemory.slice(0,100))); updateMemoryBadge(); }
 function updateMemoryBadge(){ const b = $('memoryCountBadge'); if (b) b.textContent = crossChatMemory.length; }
@@ -2045,6 +2071,7 @@ function deleteMemoryItem(i){ crossChatMemory.splice(i,1); saveCrossChatMemory()
 window.openMemoryPanel = openMemoryPanel;
 window.deleteMemoryItem = deleteMemoryItem;
 
+// ---- Music ----
 function loadMusic(){ try { musicLibrary = JSON.parse(localStorage.getItem('wk_music') || '[]'); } catch(e){ musicLibrary = []; } updateMusicBadge(); }
 function saveMusic(){ localStorage.setItem('wk_music', JSON.stringify(musicLibrary.slice(0,200))); updateMusicBadge(); }
 function updateMusicBadge(){ const b = $('musicCountBadge'); if (b) b.textContent = musicLibrary.length; }
@@ -2079,6 +2106,7 @@ async function generateLyricsFromPanel(){
 window.generateMusicFromPanel = generateMusicFromPanel;
 window.generateLyricsFromPanel = generateLyricsFromPanel;
 
+// ---- PDF ----
 function openPdfChatPanel(){ $('pdfChatPanel').classList.add('show'); closeSidebar(); }
 window.openPdfChatPanel = openPdfChatPanel;
 let currentPdfText = '', currentPdfName = '';
@@ -2107,6 +2135,7 @@ async function askPdfQuestion(){
 }
 window.askPdfQuestion = askPdfQuestion;
 
+// ---- Translate ----
 function openTranslatePanel(){ $('translatePanel').classList.add('show'); closeSidebar(); }
 function swapLanguages(){
   const from = $('translateFrom'), to = $('translateTo');
@@ -2116,7 +2145,7 @@ function swapLanguages(){
 }
 window.openTranslatePanel = openTranslatePanel;
 window.swapLanguages = swapLanguages;
-const LANG_NAMES = {auto:'auto-detect',en:'English',ha:'Hausa',ar:'Arabic',fr:'French',yo:'Yoruba',ig:'Igbo',sw:'Swahili',es:'Spanish',pcm:'Nigerian Pidgin',kr:'Kanuri',tiv:'Tiv',ibb:'Ibibio',efi:'Efik',zh:'Chinese',hi:'Hindi'};
+const LANG_NAMES = {auto:'auto-detect',en:'English',ha:'Hausa',ar:'Arabic',fr:'French',yo:'Yoruba',ig:'Igbo',sw:'Swahili',es:'Spanish'};
 async function doTranslate(){
   const text = $('translateInput').value.trim(); if (!text) return showToast('Enter text');
   const from = $('translateFrom').value, to = $('translateTo').value;
@@ -2128,6 +2157,7 @@ async function doTranslate(){
 }
 window.doTranslate = doTranslate;
 
+// ---- Data ----
 function openDataAnalysisPanel(){ $('dataAnalysisPanel').classList.add('show'); closeSidebar(); }
 window.openDataAnalysisPanel = openDataAnalysisPanel;
 async function handleDataUpload(e){
@@ -2175,6 +2205,7 @@ async function aiDataInsight(headers, data){
   else box.innerHTML = '<div class="result-card"><p>⚠️ Failed</p></div>';
 }
 
+// ---- Downloads ----
 function openDownloadHub(){ $('downloadHubPanel').classList.add('show'); closeSidebar(); renderDownloadHub(); }
 window.openDownloadHub = openDownloadHub;
 function renderDownloadHub(){
@@ -2193,6 +2224,7 @@ function downloadText(encoded, filename){
 }
 window.downloadText = downloadText;
 
+/* ---- Search Web ---- */
 function openSearchWebPanel(){ $('searchWebPanel').classList.add('show'); closeSidebar(); }
 window.openSearchWebPanel = openSearchWebPanel;
 
@@ -2225,6 +2257,7 @@ async function askAiToSearch(query) {
 }
 window.askAiToSearch = askAiToSearch;
 
+// ---- Build App ----
 const BUILD_IDEAS = [
   {t:'Todo List App',d:'Track daily tasks',icon:'✅'},
   {t:'Calculator',d:'Full working calculator',icon:'🧮'},
@@ -2252,21 +2285,27 @@ function buildApp(name){
 }
 window.buildApp = buildApp;
 
+// ---- Pricing & Paystack ----
 function openPricingPanel(){ $('pricingPanel').classList.add('show'); closeSidebar(); }
 window.openPricingPanel = openPricingPanel;
 
 function upgradeToPlan(plan, amount){
+  // IMPORTANT: Replace this with your actual Paystack public key
   const PAYSTACK_PUBLIC_KEY = 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE'; 
+  
   if (PAYSTACK_PUBLIC_KEY === 'pk_test_YOUR_PAYSTACK_PUBLIC_KEY_HERE') {
-    return showToast('💳 Please add your Paystack Public Key to enable payments.');
+    return showToast('💳 Please add your Paystack Public Key in the code to enable payments.');
   }
+
   let handler = PaystackPop.setup({
     key: PAYSTACK_PUBLIC_KEY,
     email: localStorage.getItem('wk_user_email') || 'guest@wiseking.com',
-    amount: amount * 100,
+    amount: amount * 100, // Paystack uses Kobo (₦5,000 = 500000)
     currency: 'NGN',
     ref: 'WK_' + Math.floor((Math.random() * 1000000000) + 1),
-    onClose: function(){ showToast('⚠️ Payment closed.'); },
+    onClose: function(){
+      showToast('⚠️ Payment window closed.');
+    },
     callback: function(response){
       showToast('✅ Payment successful! Ref: ' + response.reference);
       localStorage.setItem('wk_plan', plan);
@@ -2277,6 +2316,7 @@ function upgradeToPlan(plan, amount){
 }
 window.upgradeToPlan = upgradeToPlan;
 
+// ---- Chat search ----
 function toggleChatSearch(){
   const bar = $('chatSearchBar'); if (!bar) return;
   const showing = bar.classList.toggle('show');
@@ -2292,6 +2332,7 @@ document.addEventListener('input', e => {
   });
 });
 
+// ---- Modes & Voice ----
 function toggleThinkMode(){ thinkMode = !thinkMode; $('chipThink').classList.toggle('active', thinkMode); showToast(thinkMode ? '🧠 ON' : '🧠 OFF'); }
 function toggleSearchMode(){ searchMode = !searchMode; $('chipSearch').classList.toggle('active', searchMode); showToast(searchMode ? '🌐 ON' : '🌐 OFF'); }
 
@@ -2304,32 +2345,50 @@ function startVoiceInput(){
   rec.start(); showToast('🎙️ Listening...');
 }
 
+// NEW: Voice Chat Mode (Speaks back)
 function startVoiceChat() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return showToast('⚠️ Voice not supported');
+  
   const rec = new SR(); 
   rec.lang = 'en-NG';
+  
   rec.onresult = async (ev) => { 
     const t = ev.results[0][0].transcript; 
     const input = document.getElementById('messageInput');
-    input.value = t; handleInputChange(); sendMessage(); 
+    input.value = t;
+    handleInputChange();
+    
+    // Send the message
+    sendMessage(); 
+    
+    // Wait a moment for AI to reply, then read it aloud
     setTimeout(() => {
       const chat = window.chats.find(c => c.id === window.activeChatId);
       const lastMsg = chat.messages[chat.messages.length - 1];
-      if (lastMsg && lastMsg.role === 'ai') { speakText(lastMsg.content); }
+      if (lastMsg && lastMsg.role === 'ai') {
+        speakText(lastMsg.content);
+      }
     }, 4000); 
   };
+  
   rec.start(); 
   showToast('🎙️ Listening (Voice Mode)...');
 }
 
+// NEW: Text-to-Speech (Read Aloud)
 function speakText(text) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel(); 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-NG'; utterance.rate = 1.0; utterance.pitch = 1.0;
-    window.speechSynthesis.speak(utterance); showToast('🔊 Reading aloud...');
-  } else { showToast('⚠️ Text-to-Speech not supported'); }
+    utterance.lang = 'en-NG'; 
+    utterance.rate = 1.0; 
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+    showToast('🔊 Reading aloud...');
+  } else {
+    showToast('⚠️ Text-to-Speech not supported');
+  }
 }
 
 window.toggleThinkMode = toggleThinkMode;
@@ -2338,12 +2397,16 @@ window.startVoiceInput = startVoiceInput;
 window.startVoiceChat = startVoiceChat;
 window.speakText = speakText;
 
+// ---- Input handling ----
 function handleInputChange(){
   const input = $('messageInput'), btn = $('sendBtn');
   if (!input || !btn) return;
   const has = input.value.trim().length > 0 || uploadedFiles.length > 0;
-  if (isSending) { btn.classList.remove('hidden'); } 
-  else { btn.classList.toggle('hidden', !has); }
+  if (isSending) {
+    btn.classList.remove('hidden');
+  } else {
+    btn.classList.toggle('hidden', !has);
+  }
   input.style.height = 'auto';
   const max = window.innerHeight * 0.7;
   input.style.height = Math.min(input.scrollHeight, max) + 'px';
@@ -2378,7 +2441,8 @@ async function handleFiles(e){
             img.onerror = () => resolve(ev.target.result);
             img.src = ev.target.result;
           };
-          fr.onerror = reject; fr.readAsDataURL(file);
+          fr.onerror = reject;
+          fr.readAsDataURL(file);
         });
         uploadedFiles.push({type:'image', dataUrl, mime:'image/jpeg', name:file.name});
       } else if (fname.endsWith('.pdf')){
@@ -2425,6 +2489,7 @@ window.toggleSection = toggleSection;
 window.toggleSidebar = toggleSidebar;
 window.closeSidebar = closeSidebar;
 
+// ---- Message rendering ----
 function renderMessages(){
   const area = $('messagesArea'); if (!area) return;
   area.innerHTML = '';
@@ -2454,10 +2519,13 @@ function buildMessageEl(msg, idx, chatId){
     content.classList.add('thinking');
     content.innerHTML = '<span class="thinking-crown">'+window.WK_LOGO_INLINE(26)+'</span><span class="thinking-text">Wise King is thinking</span><span class="thinking-dots"><span></span><span></span><span></span></span>';
   } else {
-    let htmlContent = '<div class="md" id="msg-text-'+idx+'">' + renderMarkdown(msg.content || '') + '</div>';
+    let htmlContent = '<div class="md">' + renderMarkdown(msg.content || '') + '</div>';
+    
+    // AI Image Generation Display
     if (msg.imageUrl) {
       htmlContent += `<div style="margin-top:12px;"><img src="${msg.imageUrl}" alt="AI Generated" style="max-width:100%;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);"><br><a href="${msg.imageUrl}" target="_blank" download class="btn solid" style="margin-top:8px;font-size:12px;padding:6px 12px;"><i class="fas fa-download"></i> Download Image</a></div>`;
     }
+
     if (msg.attachments && msg.attachments.length){
       const aHtml = msg.attachments.map(att => {
         if (att.type === 'image') return '<img src="'+att.dataUrl+'" style="max-width:220px;border-radius:10px;margin-top:8px;display:block" alt="attachment">';
@@ -2487,6 +2555,11 @@ function buildMessageEl(msg, idx, chatId){
     body.appendChild(bar);
   }
   el.appendChild(body);
+  
+  // Add ID to md div for TTS reading
+  const mdDiv = el.querySelector('.md');
+  if (mdDiv) mdDiv.id = 'msg-text-' + idx;
+
   return el;
 }
 
@@ -2536,6 +2609,7 @@ window.handleDeleteMessage = handleDeleteMessage;
 window.saveEditedMessage = saveEditedMessage;
 window.confirmDeleteMessage = confirmDeleteMessage;
 
+// ---- API ----
 function parseDataUrl(dataUrl){
   try { const m = dataUrl.match(/^data:([^;]+);base64,(.+)$/); return m ? {mime: m[1], base64: m[2]} : null; } catch(e){ return null; }
 }
@@ -2546,6 +2620,7 @@ function buildMemoryContext(){
   return parts.join('\n');
 }
 
+// Personas for the AI
 const PERSONAS = {
   default: "", 
   coder: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a strict, highly efficient senior software engineer. Only provide code and brief, technical explanations. No fluff, no motivational talk.]",
@@ -2695,6 +2770,7 @@ function sendMessage(){
     }
     if (chat.title === 'New chat' && text) chat.title = text.slice(0, 32);
 
+    // Intercept Image Requests
     const isImageReq = text.toLowerCase().includes('generate image') || text.toLowerCase().includes('create image') || text.toLowerCase().includes('draw ');
     if (isImageReq && text.length > 15) {
       chat.messages.push({role:'user', content: text, createdAt: Date.now()});
@@ -2751,19 +2827,21 @@ async function triggerResponse(chat, userMsg){
   }
 }
 
+// Export Chat to PDF
 function downloadChatAsPDF() {
   const chat = window.chats.find(c => c.id === window.activeChatId);
   if (!chat || chat.messages.length === 0) return showToast('No chat to export');
   
   showToast('📄 Generating PDF...');
   const element = document.createElement('div');
-  element.style.padding = '20px'; element.style.fontFamily = 'Arial, sans-serif';
-  element.innerHTML = `<h1 style="text-align:center; color:#10B981;">Wise King AI Chat</h1><hr>`;
+  element.style.padding = '20px';
+  element.style.fontFamily = 'Arial, sans-serif';
+  element.innerHTML = `<h1 style="text-align:center; color:#6366f1;">Wise King AI Chat</h1><hr>`;
   
   chat.messages.forEach(msg => {
     element.innerHTML += `
       <div style="margin-bottom: 20px; page-break-inside: avoid;">
-        <strong style="color: ${msg.role === 'user' ? '#10B981' : '#FBBF24'}">
+        <strong style="color: ${msg.role === 'user' ? '#6366f1' : '#10b981'}">
           ${msg.role === 'user' ? 'User' : 'Wise King AI'}:
         </strong>
         <p style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${msg.content}</p>
@@ -2772,18 +2850,23 @@ function downloadChatAsPDF() {
   });
   
   html2pdf().from(element).set({
-    margin: 1, filename: 'WiseKing-Chat.pdf',
-    html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    margin: 1,
+    filename: 'WiseKing-Chat.pdf',
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
   }).save().then(() => showToast('✅ PDF Downloaded!'));
 }
 window.downloadChatAsPDF = downloadChatAsPDF;
 
+// ---- Export / Import ----
 function exportData(){
   const data = {chats: window.chats, vault: vaultMemories, memory: crossChatMemory, music: musicLibrary, exportedAt: new Date().toISOString()};
   const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'wiseking-backup-'+Date.now()+'.json';
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'wiseking-backup-'+Date.now()+'.json';
   document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000); showToast('✅ Exported');
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast('✅ Exported');
 }
 window.exportData = exportData;
 function importData(e){
@@ -2799,22 +2882,31 @@ function importData(e){
       showToast('✅ Imported');
     } catch(err){ showToast('⚠️ Invalid file'); }
   };
-  fr.readAsText(file); e.target.value = '';
+  fr.readAsText(file);
+  e.target.value = '';
 }
 window.importData = importData;
 
+// ---- Install ----
 window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); deferredInstallPrompt = e; $('installAppBtn').style.display = 'inline-flex';
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  $('installAppBtn').style.display = 'inline-flex';
 });
 window.addEventListener('appinstalled', () => {
-  deferredInstallPrompt = null; $('installAppBtn').style.display = 'none'; showToast('✅ Installed!');
+  deferredInstallPrompt = null;
+  $('installAppBtn').style.display = 'none';
+  showToast('✅ Installed!');
 });
 async function promptInstallApp(){
   if (!deferredInstallPrompt) return showToast('Menu → "Add to Home Screen"');
-  deferredInstallPrompt.prompt(); await deferredInstallPrompt.userChoice; deferredInstallPrompt = null;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
 }
 window.promptInstallApp = promptInstallApp;
 
+// ---- Save on close ----
 window.addEventListener('beforeunload', () => {
   try { localStorage.setItem('wk_chats', JSON.stringify(window.chats || [])); localStorage.setItem('wk_active_chat', window.activeChatId || ''); } catch(e){}
 });
@@ -2824,31 +2916,59 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
+// ============================================================
+// WISE KING COACH
+// ============================================================
 function openCoachPanel(){
-  document.getElementById('coachPanel').classList.add('show'); closeSidebar(); generateDailyTip();
+  document.getElementById('coachPanel').classList.add('show');
+  closeSidebar();
+  generateDailyTip();
 }
 window.openCoachPanel = openCoachPanel;
 
 async function generateDailyTip(){
-  const box = document.getElementById('coachDailyTip'); if (!box) return;
+  const box = document.getElementById('coachDailyTip');
+  if (!box) return;
   box.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Crafting your tip...';
   const pillars = ['Knowledge','Skill','Wealth','Health','Character'];
   const pillar = pillars[Math.floor(Math.random() * pillars.length)];
   const day = new Date().toLocaleDateString('en-NG', {weekday:'long', month:'short', day:'numeric'});
-  const prompt = 'Give me ONE Daily Tip in this exact format:\n\n🌅 TIP OF THE DAY\nPillar: ' + pillar + '\nTip: [2–3 practical sentences for a user in Nigeria. ' + day + '.]\nAction: [one thing to do in the next 24 hours]\nBismillah. Go and become better.';
+  const prompt =
+    'Give me ONE Daily Tip in this exact format:\n\n' +
+    '🌅 TIP OF THE DAY\n' +
+    'Pillar: ' + pillar + '\n' +
+    'Tip: [2–3 practical sentences for a user in Nigeria. ' + day + '.]\n' +
+    'Action: [one thing to do in the next 24 hours]\n' +
+    'Bismillah. Go and become better.';
   const res = await sendMessageWithFallback(prompt);
-  if (res.success){ box.innerHTML = '<div class="md">' + renderMarkdown(res.reply) + '</div>'; highlightCodeBlocks(); } 
-  else { box.innerHTML = '<span style="color:#fca5a5">⚠️ ' + esc(res.error||'Try again') + '</span>'; }
+  if (res.success){
+    box.innerHTML = '<div class="md">' + renderMarkdown(res.reply) + '</div>';
+    highlightCodeBlocks();
+  } else {
+    box.innerHTML = '<span style="color:#fca5a5">⚠️ ' + esc(res.error||'Try again') + '</span>';
+  }
 }
 window.generateDailyTip = generateDailyTip;
 
 async function coachAskPillar(pillar){
-  const out = document.getElementById('coachAnswerOutput'); if (!out) return;
+  const out = document.getElementById('coachAnswerOutput');
+  if (!out) return;
   out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Coach is thinking about ' + pillar + '...</div>';
-  const prompt = 'You are Wise King Coach. Teach me one improvement in the ' + pillar + ' pillar.\nFormat:\n🎯 PILLAR: ' + pillar + '\nINSIGHT: [2 sentences]\nTODAY\'S ACTION: [one concrete step]\nCOMMON MISTAKE: [one warning]\nKeep it short, practical, Nigeria-aware where relevant.';
+  const prompt =
+    'You are Wise King Coach. Teach me one improvement in the ' + pillar + ' pillar.\n' +
+    'Format:\n' +
+    '🎯 PILLAR: ' + pillar + '\n' +
+    'INSIGHT: [2 sentences]\n' +
+    'TODAY\'S ACTION: [one concrete step]\n' +
+    'COMMON MISTAKE: [one warning]\n' +
+    'Keep it short, practical, Nigeria-aware where relevant.';
   const res = await sendMessageWithFallback(prompt);
-  if (res.success){ out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>'; highlightCodeBlocks(); } 
-  else { out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>'; }
+  if (res.success){
+    out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>';
+    highlightCodeBlocks();
+  } else {
+    out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
+  }
 }
 window.coachAskPillar = coachAskPillar;
 
@@ -2857,10 +2977,24 @@ async function generate7DayPlan(){
   if (!goal) return showToast('Type your goal first');
   const out = document.getElementById('coachPlanOutput');
   out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Building your 7-day plan...</div>';
-  const prompt = 'Create a 7-Day Improvement Plan for this goal: "' + goal + '".\nFormat each day like this:\n\nDAY 1 — [Theme]\n  • Action: [one clear task]\n  • Time: [minutes needed]\n  • Success marker: [how I know it is done]\n\n...continue for Days 2–7.\n\nMake each action realistic for one person with limited budget and time.\nEnd with: "Bismillah. Consistency beats intensity."';
+  const prompt =
+    'Create a 7-Day Improvement Plan for this goal: "' + goal + '".\n' +
+    'Format each day like this:\n\n' +
+    'DAY 1 — [Theme]\n' +
+    '  • Action: [one clear task]\n' +
+    '  • Time: [minutes needed]\n' +
+    '  • Success marker: [how I know it is done]\n\n' +
+    '...continue for Days 2–7.\n\n' +
+    'Make each action realistic for one person with limited budget and time.\n' +
+    'End with: "Bismillah. Consistency beats intensity."';
   const res = await sendMessageWithFallback(prompt);
-  if (res.success){ out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>'; highlightCodeBlocks(); showToast('✅ Plan ready!'); } 
-  else { out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>'; }
+  if (res.success){
+    out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>';
+    highlightCodeBlocks();
+    showToast('✅ Plan ready!');
+  } else {
+    out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
+  }
 }
 window.generate7DayPlan = generate7DayPlan;
 
@@ -2869,15 +3003,30 @@ async function coachAskFree(){
   if (!q) return showToast('Type your question');
   const out = document.getElementById('coachAnswerOutput');
   out.innerHTML = '<div class="result-card"><i class="fas fa-spinner fa-spin"></i> Coach is answering...</div>';
-  const prompt = 'As Wise King Coach, answer this self-improvement question:\n\n' + q + '\n\nFormat:\n💬 ANSWER: [clear, direct]\n💡 TIP: [one extra improvement insight]\n➡️ NEXT STEP: [one action to do today]\nKeep it practical and short. Nigeria/global context where helpful.';
+  const prompt =
+    'As Wise King Coach, answer this self-improvement question:\n\n' + q + '\n\n' +
+    'Format:\n' +
+    '💬 ANSWER: [clear, direct]\n' +
+    '💡 TIP: [one extra improvement insight]\n' +
+    '➡️ NEXT STEP: [one action to do today]\n' +
+    'Keep it practical and short. Nigeria/global context where helpful.';
   const res = await sendMessageWithFallback(prompt);
-  if (res.success){ out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>'; highlightCodeBlocks(); document.getElementById('coachAskInput').value = ''; } 
-  else { out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>'; }
+  if (res.success){
+    out.innerHTML = '<div class="result-card"><div class="md">' + renderMarkdown(res.reply) + '</div></div>';
+    highlightCodeBlocks();
+    document.getElementById('coachAskInput').value = '';
+  } else {
+    out.innerHTML = '<div class="result-card"><p>⚠️ ' + esc(res.error||'Failed') + '</p></div>';
+  }
 }
 window.coachAskFree = coachAskFree;
 
+// ============================================================
+// INIT
+// ============================================================
 function init(){
   try {
+    // ---- Logos ----
     $('loginLogo').innerHTML = window.WK_LOGO_INLINE(72);
     $('brandLogo').innerHTML = window.WK_LOGO_INLINE(32);
     $('welcomeLogo').innerHTML = window.WK_LOGO_INLINE(80);
@@ -2885,30 +3034,40 @@ function init(){
     $('pmAvatar').innerHTML = window.WK_LOGO_INLINE(48);
     $('sidebarAvatar').innerHTML = window.WK_LOGO_INLINE(36);
 
-    loadVault(); loadCrossChatMemory(); loadMusic(); loadTheme();
+    // ---- Load persisted state ----
+    loadVault();
+    loadCrossChatMemory();
+    loadMusic();
+    loadTheme();
 
     const savedName = localStorage.getItem('wk_user_name');
     if (savedName) $('sidebarName').textContent = savedName;
     const av = localStorage.getItem('wk_user_avatar');
     if (av) applyAvatar(av);
 
+    // ---- Settings toggles ----
     $('webSearchToggle')?.classList.toggle('on', getWebSearchEnabled());
     $('memoryToggle')?.classList.toggle('on', getMemoryEnabled());
     $('streamingToggle')?.classList.toggle('on', getStreamingEnabled());
-    updateModelBadge(); handleInputChange();
+    updateModelBadge();
+    handleInputChange();
 
+    // ---- Theme swatches ----
     document.querySelectorAll('.theme-swatch').forEach(sw => {
       sw.addEventListener('click', () => {
         const c = sw.dataset.color;
         document.documentElement.style.setProperty('--accent', c);
-        localStorage.setItem('wk_accent', c); showToast('🎨 Accent changed');
+        localStorage.setItem('wk_accent', c);
+        showToast('🎨 Accent changed');
       });
     });
     const savedAccent = localStorage.getItem('wk_accent');
     if (savedAccent) document.documentElement.style.setProperty('--accent', savedAccent);
 
+    // ---- Profile popup ----
     setupProfileButton();
 
+    // ---- Modals close on backdrop ----
     document.querySelectorAll('.modal-bg').forEach(m =>
       m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); })
     );
@@ -2916,42 +3075,68 @@ function init(){
       if (e.target.id === 'sharePopup') closeSharePopup();
     });
 
+    // ---- Escape key closes modals ----
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape'){ document.querySelectorAll('.modal-bg.show').forEach(m => m.classList.remove('show')); closeTopProfileMenu(); }
+      if (e.key === 'Escape'){
+        document.querySelectorAll('.modal-bg.show').forEach(m => m.classList.remove('show'));
+        closeTopProfileMenu();
+      }
     });
 
+    // ---- PDF.js worker ----
     if (typeof pdfjsLib !== 'undefined'){
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
+    // ---- Auto highlight code blocks ----
     const area = $('messagesArea');
-    if (area){ new MutationObserver(() => highlightCodeBlocks()).observe(area, {childList: true, subtree: true}); }
+    if (area){
+      new MutationObserver(() => highlightCodeBlocks())
+        .observe(area, {childList: true, subtree: true});
+    }
 
-    if (localStorage.getItem('wk_logged_in') === '1' && localStorage.getItem('wk_guest_mode') === '1'){
-      unlockApp('Guest', 'Local Mode', null); loadChatsFromLocalStorage();
+    // ---- Auth unlock ----
+    if (localStorage.getItem('wk_logged_in') === '1' &&
+        localStorage.getItem('wk_guest_mode') === '1'){
+      unlockApp('Guest', 'Local Mode', null);
+      loadChatsFromLocalStorage();
     } else if (localStorage.getItem('wk_logged_in') === '1'){
       loadChatsFromLocalStorage();
     }
 
+    // ---- Cached daily tip (once per day) ----
     setTimeout(() => {
-      const tipEl = document.getElementById('welcomeTipText'); if (!tipEl) return;
+      const tipEl = document.getElementById('welcomeTipText');
+      if (!tipEl) return;
       const todayKey = 'wk_tip_' + new Date().toDateString();
       const cached = localStorage.getItem(todayKey);
       if (cached) { tipEl.textContent = cached; return; }
-      sendMessageWithFallback('Give me ONE short Daily Tip in this format: 🌅 TIP: [1 sentence] — ACTION: [1 short step]. Be practical and Nigeria-aware.').then(r => {
+
+      sendMessageWithFallback(
+        'Give me ONE short Daily Tip in this format: 🌅 TIP: [1 sentence] — ACTION: [1 short step]. Be practical and Nigeria-aware.'
+      ).then(r => {
         if (r && r.success){
           const clean = String(r.reply).replace(/\n+/g, ' ').slice(0, 220);
-          tipEl.textContent = clean; localStorage.setItem(todayKey, clean);
-          Object.keys(localStorage).filter(k => k.startsWith('wk_tip_') && k !== todayKey).forEach(k => localStorage.removeItem(k));
+          tipEl.textContent = clean;
+          localStorage.setItem(todayKey, clean);
+          Object.keys(localStorage)
+            .filter(k => k.startsWith('wk_tip_') && k !== todayKey)
+            .forEach(k => localStorage.removeItem(k));
         }
       }).catch(() => {});
     }, 2000);
 
-  } catch(e){ console.warn('Init error:', e); }
+  } catch(e){
+    console.warn('Init error:', e);
+  }
 }
 
-if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init); } 
-else { init(); }
+if (document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 </script>
 </body>
 </html>
