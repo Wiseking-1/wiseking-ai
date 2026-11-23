@@ -40,8 +40,8 @@ body.light-mode ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15)}
 .brand-logo{width:34px;height:34px;border-radius:12px;background:transparent;display:flex;align-items:center;justify-content:center;overflow:visible}
 .welcome-logo{background:transparent!important;box-shadow:none!important;width:92px!important;height:92px!important; margin: 0 auto 24px auto;}
 .login-logo{background:transparent!important;box-shadow:none!important;width:80px!important;height:80px!important}
-
-/* --- UPDATED LOGIN SCREEN STYLES (PIC 2) --- */
+  
+/* --- UPDATED LOGIN SCREEN STYLES --- */
 #loginScreen {
   position: fixed; inset: 0; 
   background: radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.15) 0%, transparent 50%), 
@@ -54,21 +54,22 @@ body.light-mode ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15)}
 
 .login-card {
   width: 100%; max-width: 420px; 
-  background: rgba(18, 18, 24, 0.85);
+  background: rgba(18, 18, 24, 0.85); /* Darker, slightly transparent */
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.3); /* Emerald border */
   border-radius: 24px; padding: 38px 32px; 
   box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05); 
   animation: slideUp 0.5s; text-align: center; margin: auto; position: relative; overflow: hidden;
 }
 
+/* Centered Crown Icon */
 .crown-container {
   width: 70px; height: 70px; 
   background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15));
   border: 1px solid rgba(251, 191, 36, 0.4);
   border-radius: 50%; 
   display: flex; align-items: center; justify-content: center; 
-  margin: 0 auto 20px auto;
+  margin: 0 auto 20px auto; /* Keeps it perfectly centered */
   box-shadow: 0 0 30px rgba(251, 191, 36, 0.2);
   animation: crownFloat 3s ease-in-out infinite;
 }
@@ -77,31 +78,54 @@ body.light-mode ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15)}
 .login-title { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; color: #f8f8fb; position: relative; }
 .login-subtitle { color: var(--text-secondary); font-size: 13px; margin-bottom: 28px; position: relative; line-height: 1.5; }
 
+/* Google Button specifically */
 .google-btn { background: #ffffff; color: #1f2937; border: none; font-weight: 600; padding: 12px; border-radius: 12px; margin-bottom: 16px; }
 .google-btn:hover { background: #f3f4f6; transform: translateY(-1px); }
+
+/* Auth Divider */
 .auth-divider { color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 600; margin: 20px 0; letter-spacing: 1px; }
+
+/* Auth Tabs */
 .auth-tabs { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 4px; margin-bottom: 24px; }
 .auth-tab { padding: 10px; font-size: 13px; border-radius: 8px; color: var(--text-secondary); }
 .auth-tab.active { background: linear-gradient(135deg, #10B981, #059669); color: white; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+
+/* Inputs */
 .auth-input-wrap { position: relative; margin-bottom: 2px; }
 .auth-input { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); padding: 14px 14px 14px 44px; border-radius: 12px; font-size: 14px; }
 .auth-input:focus { border-color: #10B981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15); background: rgba(0,0,0,0.4); }
 .auth-input-wrap i { color: #6b7280; font-size: 15px; }
+
+/* Submit Buttons */
 .auth-submit { background: linear-gradient(135deg, #10B981, #059669); border-radius: 12px; padding: 14px; font-size: 14px; box-shadow: 0 4px 15px rgba(16,185,129,0.3); margin-top: 12px; }
 .auth-submit:hover { box-shadow: 0 6px 20px rgba(16,185,129,0.5); transform: translateY(-1px); }
+
+/* Skip Button */
 .skip-auth { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); padding: 12px; border-radius: 12px; margin-top: 20px; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .skip-auth:hover { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.2); }
-/* --- END LOGIN STYLES --- */
-
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.login-title{font-size:27px;font-weight:700;letter-spacing:-0.02em;margin-bottom:6px;position:relative}
+.login-subtitle{color:var(--text-secondary);font-size:14px;margin-bottom:24px;position:relative}
+.auth-tabs{display:flex;background:var(--bg-elevated);border-radius:var(--radius-md);padding:4px;margin-bottom:20px;gap:4px;position:relative}
+.auth-tab{flex:1;padding:9px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--text-secondary);font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;transition:all var(--transition-fast)}
+.auth-tab.active{background:var(--accent-gradient);color:white;box-shadow:var(--shadow-sm)}
 .auth-panel{display:none;flex-direction:column;gap:10px;position:relative}
 .auth-panel.active{display:flex}
+.auth-input-wrap{position:relative}
+.auth-input-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-tertiary);font-size:14px;pointer-events:none}
+.auth-input{width:100%;padding:13px 14px 13px 42px;background:var(--bg-input);border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-primary);font-size:14.5px;outline:none;font-family:inherit;transition:all var(--transition-fast)}
+.auth-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
 .auth-input::placeholder{color:var(--text-tertiary)}
+.auth-submit{width:100%;padding:13px;background:var(--accent-gradient);border:none;border-radius:var(--radius-md);color:white;font-size:14.5px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--shadow-sm);transition:all var(--transition-fast);margin-top:6px}
+.auth-submit:hover{box-shadow:var(--shadow-glow);transform:translateY(-1px)}
 .auth-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none}
 .auth-link{background:none;border:none;color:var(--accent-hover);font-size:13px;cursor:pointer;font-family:inherit;padding:6px;text-decoration:underline}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--text-tertiary);font-size:12px;position:relative}
 .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border-subtle)}
 .social-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:12px;margin-bottom:10px;border-radius:var(--radius-md);background:var(--bg-elevated);border:1px solid var(--border-default);color:var(--text-primary);font-size:14px;font-weight:500;cursor:pointer;transition:all var(--transition-fast);font-family:inherit;position:relative}
 .social-btn:hover{background:var(--bg-hover);border-color:var(--border-strong)}
+.skip-auth{background:linear-gradient(135deg,rgba(18,196,139,0.15),rgba(5,150,105,0.15));border:1px solid rgba(18,196,139,0.35);color:#5eead4;font-size:13.5px;font-weight:600;cursor:pointer;margin-top:14px;padding:11px;border-radius:var(--radius-md);font-family:inherit;width:100%;transition:all 0.2s;position:relative}
+.skip-auth:hover{background:linear-gradient(135deg,rgba(18,196,139,0.25),rgba(5,150,105,0.25));box-shadow:0 0 16px rgba(18,196,139,0.3)}
 .auth-error{background:rgba(240,71,71,0.1);border:1px solid rgba(240,71,71,0.3);color:#fca5a5;font-size:12.5px;padding:10px 12px;border-radius:var(--radius-sm);margin-bottom:8px;display:none;text-align:left}
 .auth-error.show{display:block}
 .auth-success{background:rgba(18,196,139,0.1);border:1px solid rgba(18,196,139,0.3);color:#5eead4;font-size:12.5px;padding:10px 12px;border-radius:var(--radius-sm);margin-bottom:8px;display:none;text-align:left}
@@ -267,9 +291,33 @@ body.light-mode .md code{color:#d6336c;background:#f0f0f2}
 .md pre .code-action-btn.copied{background:rgba(18,196,139,0.2);color:#5eead4;border-color:#12c48b}
 .md pre code{display:block !important;padding:16px 18px !important;overflow-x:auto !important;font-family:'JetBrains Mono','SF Mono',Consolas,monospace !important;font-size:13px !important;line-height:1.7 !important;color:#e6edf3 !important;background:transparent !important;white-space:pre !important;word-break:normal !important;overflow-wrap:normal !important;tab-size:2}
 
-.link-story-btn {display: none;align-items: center;gap: 8px;background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.15));border: 1px solid var(--accent);color: var(--accent-hover);padding: 8px 14px;border-radius: var(--radius-full);font-size: 13px;font-weight: 600;cursor: pointer;margin-bottom: 8px;font-family: inherit;transition: all var(--transition-fast);box-shadow: 0 0 10px rgba(108,111,245,0.2);animation: slideUp 0.3s ease;}
-.link-story-btn.show {display: inline-flex;}
-.link-story-btn:hover {background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(168,85,247,0.25));box-shadow: 0 0 16px rgba(108,111,245,0.4);transform: translateY(-1px);}
+/* 2027 UPDATE: Link to Story Button */
+.link-story-btn {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.15));
+  border: 1px solid var(--accent);
+  color: var(--accent-hover);
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 8px;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  box-shadow: 0 0 10px rgba(108,111,245,0.2);
+  animation: slideUp 0.3s ease;
+}
+.link-story-btn.show {
+  display: inline-flex;
+}
+.link-story-btn:hover {
+  background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(168,85,247,0.25));
+  box-shadow: 0 0 16px rgba(108,111,245,0.4);
+  transform: translateY(-1px);
+}
 
 .input-dock{position:absolute;bottom:0;left:0;right:0;padding:12px 20px 16px;background:linear-gradient(to top,var(--bg-primary) 60%,transparent);pointer-events:none;z-index:20}
 .input-inner-wrap{max-width:780px;margin:0 auto;pointer-events:auto}
@@ -451,6 +499,7 @@ window.__wkCodeBlocks = {};
 
 <div id="loginScreen">
   <div class="login-card">
+    <!-- Centered Crown Logo -->
     <div class="crown-container">
       <i class="fas fa-crown crown-icon"></i>
     </div>
@@ -461,6 +510,7 @@ window.__wkCodeBlocks = {};
     <div class="auth-error" id="authError"></div>
     <div class="auth-success" id="authSuccess"></div>
 
+    <!-- Google Button -->
     <button class="social-btn google-btn" onclick="signInWithGoogle()">
       <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5.04c1.7 0 3.23.58 4.43 1.73l3.3-3.3C17.77 1.53 15.1 0 12 0 7.37 0 3.39 2.67 1.44 6.56l3.85 2.99C6.23 6.6 8.87 5.04 12 5.04z"/><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58l3.74 2.9c2.18-2.01 3.68-4.97 3.68-8.72z"/><path fill="#FBBC05" d="M5.29 14.56c-.24-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29L1.44 6.99C.52 8.84 0 10.89 0 13.03s.52 4.19 1.44 6.04l3.85-2.99z"/><path fill="#34A853" d="M12 24c3.24 0 5.97-1.08 7.96-2.91l-3.74-2.9c-1.04.7-2.38 1.11-4.22 1.11-3.13 0-5.77-2.11-6.71-4.95H1.44v3.86C3.39 21.33 7.37 24 12 24z"/></svg>
       Continue with Google
@@ -512,15 +562,6 @@ window.__wkCodeBlocks = {};
     </div>
 
     <button class="skip-auth" onclick="skipLoginAsGuest()"><i class="fas fa-bolt"></i> Continue Instantly (Local Mode)</button>
-  </div>
-</div>
-
-<div id="welcomePopup" style="position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;z-index:99998;padding:20px">
-  <div style="background:#fff;color:#0d0d0d;border-radius:24px;max-width:420px;width:100%;padding:40px 32px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,0.6)">
-    <div style="width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:white;font-size:40px;font-weight:700" id="wpAvatar"></div>
-    <h2 style="font-size:24px;font-weight:700;margin-bottom:12px">Welcome, <span id="wpName">Friend</span>! 🎉</h2>
-    <p style="font-size:14.5px;color:#4b5563;margin-bottom:26px">You are now signed in to <strong style="color:#6366f1">Wise King AI</strong>.<br>Your chats and memories will sync across devices.</p>
-    <button style="width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#a855f7);border:none;border-radius:14px;color:white;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit" onclick="closeWelcomePopup()"><i class="fas fa-comments"></i> Start Chatting</button>
   </div>
 </div>
 
@@ -678,6 +719,803 @@ window.__wkCodeBlocks = {};
 
 </main>
 </div>
+
+
+<!-- ========================================== -->
+<!-- PANELS SECTION                             -->
+<!-- ========================================== -->
+
+<!-- 1. MUSIC PANEL -->
+<div class="full-panel" id="musicPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-music"></i> AI Music Studio 🎵</div>
+    <button class="btn ghost" onclick="closePanel('musicPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">🎼 Paste lyrics OR describe a style — AI will build your song prompt.</p>
+      
+      <textarea class="search-big" id="musicInput" rows="6" placeholder="Describe the music style..." style="min-height:140px;resize:vertical;font-family:inherit"></textarea>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px">
+        <select class="input-field" id="musicGenre" style="margin-bottom:0">
+          <option value="">🎵 Genre</option>
+          <option>Afrobeat</option>
+          <option>Amapiano</option>
+          <option>Hip-hop</option>
+          <option>R&B</option>
+          <option>Gospel</option>
+          <option>Reggae</option>
+          <option>Pop</option>
+          <option>Traditional Hausa</option>
+          <option>Fuji</option>
+          <option>Highlife</option>
+        </select>
+        <select class="input-field" id="musicMood" style="margin-bottom:0">
+          <option value="">💫 Mood</option>
+          <option>Happy & Uplifting</option>
+          <option>Romantic</option>
+          <option>Motivational</option>
+          <option>Spiritual</option>
+          <option>Party Vibe</option>
+          <option>Chill & Relaxed</option>
+        </select>
+      </div>
+      
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="btn accent" style="flex:1;justify-content:center" onclick="generateMusicFromPanel()"><i class="fas fa-wand-magic-sparkles"></i> Build Music Prompt</button>
+        <button class="btn solid" style="flex:1;justify-content:center" onclick="generateLyricsFromPanel()"><i class="fas fa-pen-fancy"></i> Write Lyrics</button>
+      </div>
+      
+      <div id="musicPanelResults"></div>
+      
+      <h3 style="margin:24px 0 12px;color:var(--accent-hover);font-size:15px">🎧 My Music Library</h3>
+      <div id="musicLibraryBox"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. PDF CHAT PANEL -->
+<div class="full-panel" id="pdfChatPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-file-pdf"></i> PDF Chat 📄</div>
+    <button class="btn ghost" onclick="closePanel('pdfChatPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="pdf-dropzone" onclick="document.getElementById('pdfFileInput').click()">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p><strong>Click to upload PDF</strong> or drag & drop</p>
+        <small>Read, summarize, and ask questions about any PDF</small>
+        <input type="file" id="pdfFileInput" accept=".pdf" style="display:none" onchange="handlePdfUpload(event)">
+      </div>
+      
+      <div id="pdfFileInfo"></div>
+      <div id="pdfSummaryBox"></div>
+      
+      <input type="text" class="search-big" id="pdfQuestionInput" placeholder="Ask anything about the PDF..." onkeydown="if(event.key==='Enter'){askPdfQuestion()}" style="margin-top:16px">
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="askPdfQuestion()"><i class="fas fa-question-circle"></i> Ask About PDF</button>
+      
+      <div id="pdfChatResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. TRANSLATE PANEL -->
+<div class="full-panel" id="translatePanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-language"></i> Real-time Translation 2027 🌍</div>
+    <button class="btn ghost" onclick="closePanel('translatePanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="lang-selector">
+        <select class="lang-select" id="translateFrom">
+          <option value="auto">🔍 Auto-detect</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="pcm">🇳🇬 Pidgin</option>
+          <option value="kr">🇳🇬 Kanuri</option>
+          <option value="tiv">🇳🇬 Tiv</option>
+          <option value="ibb">🇳🇬 Ibibio</option>
+          <option value="efi">🇳🇬 Efik</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+        </select>
+        <button class="lang-swap" aria-label="Swap languages" onclick="swapLanguages()"><i class="fas fa-right-left"></i></button>
+        <select class="lang-select" id="translateTo">
+          <option value="en">🇬🇧 English</option>
+          <option value="ha">🇳🇬 Hausa</option>
+          <option value="yo">🇳🇬 Yoruba</option>
+          <option value="ig">🇳🇬 Igbo</option>
+          <option value="pcm">🇳🇬 Pidgin</option>
+          <option value="kr">🇳🇬 Kanuri</option>
+          <option value="tiv">🇳🇬 Tiv</option>
+          <option value="ibb">🇳🇬 Ibibio</option>
+          <option value="efi">🇳🇬 Efik</option>
+          <option value="ar">🇸🇦 Arabic</option>
+          <option value="fr">🇫🇷 French</option>
+          <option value="sw">🌍 Swahili</option>
+          <option value="es">🇪🇸 Spanish</option>
+          <option value="zh">🇨🇳 Chinese</option>
+          <option value="hi">🇮🇳 Hindi</option>
+        </select>
+      </div>
+      
+      <textarea class="search-big" id="translateInput" rows="6" placeholder="Type or paste text to translate..." style="min-height:130px;resize:vertical;font-family:inherit"></textarea>
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="doTranslate()"><i class="fas fa-language"></i> Translate Now</button>
+      
+      <div id="translateResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. DATA ANALYSIS PANEL -->
+<div class="full-panel" id="dataAnalysisPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-chart-line"></i> Data Analysis 2027 📊</div>
+    <button class="btn ghost" onclick="closePanel('dataAnalysisPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <div class="pdf-dropzone" onclick="document.getElementById('dataFileInput').click()">
+        <i class="fas fa-file-csv"></i>
+        <p><strong>Upload CSV, Excel, or paste data</strong></p>
+        <small>Auto-generate stats, charts, and AI insights — updated for 2027</small>
+        <input type="file" id="dataFileInput" accept=".csv,.json,.txt" style="display:none" onchange="handleDataUpload(event)">
+      </div>
+      
+      <textarea class="search-big" id="dataPasteInput" rows="5" placeholder="Or paste CSV data here..." style="min-height:120px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:12.5px"></textarea>
+      <button class="btn accent" style="width:100%;justify-content:center;margin-bottom:16px" onclick="analyzePastedData()"><i class="fas fa-chart-bar"></i> Analyze Data</button>
+      
+      <div id="dataAnalysisResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 5. DOWNLOAD HUB PANEL -->
+<div class="full-panel" id="downloadHubPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-cloud-arrow-down"></i> Downloads Hub 2027 📥</div>
+    <button class="btn ghost" onclick="closePanel('downloadHubPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:14px">📱 Everything you create — download directly to your phone. Fully 2027-ready.</p>
+      <div class="download-grid" id="downloadHubGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. PRICING PANEL -->
+<div class="full-panel" id="pricingPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans 2027</div>
+    <button class="btn ghost" onclick="closePanel('pricingPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;text-align:center">Choose the plan that fits your 2027 journey. Upgrade anytime. 👑</p>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+        
+        <!-- Free Plan -->
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">🌱</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Free</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦0</div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Forever free</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Unlimited chats</li>
+            <li>✅ Image generation</li>
+            <li>✅ Voice & translation</li>
+            <li>✅ PDF chat</li>
+          </ul>
+          <button class="btn solid" style="width:100%;justify-content:center" disabled>Current Plan</button>
+        </div>
+        
+        <!-- Pro Plan -->
+        <div class="result-card" style="text-align:center;border:2px solid var(--accent);box-shadow:var(--shadow-glow)">
+          <div style="font-size:40px;margin-bottom:8px">⚡</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Pro</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400">/month</span></div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Free</li>
+            <li>✅ Unlimited AI messages</li>
+            <li>✅ Music generation</li>
+            <li>✅ Priority speed</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Pro', 5000)"><i class="fas fa-rocket"></i> Upgrade to Pro</button>
+        </div>
+        
+        <!-- Premium Plan -->
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">👑</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Premium</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400">/month</span></div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Pro</li>
+            <li>✅ Custom AI models</li>
+            <li>✅ Business account</li>
+            <li>✅ 24/7 priority support</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Premium', 15000)"><i class="fas fa-crown"></i> Go Premium</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. SEARCH WEB PANEL -->
+<div class="full-panel" id="searchWebPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-globe"></i> Search the web 2027</div>
+    <button class="btn ghost" onclick="closePanel('searchWebPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      
+      <div style="display:flex; gap:10px; margin-bottom:12px;">
+        <select id="searchEngineSelect" class="input-field" style="margin-bottom:0; flex:1; padding:12px;">
+          <option value="google">🔍 Google</option>
+          <option value="bing">🦆 Bing</option>
+          <option value="duckduckgo">🦆 DuckDuckGo</option>
+        </select>
+      </div>
+
+      <input type="text" class="search-big" id="searchWebInput" placeholder="What do you want to search for?" onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+      
+      <div style="display:flex; gap:10px; margin-bottom:16px;">
+        <button class="btn accent" style="flex:1; justify-content:center;" onclick="openSearchEngine()">
+          <i class="fas fa-external-link-alt"></i> Open in Browser
+        </button>
+        <button class="btn solid" style="flex:1; justify-content:center;" onclick="askAiToSearch(document.getElementById('searchWebInput').value)">
+          <i class="fas fa-robot"></i> Ask AI
+        </button>
+      </div>
+
+      <div id="searchWebResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 8. BUILD APP PANEL -->
+<div class="full-panel" id="buildAppPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-code"></i> Build an app 2027</div>
+    <button class="btn ghost" onclick="closePanel('buildAppPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <input type="text" class="search-big" id="buildAppInput" placeholder="Search or describe your app idea..." oninput="filterBuildIdeas(this.value)">
+      <div id="buildAppIdeas"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 9. MEMORY PANEL -->
+<div class="full-panel" id="memoryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory 2027</div>
+    <button class="btn ghost" onclick="closePanel('memoryPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King remembers facts from your vault and chats — 2027 memory engine.</p>
+      <div id="memoryPanelResults"></div>
+    </div>
+  </div>
+</div>
+  
+<!-- 6. PRICING PANEL -->
+<div class="full-panel" id="pricingPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-crown"></i> Wise King Plans</div>
+    <button class="btn ghost" onclick="closePanel('pricingPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;text-align:center">Choose the plan that fits your journey. Upgrade anytime. 👑</p>
+      
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+        
+        <!-- Free Plan -->
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">🌱</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Free</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦0</div>
+          <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:14px">Forever free</div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Unlimited chats</li>
+            <li>✅ Image generation</li>
+            <li>✅ Voice & translation</li>
+            <li>✅ PDF chat</li>
+          </ul>
+          <button class="btn solid" style="width:100%;justify-content:center" disabled>Current Plan</button>
+        </div>
+        
+        <!-- Pro Plan -->
+        <div class="result-card" style="text-align:center;border:2px solid var(--accent);box-shadow:var(--shadow-glow)">
+          <div style="font-size:40px;margin-bottom:8px">⚡</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Pro</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦5,000<span style="font-size:14px;font-weight:400">/month</span></div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Free</li>
+            <li>✅ Unlimited AI messages</li>
+            <li>✅ Music generation</li>
+            <li>✅ Priority speed</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Pro', 5000)"><i class="fas fa-rocket"></i> Upgrade to Pro</button>
+        </div>
+        
+        <!-- Premium Plan -->
+        <div class="result-card" style="text-align:center">
+          <div style="font-size:40px;margin-bottom:8px">👑</div>
+          <h3 style="font-size:18px;margin-bottom:4px">Premium</h3>
+          <div style="font-size:28px;font-weight:800;color:var(--accent-hover);margin:10px 0">₦15,000<span style="font-size:14px;font-weight:400">/month</span></div>
+          <ul style="text-align:left;font-size:13px;color:var(--text-secondary);line-height:2;list-style:none;padding:0;margin-bottom:16px">
+            <li>✅ Everything in Pro</li>
+            <li>✅ Custom AI models</li>
+            <li>✅ Business account</li>
+            <li>✅ 24/7 priority support</li>
+          </ul>
+          <button class="btn accent" style="width:100%;justify-content:center" onclick="upgradeToPlan('Premium', 15000)"><i class="fas fa-crown"></i> Go Premium</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7. SEARCH WEB PANEL -->
+<div class="full-panel" id="searchWebPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-globe"></i> Search the web</div>
+    <button class="btn ghost" onclick="closePanel('searchWebPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      
+      <div style="display:flex; gap:10px; margin-bottom:12px;">
+        <select id="searchEngineSelect" class="input-field" style="margin-bottom:0; flex:1; padding:12px;">
+          <option value="google">🔍 Google</option>
+          <option value="bing">🦆 Bing</option>
+          <option value="duckduckgo">🦆 DuckDuckGo</option>
+        </select>
+      </div>
+
+      <input type="text" class="search-big" id="searchWebInput" placeholder="What do you want to search for?" onkeydown="if(event.key==='Enter'){doSearchWeb(this.value)}">
+      
+      <div style="display:flex; gap:10px; margin-bottom:16px;">
+        <button class="btn accent" style="flex:1; justify-content:center;" onclick="openSearchEngine()">
+          <i class="fas fa-external-link-alt"></i> Open in Browser
+        </button>
+        <button class="btn solid" style="flex:1; justify-content:center;" onclick="askAiToSearch(document.getElementById('searchWebInput').value)">
+          <i class="fas fa-robot"></i> Ask AI
+        </button>
+      </div>
+
+      <div id="searchWebResults"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 8. BUILD APP PANEL -->
+<div class="full-panel" id="buildAppPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-code"></i> Build an app</div>
+    <button class="btn ghost" onclick="closePanel('buildAppPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <input type="text" class="search-big" id="buildAppInput" placeholder="Search or describe your app idea..." oninput="filterBuildIdeas(this.value)">
+      <div id="buildAppIdeas"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 9. MEMORY PANEL -->
+<div class="full-panel" id="memoryPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-brain"></i> Cross-Chat Memory</div>
+    <button class="btn ghost" onclick="closePanel('memoryPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body">
+    <div class="panel-inner">
+      <p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:12px">Wise King remembers facts from your vault and chats.</p>
+      <div id="memoryPanelResults"></div>
+    </div>
+  </div>
+</div>
+  
+<!-- COACH PANEL -->
+<div class="full-panel" id="coachPanel">
+  <div class="panel-header">
+    <div class="panel-title"><i class="fas fa-lightbulb"></i> Wise King Coach 💡</div>
+    <button class="btn ghost" onclick="closePanel('coachPanel')"><i class="fas fa-arrow-left"></i> Back</button>
+  </div>
+  <div class="panel-body"><div class="panel-inner">
+    <div class="result-card" style="background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(168,85,247,0.12));border:1px solid var(--accent)">
+      <h4 style="color:var(--accent-hover);margin-bottom:8px">🌅 TIP OF THE DAY</h4>
+      <div id="coachDailyTip" style="font-size:14px;line-height:1.7;color:var(--text-primary)">Loading your daily tip...</div>
+      <button class="btn accent" style="margin-top:12px" onclick="generateDailyTip()"><i class="fas fa-sync-alt"></i> New Tip</button>
+    </div>
+    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--accent-hover)">🎯 5 Pillars of Growth</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+      <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Knowledge')"><div style="font-size:28px">📚</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Knowledge</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Learn a new thing</div></div>
+      <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Skill')"><div style="font-size:28px">🛠️</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Skill</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Practice a craft</div></div>
+      <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Wealth')"><div style="font-size:28px">💰</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Wealth</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Grow your money</div></div>
+      <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Health')"><div style="font-size:28px">💪</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Health</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Strengthen body</div></div>
+      <div class="result-card" style="cursor:pointer;text-align:center" onclick="coachAskPillar('Character')"><div style="font-size:28px">🤲</div><div style="font-weight:600;font-size:13.5px;margin-top:6px">Character</div><div style="font-size:11.5px;color:var(--text-tertiary);margin-top:2px">Build integrity</div></div>
+    </div>
+    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--accent-hover)">📅 7-Day Improvement Plan</h3>
+    <div class="settings-card">
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">Tell Wise King your goal — health, business, study, faith, or skill — and get a day-by-day 7-day plan you can actually follow.</p>
+      <input type="text" class="input-field" id="coachGoalInput" placeholder="e.g. Start a small business in Kano" style="margin-bottom:10px">
+      <button class="btn accent" style="width:100%;justify-content:center" onclick="generate7DayPlan()"><i class="fas fa-calendar-check"></i> Generate My 7-Day Plan</button>
+    </div>
+    <div id="coachPlanOutput" style="margin-top:14px"></div>
+    <h3 style="margin:24px 0 12px;font-size:15px;color:var(--accent-hover)">💬 Ask Your Coach</h3>
+    <input type="text" class="search-big" id="coachAskInput" placeholder="What do you want to improve today?" onkeydown="if(event.key==='Enter'){coachAskFree()}" style="margin-bottom:10px">
+    <button class="btn accent" style="width:100%;justify-content:center" onclick="coachAskFree()"><i class="fas fa-paper-plane"></i> Ask Coach</button>
+    <div id="coachAnswerOutput" style="margin-top:14px"></div>
+  </div></div>
+</div>
+
+<div class="popup-menu" id="chatPopupMenu">
+  <button class="popup-menu-item pin-item" id="chatPinBtn" onclick="togglePinCurrentChat()"><i class="fas fa-thumbtack"></i> <span id="chatPinLabel">Pin chat</span></button>
+  <button class="popup-menu-item" onclick="renameCurrentChat()"><i class="fas fa-pen"></i> Rename</button>
+  <button class="popup-menu-item" onclick="deleteCurrentChat()"><i class="fas fa-trash"></i> Delete</button>
+  <button class="popup-menu-item" onclick="shareCurrentChat()"><i class="fas fa-share"></i> Share</button>
+</div>
+
+<div id="sharePopup">
+  <div class="share-card">
+    <div class="share-head"><div class="share-title"><i class="fas fa-share-nodes"></i> Share to</div><button class="share-close" aria-label="Close share" onclick="closeSharePopup()"><i class="fas fa-times"></i></button></div>
+    <div class="share-grid">
+      <button class="share-platform" onclick="shareTo('whatsapp')"><div class="sp-icon sp-whatsapp"><i class="fab fa-whatsapp"></i></div><div class="sp-name">WhatsApp</div></button>
+      <button class="share-platform" onclick="shareTo('facebook')"><div class="sp-icon sp-facebook"><i class="fab fa-facebook-f"></i></div><div class="sp-name">Facebook</div></button>
+      <button class="share-platform" onclick="shareTo('tiktok')"><div class="sp-icon sp-tiktok"><i class="fab fa-tiktok"></i></div><div class="sp-name">TikTok</div></button>
+      <button class="share-platform" onclick="shareTo('instagram')"><div class="sp-icon sp-instagram"><i class="fab fa-instagram"></i></div><div class="sp-name">Instagram</div></button>
+      <button class="share-platform" onclick="shareTo('telegram')"><div class="sp-icon sp-telegram"><i class="fab fa-telegram-plane"></i></div><div class="sp-name">Telegram</div></button>
+      <button class="share-platform" onclick="shareTo('x')"><div class="sp-icon sp-x"><i class="fab fa-x-twitter"></i></div><div class="sp-name">X</div></button>
+    </div>
+    <button class="share-cancel" onclick="closeSharePopup()">Cancel</button>
+  </div>
+</div>
+
+<div class="modal-bg" id="editMessageModal">
+  <div class="modal" style="max-width:520px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Edit message</div><button class="modal-close" onclick="closeModal('editMessageModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Editing this message will regenerate the AI's response.</p><textarea class="input-field" id="editMessageInput" rows="4" style="min-height:120px;resize:vertical"></textarea><div class="modal-actions"><button class="btn ghost" onclick="closeModal('editMessageModal')">Cancel</button><button class="btn accent" onclick="saveEditedMessage()"><i class="fas fa-check"></i> Save & Regenerate</button></div></div>
+</div>
+
+<div class="modal-bg" id="renameChatModal">
+  <div class="modal" style="max-width:420px"><div class="modal-head"><div class="modal-title"><i class="fas fa-pen"></i> Rename chat</div><button class="modal-close" onclick="closeModal('renameChatModal')"><i class="fas fa-times"></i></button></div><input type="text" class="input-field" id="renameChatInput" placeholder="Enter new name" maxlength="60"><div class="modal-actions"><button class="btn ghost" onclick="closeModal('renameChatModal')">Cancel</button><button class="btn accent" onclick="saveRenamedChat()"><i class="fas fa-check"></i> Save</button></div></div>
+</div>
+
+<div class="modal-bg" id="deleteChatModal">
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this chat?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0"><button class="btn ghost" style="flex:1" onclick="closeModal('deleteChatModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmDeleteChat()">Delete</button></div></div>
+</div>
+
+<div class="modal-bg" id="deleteMessageModal">
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">🗑️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Delete this message?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">This action cannot be undone.</p><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0"><button class="btn ghost" style="flex:1" onclick="closeModal('deleteMessageModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmDeleteMessage()">Delete</button></div></div>
+</div>
+
+<div class="modal-bg" id="dislikeModal">
+  <div class="modal" style="max-width:400px"><div class="modal-head"><div class="modal-title"><i class="fas fa-thumbs-down"></i> Tell us more</div><button class="modal-close" onclick="closeModal('dislikeModal')"><i class="fas fa-times"></i></button></div><p class="modal-text" style="margin-bottom:12px">Help us improve. What went wrong?</p><textarea class="input-field" id="dislikeFeedbackInput" rows="3" placeholder="Type your feedback here (optional)..." style="min-height:80px;resize:vertical;margin-bottom:0"></textarea><div class="modal-actions"><button class="btn ghost" onclick="closeModal('dislikeModal')">Cancel</button><button class="btn accent" onclick="submitDislikeFeedback()"><i class="fas fa-paper-plane"></i> Submit</button></div></div>
+</div>
+
+<div class="modal-bg" id="signOutModal">
+  <div class="modal" style="max-width:380px;text-align:center;padding:32px 24px"><div style="font-size:36px;margin-bottom:12px">⚠️</div><div style="font-size:17px;font-weight:600;margin-bottom:8px">Sign out?</div><p style="font-size:13.5px;color:var(--text-secondary);margin-bottom:24px">Your sync session will be closed on this device.</p><div class="modal-actions" style="justify-content:center;gap:12px;margin-top:0"><button class="btn ghost" style="flex:1" onclick="closeModal('signOutModal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmSignOut()">Sign Out</button></div></div>
+</div>
+
+<div class="modal-bg" id="vaultModal">
+  <div class="modal"><div class="modal-head"><div class="modal-title"><i class="fas fa-shield-halved"></i> Master Vault</div><button class="modal-close" onclick="closeModal('vaultModal')"><i class="fas fa-times"></i></button></div><p class="modal-text">Permanent locked memories the AI will never forget.</p><div class="settings-card" style="margin-bottom:16px"><textarea class="input-field" id="vaultNewInput" rows="3" placeholder="e.g., My name is Ibrahim Abdullahi..." style="resize:vertical;min-height:70px;margin-bottom:10px"></textarea><button class="btn accent" style="width:100%;justify-content:center" onclick="addVaultMemory()"><i class="fas fa-plus"></i> Lock this memory</button></div><div id="vaultList"></div><div class="modal-actions"><button class="btn solid" onclick="closeModal('vaultModal')">Close</button></div></div>
+</div>
+
+<div class="modal-bg" id="settingsModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title"><i class="fas fa-cog"></i> Settings</div><button class="modal-close" onclick="closeModal('settingsModal')"><i class="fas fa-times"></i></button></div>
+    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div><div class="settings-card"><div class="toggle-row"><div class="toggle-label">Light Mode</div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div></div></div>
+    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-user"></i> Profile & Account</div><div class="settings-card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar" style="width:52px;height:52px;font-size:20px" id="settingsAvatar">WK</div><div style="flex:1"><div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">Not signed in</div><button class="btn accent" style="font-size:12px;padding:6px 12px" onclick="signInWithGoogle()"><i class="fab fa-google"></i> Link Google</button></div></div></div></div>
+    
+<!-- AI Persona -->
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-masks-theater"></i> AI Persona</div>
+  <div class="settings-card">
+    <select class="input-field" id="personaSelect" style="margin-bottom:0">
+      <option value="default">🤖 Wise King (Default)</option>
+      <option value="coder">💻 Strict Senior Developer</option>
+      <option value="teacher">🍎 Patient Teacher</option>
+      <option value="comedian">😂 Funny Nigerian Comedian</option>
+    </select>
+  </div>
+</div>
+
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div>
+  <div class="settings-card">
+    <div class="toggle-row">
+      <div class="toggle-label">Enable Web Search</div>
+      <div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div>
+    </div>
+    <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
+    <div class="toggle-row">
+      <div class="toggle-label">Enable Cross-Chat Memory</div>
+      <div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div>
+    </div>
+    <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
+    <div class="toggle-row">
+      <div class="toggle-label">Enable Streaming</div>
+      <div class="toggle-switch on" id="streamingToggle" onclick="toggleStreamingSetting()"></div>
+    </div>
+  </div>
+</div>
+
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-key"></i> API Keys (optional)</div>
+  <div class="settings-card">
+    <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off">
+    <input type="password" class="input-field" id="deepseekKeyInput" placeholder="DeepSeek API key (optional fallback)" autocomplete="off" style="margin-bottom:0">
+  </div>
+</div>
+
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
+  <div class="settings-card">
+    <select class="input-field" id="modelSelect" style="margin-bottom:0">
+      <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite — Fast & Efficient ⚡</option>
+      <option value="gemini-3.8-flash">Gemini 3.8 Flash — Best for Web Search & Coding 🔍</option>
+      <option value="gemini-4-argon">Gemini 4 Argon — Deep Reasoning 🧠</option>
+    </select>
+  </div>
+</div>
+
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-palette"></i> Accent color</div>
+  <div class="settings-card">
+    <div class="theme-swatches">
+      <div class="theme-swatch" style="background:#6366f1" data-color="#6366f1"></div>
+      <div class="theme-swatch" style="background:#8b5cf6" data-color="#8b5cf6"></div>
+      <div class="theme-swatch" style="background:#ec4899" data-color="#ec4899"></div>
+      <div class="theme-swatch" style="background:#10b981" data-color="#10b981"></div>
+      <div class="theme-swatch" style="background:#f59e0b" data-color="#f59e0b"></div>
+      <div class="theme-swatch" style="background:#3b82f6" data-color="#3b82f6"></div>
+    </div>
+  </div>
+</div>
+
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-file-export"></i> Backup & Restore</div>
+  <div class="settings-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn solid" style="flex:1;justify-content:center" onclick="exportData()"><i class="fas fa-download"></i> Export</button>
+      <button class="btn solid" style="flex:1;justify-content:center" onclick="document.getElementById('importInput').click()"><i class="fas fa-upload"></i> Import</button>
+      <input type="file" id="importInput" accept="application/json" style="display:none" onchange="importData(event)">
+    </div>
+  </div>
+</div>
+
+<div class="modal-actions" style="justify-content:space-between">
+  <button class="btn ghost" style="color:#f87171" onclick="closeModal('settingsModal'); setTimeout(() => askSignOut(), 150);"><i class="fas fa-sign-out-alt"></i> Sign out</button>
+  <button class="btn accent" onclick="saveSettings()">Save changes</button>
+</div>
+  
+<!-- LOAD REQUIRED LIBRARIES -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<script>
+  window.__WK_ENV__ = {
+    GEMINI_API_KEY: 'AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU',
+    DEEPSEEK_API_KEY: ''
+  };
+</script>
+  
+<!-- FIREBASE AUTH -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDJgzRfoLYzttGpoXr8JzKEqLA19y2V4fU",
+    authDomain: "wise-king-ai-259fc.firebaseapp.com",
+    projectId: "wise-king-ai-259fc",
+    storageBucket: "wise-king-ai-259fc.firebasestorage.app",
+    messagingSenderId: "19851699752",
+    appId: "1:19851699752:web:6735280bf59561e8ffb71d"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  setPersistence(auth, browserLocalPersistence).catch(() => {});
+
+  window.WK_CLOUD = {
+    async loadUserData(uid) {
+      try { const snap = await getDoc(doc(db, 'users', uid)); return snap.exists() ? snap.data() : null; }
+      catch (e) { return null; }
+    },
+    async saveUserData(uid, data) {
+      try { await setDoc(doc(db, 'users', uid), { ...data, updatedAt: serverTimestamp() }, { merge: true }); return true; }
+      catch (e) { return false; }
+    }
+  };
+
+  function mergeById(local, remote) {
+    const map = new Map();
+    (remote || []).forEach(x => { if (x && x.id) map.set(x.id, x); });
+    (local || []).forEach(x => {
+      if (!x) return;
+      const key = x.id || ('t_' + (x.createdAt || 0));
+      const prev = map.get(key);
+      if (!prev || (x.updatedAt || x.createdAt || 0) > (prev.updatedAt || prev.createdAt || 0)) {
+        map.set(key, x);
+      }
+    });
+    return [...map.values()];
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      localStorage.setItem('wk_logged_in', '1');
+      localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+      localStorage.setItem('wk_user_email', user.email || '');
+      localStorage.setItem('wk_user_uid', user.uid);
+      localStorage.removeItem('wk_guest_mode');
+
+      const cloud = await window.WK_CLOUD.loadUserData(user.uid);
+      if (cloud) {
+        try {
+          const localChats = JSON.parse(localStorage.getItem('wk_chats') || '[]');
+          const merged = mergeById(localChats, cloud.chats);
+          localStorage.setItem('wk_chats', JSON.stringify(merged));
+          window.chats = merged;
+        } catch (e) {}
+        if (Array.isArray(cloud.vault)) {
+          const localVault = JSON.parse(localStorage.getItem('wk_vault') || '[]');
+          localStorage.setItem('wk_vault', JSON.stringify([...new Set([...cloud.vault, ...localVault])]));
+        }
+        if (Array.isArray(cloud.memory)) {
+          const localMem = JSON.parse(localStorage.getItem('wk_cross_memory') || '[]');
+          localStorage.setItem('wk_cross_memory', JSON.stringify([...new Set([...cloud.memory, ...localMem])].slice(0, 100)));
+        }
+        if (Array.isArray(cloud.music)) {
+          const localMusic = JSON.parse(localStorage.getItem('wk_music') || '[]');
+          localStorage.setItem('wk_music', JSON.stringify(mergeById(localMusic, cloud.music)));
+        }
+      }
+      if (typeof window.unlockApp === 'function') window.unlockApp(user.displayName || 'Wise King User', user.email, user.photoURL);
+      if (typeof window.loadChatsFromLocalStorage === 'function') window.loadChatsFromLocalStorage();
+    }
+  });
+
+  window.signInWithGoogle = function() {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        localStorage.setItem('wk_logged_in', '1');
+        localStorage.setItem('wk_user_name', user.displayName || 'Wise King User');
+        localStorage.setItem('wk_user_email', user.email || '');
+        localStorage.setItem('wk_user_uid', user.uid);
+        localStorage.removeItem('wk_guest_mode');
+        window.showToast('Welcome, ' + (user.displayName || 'Friend') + '! 🎉');
+      })
+      .catch((error) => {
+        if (["auth/cancelled-popup-request","auth/popup-closed-by-user","auth/user-cancelled"].includes(error.code)) return;
+        if (typeof window.showAuthError === 'function') window.showAuthError("Login failed: " + error.message);
+      });
+  };
+
+  window.emailSignIn = function() {
+    const email = document.getElementById('signInEmail').value.trim().toLowerCase();
+    const password = document.getElementById('signInPassword').value;
+    if (!email || !password) return window.showAuthError("Please enter both email and password.");
+    const btn = document.getElementById('signInBtn'); const orig = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+    signInWithEmailAndPassword(auth, email, password)
+      .then((uc) => {
+        const user = uc.user;
+        localStorage.setItem('wk_logged_in', '1');
+        localStorage.setItem('wk_user_name', user.displayName || email.split('@')[0]);
+        localStorage.setItem('wk_user_email', user.email);
+        localStorage.setItem('wk_user_uid', user.uid);
+        localStorage.removeItem('wk_guest_mode');
+        window.showToast('Welcome back! 🎉');
+      })
+      .catch((error) => {
+        let msg = "Login failed. ";
+        if (error.code === 'auth/user-not-found') msg = "No account found with that email.";
+        else if (error.code === 'auth/wrong-password') msg = "Incorrect password.";
+        else if (error.code === 'auth/invalid-credential') msg = "Wrong email or password.";
+        else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
+        else if (error.code === 'auth/too-many-requests') msg = "Too many attempts. Try again later.";
+        else msg += error.message;
+        window.showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+      });
+  };
+
+  window.emailSignUp = function() {
+    const name = document.getElementById('signUpName').value.trim();
+    const email = document.getElementById('signUpEmail').value.trim().toLowerCase();
+    const password = document.getElementById('signUpPassword').value;
+    if (!name || !email || !password) return window.showAuthError("Please fill in all fields.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return window.showAuthError("Enter a valid email.");
+    if (password.length < 6) return window.showAuthError("Password must be at least 6 characters.");
+    if (name.length < 2) return window.showAuthError("Please enter your full name.");
+    const btn = document.getElementById('signUpBtn'); const orig = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(async (uc) => {
+        const user = uc.user;
+        try { await updateProfile(user, { displayName: name }); } catch(e) {}
+        localStorage.setItem('wk_logged_in', '1');
+        localStorage.setItem('wk_user_name', name);
+        localStorage.setItem('wk_user_email', user.email);
+        localStorage.setItem('wk_user_uid', user.uid);
+        localStorage.removeItem('wk_guest_mode');
+        window.showToast('Account created! Welcome, ' + name + ' 🎉');
+      })
+      .catch((error) => {
+        let msg = "Sign up failed. ";
+        if (error.code === 'auth/email-already-in-use') msg = "This email is already registered.";
+        else if (error.code === 'auth/weak-password') msg = "Password too weak.";
+        else if (error.code === 'auth/invalid-email') msg = "Invalid email format.";
+        else msg += error.message;
+        window.showAuthError(msg); btn.disabled = false; btn.innerHTML = orig;
+      });
+  };
+
+  window.sendPasswordReset = function() {
+    const email = document.getElementById('resetEmail').value.trim().toLowerCase();
+    if (!email) return window.showAuthError("Please enter your email.");
+    const btn = document.getElementById('resetBtn'); const orig = btn.innerHTML;
+    btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    sendPasswordResetEmail(auth, email)
+      .then(() => { window.showAuthSuccess("Reset email sent! Check your inbox."); btn.disabled = false; btn.innerHTML = orig; })
+      .catch((error) => { window.showAuthError("Error: " + error.message); btn.disabled = false; btn.innerHTML = orig; });
+  };
+
+  window.addAnotherAccount = function() { window.closeTopProfileMenu(); provider.setCustomParameters({ prompt: 'select_account' }); setTimeout(() => window.signInWithGoogle(), 80); };
+  window.switchAccount = window.addAnotherAccount;
+
+  window.askSignOut = function() {
+    window.closeTopProfileMenu();
+    document.getElementById('settingsModal')?.classList.remove('show');
+    if (typeof window.closeSidebar === 'function') window.closeSidebar();
+    setTimeout(() => document.getElementById('signOutModal')?.classList.add('show'), 100);
+  };
+
+  window.confirmSignOut = function() {
+    document.getElementById('signOutModal').classList.remove('show');
+    window.showToast('Signing out... 👋');
+    signOut(auth).then(() => {
+      ['wk_logged_in','wk_user_email','wk_user_name','wk_user_uid','wk_guest_mode','wk_user_avatar','wk_chats','wk_vault','wk_cross_memory','wk_music','wk_active_chat'].forEach(k => localStorage.removeItem(k));
+      try { sessionStorage.clear(); } catch(e) {}
+      if (typeof window.forceShowLoginScreen === 'function') window.forceShowLoginScreen();
+    }).catch(() => {
+      if (typeof window.forceShowLoginScreen === 'function') window.forceShowLoginScreen();
+    });
+  };
+</script>
+
+<script>
+// ============ CORE ============
+const ENV_GEMINI_KEY = window.__WK_ENV__.GEMINI_API_KEY;
+const ENV_DEEPSEEK_KEY = window.__WK_ENV__.DEEPSEEK_API_KEY;
 
 <!-- ========================================== -->
 <!-- PANELS SECTION                             -->
@@ -2165,6 +3003,84 @@ CONTINUITY RULES:
 🔄 When the user corrects an established detail → use the
 correction going forward.
 
+==================================================
+29.1 — CONVERSATION MEMORY & CONTEXT RETRIEVAL
+==================================================
+
+WISE KING AI MUST treat conversation continuity
+as a core operational responsibility.
+
+Before answering a follow-up:
+
+1. Identify the current conversation and active project.
+2. Retrieve relevant earlier messages when available.
+3. Search for the user's original request, corrections,
+   rejected approaches, and approved decisions.
+4. Resolve references such as:
+   "that one", "the previous version", "as we discussed",
+   "continue", "A cigaba", and "Muje zuwa".
+5. Distinguish the current topic from earlier unrelated topics.
+6. Preserve the user's latest confirmed instruction.
+7. Use the retrieved context to produce the correct result.
+
+MEMORY PRIORITY:
+
+Latest explicit correction
+    >
+Latest approved project decision
+    >
+Relevant earlier conversation
+    >
+Saved project memory
+    >
+General assumptions
+
+ANTI-REPETITION RULE:
+
+If the user has explicitly rejected an approach,
+do not repeat it unless the user requests it again.
+
+If the user corrects a character, scene, format,
+dialogue, design, or technical requirement,
+apply the correction to future relevant responses.
+
+CONTEXT LIMIT RULE:
+
+Never silently discard important decisions merely
+because a conversation is long.
+
+When the full conversation cannot fit into the model's
+context window, use available retrieval and structured
+summaries to preserve:
+
+- User objective
+- Project identity
+- Approved decisions
+- Corrections and rejected approaches
+- Character and scene continuity
+- Current progress
+- Next confirmed step
+
+MEMORY HONESTY:
+
+Use only information actually retrieved or available.
+
+Never pretend to remember a conversation that cannot
+be accessed.
+
+If essential context is missing, explain briefly and
+request only the specific missing information.
+
+APPLICATION REQUIREMENT:
+
+Persistent memory, database storage, conversation
+restoration, and semantic retrieval must be implemented
+by the actual application and backend.
+
+A system prompt alone cannot guarantee these functions.
+==================================================
+END OF MEMORY RETRIEVAL ENGINE
+==================================================
 
 30 — RESPONSE STYLE & FORMATTING ENGINE
 
