@@ -1142,30 +1142,88 @@ window.__wkCodeBlocks = {};
     <div class="settings-group"><div class="settings-group-title"><i class="fas fa-palette"></i> Appearance</div><div class="settings-card"><div class="toggle-row"><div class="toggle-label">Light Mode</div><div class="toggle-switch" id="lightModeToggle" onclick="toggleLightMode()"></div></div></div></div>
     <div class="settings-group"><div class="settings-group-title"><i class="fas fa-user"></i> Profile & Account</div><div class="settings-card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar" style="width:52px;height:52px;font-size:20px" id="settingsAvatar">WK</div><div style="flex:1"><div id="settingsUserEmail" style="font-size:13px;color:var(--text-secondary);margin-bottom:6px">Not signed in</div><button class="btn accent" style="font-size:12px;padding:6px 12px" onclick="signInWithGoogle()"><i class="fab fa-google"></i> Link Google</button></div></div></div></div>
     
-    <!-- AI Persona -->
-    <div class="settings-group">
-      <div class="settings-group-title"><i class="fas fa-masks-theater"></i> AI Persona</div>
-      <div class="settings-card">
-        <select class="input-field" id="personaSelect" style="margin-bottom:0">
-          <option value="default">🤖 Wise King (Default)</option>
-          <option value="coder">💻 Strict Senior Developer</option>
-          <option value="teacher">🍎 Patient Teacher</option>
-          <option value="comedian">😂 Funny Nigerian Comedian</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div><div class="settings-card"><div class="toggle-row"><div class="toggle-label">Enable Web Search</div><div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div></div><div style="height:1px;background:var(--border-subtle);margin:10px 0"></div><div class="toggle-row"><div class="toggle-label">Enable Cross-Chat Memory</div><div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div></div><div style="height:1px;background:var(--border-subtle);margin:10px 0"></div><div class="toggle-row"><div class="toggle-label">Enable Streaming</div><div class="toggle-switch on" id="streamingToggle" onclick="toggleStreamingSetting()"></div></div></div></div>
-    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-key"></i> API Keys (optional)</div><div class="settings-card"><input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off"><input type="password" class="input-field" id="deepseekKeyInput" placeholder="DeepSeek API key (optional fallback)" autocomplete="off" style="margin-bottom:0"></div></div>
-    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div><div class="settings-card"><select class="input-field" id="modelSelect" style="margin-bottom:0"><option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-lite — Blazing Fast ✅</option><option value="gemini-3.1-flash">Gemini 3.1 Flash — Best for Web Search 🔍</option><option value="gemini-2.5-flash">Gemini 2.5 Flash — Instant</option></select></div></div>
-    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-palette"></i> Accent color</div><div class="settings-card"><div class="theme-swatches"><div class="theme-swatch" style="background:#6366f1" data-color="#6366f1"></div><div class="theme-swatch" style="background:#8b5cf6" data-color="#8b5cf6"></div><div class="theme-swatch" style="background:#ec4899" data-color="#ec4899"></div><div class="theme-swatch" style="background:#10b981" data-color="#10b981"></div><div class="theme-swatch" style="background:#f59e0b" data-color="#f59e0b"></div><div class="theme-swatch" style="background:#3b82f6" data-color="#3b82f6"></div></div></div></div>
-    <div class="settings-group"><div class="settings-group-title"><i class="fas fa-file-export"></i> Backup & Restore</div><div class="settings-card"><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn solid" style="flex:1;justify-content:center" onclick="exportData()"><i class="fas fa-download"></i> Export</button><button class="btn solid" style="flex:1;justify-content:center" onclick="document.getElementById('importInput').click()"><i class="fas fa-upload"></i> Import</button><input type="file" id="importInput" accept="application/json" style="display:none" onchange="importData(event)"></div></div></div>
-    <div class="modal-actions" style="justify-content:space-between"><button class="btn ghost" style="color:#f87171" onclick="closeModal('settingsModal'); setTimeout(() => askSignOut(), 150);"><i class="fas fa-sign-out-alt"></i> Sign out</button><button class="btn accent" onclick="saveSettings()">Save changes</button></div>
+<!-- AI Persona -->
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-masks-theater"></i> AI Persona</div>
+  <div class="settings-card">
+    <select class="input-field" id="personaSelect" style="margin-bottom:0">
+      <option value="default">🤖 Wise King (Default)</option>
+      <option value="coder">💻 Strict Senior Developer</option>
+      <option value="teacher">🍎 Patient Teacher</option>
+      <option value="comedian">😂 Funny Nigerian Comedian</option>
+    </select>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-sliders-h"></i> Features</div>
+  <div class="settings-card">
+    <div class="toggle-row">
+      <div class="toggle-label">Enable Web Search</div>
+      <div class="toggle-switch on" id="webSearchToggle" onclick="toggleWebSearchSetting()"></div>
+    </div>
+    <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
+    <div class="toggle-row">
+      <div class="toggle-label">Enable Cross-Chat Memory</div>
+      <div class="toggle-switch on" id="memoryToggle" onclick="toggleMemorySetting()"></div>
+    </div>
+    <div style="height:1px;background:var(--border-subtle);margin:10px 0"></div>
+    <div class="toggle-row">
+      <div class="toggle-label">Enable Streaming</div>
+      <div class="toggle-switch on" id="streamingToggle" onclick="toggleStreamingSetting()"></div>
+    </div>
+  </div>
+</div>
 
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-key"></i> API Keys (optional)</div>
+  <div class="settings-card">
+    <input type="password" class="input-field" id="apiKeyInput" placeholder="Gemini API key (optional)" autocomplete="off">
+    <input type="password" class="input-field" id="deepseekKeyInput" placeholder="DeepSeek API key (optional fallback)" autocomplete="off" style="margin-bottom:0">
+  </div>
+</div>
+
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-robot"></i> AI Model</div>
+  <div class="settings-card">
+    <select class="input-field" id="modelSelect" style="margin-bottom:0">
+      <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite — Fast & Efficient ⚡</option>
+      <option value="gemini-3.8-flash">Gemini 3.8 Flash — Best for Web Search & Coding 🔍</option>
+      <option value="gemini-4-argon">Gemini 4 Argon — Deep Reasoning 🧠</option>
+    </select>
+  </div>
+</div>
+
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-palette"></i> Accent color</div>
+  <div class="settings-card">
+    <div class="theme-swatches">
+      <div class="theme-swatch" style="background:#6366f1" data-color="#6366f1"></div>
+      <div class="theme-swatch" style="background:#8b5cf6" data-color="#8b5cf6"></div>
+      <div class="theme-swatch" style="background:#ec4899" data-color="#ec4899"></div>
+      <div class="theme-swatch" style="background:#10b981" data-color="#10b981"></div>
+      <div class="theme-swatch" style="background:#f59e0b" data-color="#f59e0b"></div>
+      <div class="theme-swatch" style="background:#3b82f6" data-color="#3b82f6"></div>
+    </div>
+  </div>
+</div>
+
+<div class="settings-group">
+  <div class="settings-group-title"><i class="fas fa-file-export"></i> Backup & Restore</div>
+  <div class="settings-card">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn solid" style="flex:1;justify-content:center" onclick="exportData()"><i class="fas fa-download"></i> Export</button>
+      <button class="btn solid" style="flex:1;justify-content:center" onclick="document.getElementById('importInput').click()"><i class="fas fa-upload"></i> Import</button>
+      <input type="file" id="importInput" accept="application/json" style="display:none" onchange="importData(event)">
+    </div>
+  </div>
+</div>
+
+<div class="modal-actions" style="justify-content:space-between">
+  <button class="btn ghost" style="color:#f87171" onclick="closeModal('settingsModal'); setTimeout(() => askSignOut(), 150);"><i class="fas fa-sign-out-alt"></i> Sign out</button>
+  <button class="btn accent" onclick="saveSettings()">Save changes</button>
+</div>
+  
 <!-- LOAD REQUIRED LIBRARIES -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
@@ -3278,7 +3336,6 @@ const PERSONAS = {
   teacher: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a patient primary school teacher. Explain things using simple analogies, step-by-step, and always encourage the user.]",
   comedian: "\n\n[IMPORTANT PERSONA OVERRIDE: You are a funny Nigerian stand-up comedian. Answer the user's questions with humour, pidgin slang, and jokes while still giving the correct, useful answer.]"
 };
-
 async function sendMessageWithFallback(userText, chatHistory, signal) {
   if (!__canCallApi()) {
     return { success: false, error: 'Slow down — sending too fast. Try again in a moment.' };
@@ -3286,14 +3343,20 @@ async function sendMessageWithFallback(userText, chatHistory, signal) {
   chatHistory = chatHistory || [];
 
   const apiKey = (localStorage.getItem('wk_api_key') || '').trim() || ENV_GEMINI_KEY;
-  const defaultModel = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
+  const rawSavedModel = localStorage.getItem('wk_model') || 'gemini-3.5-flash-lite';
 
-  // Use a valid search-capable model when search is needed
+  const MODEL_MIGRATIONS = {
+    'gemini-3.1-flash': 'gemini-3.8-flash',
+    'gemini-2.5-flash': 'gemini-3.5-flash-lite',
+    'gemini-2.5-pro': 'gemini-3.8-flash'
+  };
+  const savedModel = MODEL_MIGRATIONS[rawSavedModel] || rawSavedModel;
+
   const needsWeb = Boolean(
     window.searchMode ||
     /(latest|news|current|today|who is|what is happening|weather|price of|search|google)/i.test(userText)
   );
-  const model = needsWeb ? 'gemini-3.8-flash' : defaultModel;
+  const model = needsWeb ? 'gemini-3.8-flash' : savedModel;
 
   const url =
     'https://generativelanguage.googleapis.com/v1beta/models/' +
@@ -3413,7 +3476,6 @@ async function sendMessageWithFallback(userText, chatHistory, signal) {
         continue;
       }
 
-      // Auto-continue if truncated by token limit or abruptly mid-sentence (up to 3 continuation passes)
       let continuations = 0;
       const maxContinuations = 3;
       let workingContents = [...contents, { role: 'model', parts: [{ text: reply }] }];
